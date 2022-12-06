@@ -1,6 +1,6 @@
 import { useState, MouseEvent } from "react";
 
-const boardPieces = [['x'],['x', 'x', null],['x'],['x'],['x'],['x'],['x']];
+const boardPieces:string[][] = [[],[],[],[],[],[],[]];
 
 export default function Board(){
     const [playerTurn, setTurn] = useState(true);
