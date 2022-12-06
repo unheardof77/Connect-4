@@ -5,14 +5,23 @@ const boardPieces = [['x'],['x', 'x', null],['x'],['x'],['x'],['x'],['x']];
 export default function Board(){
     const [playerTurn, setTurn] = useState(true);
 
-    function didWin() {
-        let winCondition:boolean;
+    const checkColWin = () => {
+        const regexColX =/xxxx/;
+        const regexColO =/OOOO/;
         boardPieces.forEach((col, index) => {
-            const firstMatch = col.findIndex((piece) => piece === 'x');
-            if(col[firstMatch] && col[firstMatch +1] && col[firstMatch+2] && col[firstMatch + 3] === 'x'){
-                winCondition = true
+            const stringCol = col.join('');
+            console.log(stringCol)
+            if(regexColX.test(stringCol)){
+                window.location.assign(`/#/gameOver/Player_One`);
+            }else if(regexColO.test(stringCol)){
+                window.location.assign(`/#/gameOver/Player_Two`);
             }
-        })
+        });
+    };
+
+    function didWin() {
+        checkColWin();
+        
     };
     function whatPositionPicked(e:MouseEvent<HTMLTableRowElement>){
         if(playerTurn){
