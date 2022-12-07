@@ -19,9 +19,9 @@ export default function Board(){
         });
     };
 
+
     function didWin() {
         checkColWin();
-        
     };
     function whatPositionPicked(e:MouseEvent<HTMLTableRowElement>){
         if(playerTurn){
