@@ -45,7 +45,7 @@ export default function Board(){
         for (let i=1; i<4; i++) {
             let northWestDiagonal:string = '';
             for (let j=0; j<6; j++) {
-                if (boardPieces[i+j][5-j]) {
+                if (boardPieces?.[i+j]?.[5-j]) {
                     // console.log("happened")
                     console.log(boardPieces[i+j][5-j])
                     northWestDiagonal += boardPieces[i+j][5-j];
@@ -59,7 +59,7 @@ export default function Board(){
         for (let i=3; i<6; i++) {
             let northEastDiagonal:string = '';
             for (let j=0; j<6; j++) {
-                if (boardPieces[i-j][5-j]) northEastDiagonal += boardPieces[i-j][5-j];
+                if (boardPieces?.[i-j]?.[5-j]) northEastDiagonal += boardPieces[i-j][5-j];
             }
             console.log(`northEastDiagonal: ${northEastDiagonal}`);
             regexTest(northEastDiagonal);
