@@ -5,7 +5,6 @@ const boardPieces:string[][] = [['x'],['O'],['x'],['O'],['x'],['O'],['x']];
 export default function Board(){
     const [playerTurn, setTurn] = useState(true);
 
-
     const regexTest = (testString: string) => {
         const regexColX =/xxxx/;
         const regexColO =/OOOO/;
