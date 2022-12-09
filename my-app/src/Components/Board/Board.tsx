@@ -5,7 +5,6 @@ const boardPieces:string[][] = [['x'],['O'],['x'],['O'],['x'],['O'],['x']];
 export default function Board(){
     const [playerTurn, setTurn] = useState(true);
 
-
     const regexTest = (testString: string) => {
         const regexColX =/xxxx/;
         const regexColO =/OOOO/;
@@ -25,7 +24,7 @@ export default function Board(){
 
     const checkRowWin = () => {
         for (let i=0; i<6; i++) {
-            const stringRow = boardPieces.map((col) => col[i]).join('');
+            const stringRow = boardPieces.map((col) => col[i] || ' ').join('');
             regexTest(stringRow)
         }
     }
@@ -35,7 +34,11 @@ export default function Board(){
         for (let i=3; i<6; i++) {
             let westDiagonal:string = '';
             for (let j=0; j<6; j++) {
-                if (boardPieces[j][i-j]) westDiagonal += boardPieces[0+j][i-j]
+                if (boardPieces[j][i-j]) {
+                    westDiagonal += boardPieces[0+j][i-j]
+                } else {
+                    westDiagonal += ' '
+                }
             }
             console.log(`westDiagonal: ${westDiagonal}`);
             regexTest(westDiagonal);
@@ -49,6 +52,8 @@ export default function Board(){
                     // console.log("happened")
                     console.log(boardPieces[i+j][5-j])
                     northWestDiagonal += boardPieces[i+j][5-j];
+                } else {
+                    northWestDiagonal += ' '
                 }
             }
             console.log(`northWestDiagonal: ${northWestDiagonal}`);
@@ -59,7 +64,11 @@ export default function Board(){
         for (let i=3; i<6; i++) {
             let northEastDiagonal:string = '';
             for (let j=0; j<6; j++) {
-                if (boardPieces?.[i-j]?.[5-j]) northEastDiagonal += boardPieces[i-j][5-j];
+                if (boardPieces?.[i-j]?.[5-j]) {
+                    northEastDiagonal += boardPieces[i-j][5-j];
+                } else {
+                    northEastDiagonal += ' ';
+                }
             }
             console.log(`northEastDiagonal: ${northEastDiagonal}`);
             regexTest(northEastDiagonal);
@@ -69,7 +78,11 @@ export default function Board(){
         for (let i=5; i>2; i--) {
             let eastDiagonal:string = '';
             for (let j=0; j<6; j++) {
-                if (boardPieces[6-j][i-j]) eastDiagonal += boardPieces[6-j][i-j];
+                if (boardPieces[6-j][i-j]) {
+                    eastDiagonal += boardPieces[6-j][i-j];
+                } else {
+                    eastDiagonal += ' ';
+                }
             }
             console.log(`eastDiagonal: ${eastDiagonal}`);
             regexTest(eastDiagonal);
@@ -83,18 +96,18 @@ export default function Board(){
     };
 
     function whatPositionPicked(e:MouseEvent<HTMLTableRowElement>){
-        if(playerTurn){
+        const index = Number(e.currentTarget.getAttribute('data-index'))
+        if(playerTurn && boardPieces[index].length<6){
             console.log('whatRan')
-            const arrayPosition:number  = Number(e.currentTarget.getAttribute('data-index'))
-            boardPieces[arrayPosition].push('x')
+            boardPieces[index].push('x')
             setTurn(false);
-        }else{
+            didWin();
+        }else if(!playerTurn && boardPieces[index].length<6){
             console.log('whatRan')
-            const arrayPosition:number  = Number(e.currentTarget.getAttribute('data-index'))
-            boardPieces[arrayPosition].push('O')
+            boardPieces[index].push('O')
             setTurn(true);
+            didWin();
         };
-        didWin();
     };
     return (
         <>
