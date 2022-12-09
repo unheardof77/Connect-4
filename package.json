@@ -1,0 +1,25 @@
+{
+  "name": "connect-4",
+  "version": "1.0.0",
+  "description": "Connect-4 clone",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd server && npx tsc && cd build && node server.js",
+    "develop": "concurrently \"cd server && npm run start\" \"cd my-app && npm start\"",
+    "install": "cd server && npm i && cd ../my-app && npm i"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unheardof77/Connect-4.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/unheardof77/Connect-4/issues"
+  },
+  "homepage": "https://github.com/unheardof77/Connect-4#readme",
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
