@@ -101,8 +101,8 @@ export default function Board() {
 
         //programatic changes to board pieces array of arrays to mock falling "animation"
         const initialLength = boardPieces[index].length;
-        for (let i=5; i>=initialLength; i--) {
-            const ArrayToConcat = Array(i-initialLength).fill("null");
+        for (let i:number=5; i>=initialLength; i--) {
+            const ArrayToConcat: string[] = Array(i-initialLength).fill("null");
             playerTurn ? boardPieces[index]=[...boardPieces[index], ...ArrayToConcat, "x"] : boardPieces[index]=[...boardPieces[index], ...ArrayToConcat, "O"];
             forceUpdate();
             console.log(i);
@@ -136,7 +136,7 @@ export default function Board() {
 
     function renderCells(columnIndex: number) {
         const cellArray = [];
-        for (let j=0; j<6; j++) {
+        for (let j:number=0; j<6; j++) {
             cellArray.push(
                 <td key={`col:${columnIndex}-cell:${j}`} className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[columnIndex][j])}/></td>
             )
@@ -146,7 +146,7 @@ export default function Board() {
 
     function renderBoard() {
         const colsArray = []
-        for (let i=0; i<7; i++) {
+        for (let i:number=0; i<7; i++) {
             colsArray.push(
                 <tr key={`col:${i}`} data-index={i} onClick={whatPositionPicked} className="boardCell-wrapper">
                     {renderCells(i)}
