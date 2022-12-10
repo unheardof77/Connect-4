@@ -1,5 +1,5 @@
 import { useState, MouseEvent } from "react";
-
+import './Board.css'
 const boardPieces: string[][] = [['x'], ['O'], ['x'], ['O'], ['x'], ['O'], ['x']];
 
 export default function Board() {
@@ -107,6 +107,64 @@ export default function Board() {
             <table style={{ transform: 'rotate(-90deg)', margin: 500 }}>
                 <tbody>
                     {boardPieces.map((col, index) => <tr data-index={index} onClick={whatPositionPicked} key={`column #${index}`}>{boardPieces[index].map((piece, ind) => <td key={`col #${index} row #${ind}`}>{piece}</td>)}</tr>)}
+                </tbody>
+            </table>
+            <table>
+                <tbody>
+                    <tr className="boardCell-wrapper">
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>o</p></div>
+                        <div className="boardCell"><p>o</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                    </tr>
+                    <tr className="boardCell-wrapper">
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>o</p></div>
+                        <div className="boardCell"><p>o</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                    </tr>
+                    <tr className="boardCell-wrapper">
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>o</p></div>
+                        <div className="boardCell"><p>o</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                    </tr>
+                    <tr className="boardCell-wrapper">
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>o</p></div>
+                        <div className="boardCell"><p>o</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                    </tr>
+                    <tr className="boardCell-wrapper">
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>o</p></div>
+                        <div className="boardCell"><p>o</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                    </tr>
+                    <tr className="boardCell-wrapper">
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>o</p></div>
+                        <div className="boardCell"><p>o</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                        <div className="boardCell"><p>X</p></div>
+                    </tr>
                 </tbody>
             </table>
         </>
