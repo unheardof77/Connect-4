@@ -1,0 +1,14 @@
+.boardCell-wrapper {
+    display: flex;
+}
+
+.boardCell {
+    min-width: 120px;
+    height: 120px;
+    border: 2px solid white;
+    font-size: 4em;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
