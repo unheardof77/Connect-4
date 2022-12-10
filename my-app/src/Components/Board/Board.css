@@ -1,14 +1,33 @@
+.gameboard-wrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
 .boardCell-wrapper {
     display: flex;
 }
 
 .boardCell {
-    min-width: 120px;
-    height: 120px;
-    border: 2px solid white;
+    min-width: 110px;
+    height: 110px;
+    border: 2px solid gray;
     font-size: 4em;
     margin: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: gray;
+}
+
+.boardCell:hover {
+    cursor: pointer;
+}
+
+.player-turn-1 {
+    color: #b69f34;
+}
+
+.player-turn-2 {
+    color: #c93030;
 }
