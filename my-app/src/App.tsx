@@ -1,8 +1,9 @@
-import Board from "./Components/Board/Board";
+import BoardPage from "./Pages/BoardPage";
 import GameOver from "./Pages/GameOver";
-import { Route, Routes, HashRouter as Router, } from 'react-router-dom'
+import { Route, Routes, HashRouter as Router, } from 'react-router-dom';
 import { useState } from 'react';
 import {GameProvider} from './utils/statemanagment/globalstate';
+import './utils/reset/reset.css';
 function App() {
 
   return (
@@ -10,7 +11,7 @@ function App() {
       <GameProvider>
         <Router>
           <Routes>
-            <Route path="/" element={<Board/>}/>
+            <Route path="/" element={<BoardPage/>}/>
             <Route path="/gameOver/:player" element={<GameOver />}/>
             <Route/>
           </Routes>
