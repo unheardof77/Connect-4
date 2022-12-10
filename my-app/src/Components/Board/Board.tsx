@@ -1,3 +1,4 @@
+import { jsx } from "@emotion/react";
 import { useState, MouseEvent } from "react";
 import {BsFillCircleFill} from "react-icons/bs"
 import './Board.css'
@@ -92,6 +93,7 @@ export default function Board() {
 
     function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {
         const index = Number(e.currentTarget.getAttribute('data-index'))
+
         if (playerTurn && boardPieces[index].length < 6) {
             console.log('whatRan')
             boardPieces[index].push('x')
@@ -112,6 +114,29 @@ export default function Board() {
             default: return "#121212";
         }
     }
+
+    function renderCells(columnIndex: number) {
+        const cellArray = [];
+        for (let j=0; j<6; j++) {
+            cellArray.push(
+                <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[columnIndex][j])}/></div>
+            )
+        }
+        return cellArray;
+    }
+
+    function renderBoard() {
+        const colsArray = []
+        for (let i=0; i<7; i++) {
+            colsArray.push(
+                <tr data-index={i} onClick={whatPositionPicked} className="boardCell-wrapper">
+                    {renderCells(i)}
+                </tr>
+            )
+        }
+        return colsArray;
+    }
+
     return (
         <>
             {/* <table style={{ transform: 'rotate(-90deg)', margin: 500 }}>
@@ -123,7 +148,8 @@ export default function Board() {
                 <h1 className="player-turn-1" style={playerTurn ? {visibility: "visible"} : {visibility: "hidden"}}>Player one's turn</h1>
                 <table style={{margin: "0px 50px 0px 50px"}}>
                     <tbody style={{transform: "rotate(-90deg)"}}>
-                        <tr data-index={0} onClick={whatPositionPicked} className="boardCell-wrapper">
+                        {renderBoard()}
+                        {/* <tr data-index={0} onClick={whatPositionPicked} className="boardCell-wrapper">
                             <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[0][0])}/></div>
                             <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[0][1])}/></div>
                             <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[0][2])}/></div>
@@ -178,7 +204,7 @@ export default function Board() {
                             <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[6][3])}/></div>
                             <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[6][4])}/></div>
                             <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[6][5])}/></div>
-                        </tr>
+                        </tr> */}
                     </tbody>
                 </table>
                 <h1 className="player-turn-2" style={playerTurn ? {visibility: "hidden"} : {visibility: "visible"}}>Player two's turn</h1>
