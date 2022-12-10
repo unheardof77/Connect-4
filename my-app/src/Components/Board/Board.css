@@ -11,13 +11,12 @@
 .boardCell {
     min-width: 110px;
     height: 110px;
-    border: 2px solid gray;
+    border: 2px solid #444444;
     font-size: 4em;
     margin: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: gray;
 }
 
 .boardCell:hover {
