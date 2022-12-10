@@ -1,7 +1,6 @@
 import Board from "./Components/Board/Board";
 import GameOver from "./Pages/GameOver";
 import { Route, Routes, HashRouter as Router, } from 'react-router-dom'
-import { useState } from 'react';
 import {GameProvider} from './utils/statemanagment/globalstate';
 function App() {
 

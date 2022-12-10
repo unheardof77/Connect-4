@@ -46,8 +46,6 @@ export default function Board(){
             let northWestDiagonal:string = '';
             for (let j=0; j<6; j++) {
                 if (boardPieces?.[i+j]?.[5-j]) {
-                    // console.log("happened")
-                    console.log(boardPieces[i+j][5-j])
                     northWestDiagonal += boardPieces[i+j][5-j];
                 } else {
                     northWestDiagonal += ' '
