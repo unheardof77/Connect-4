@@ -1,11 +1,13 @@
 import { jsx } from "@emotion/react";
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, useReducer } from "react";
 import {BsFillCircleFill} from "react-icons/bs"
 import './Board.css'
 let boardPieces: string[][] = [[], [], [], [], [], [], []];
 
 export default function Board() {
     const [playerTurn, setTurn] = useState(true);
+    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+    const [inProgress, setInProgress] = useState(false);
 
     const regexTest = (testString: string) => {
         const regexColX = /xxxx/;
@@ -91,18 +93,35 @@ export default function Board() {
         checkDiagonalWin();
     };
 
-    function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {
+    async function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {
+        if (inProgress) return;
+
+        setInProgress(true);
         const index = Number(e.currentTarget.getAttribute('data-index'))
 
+        //programatic changes to board pieces array of arrays to mock falling "animation"
+        const initialLength = boardPieces[index].length;
+        for (let i=5; i>=initialLength; i--) {
+            const ArrayToConcat = Array(i-initialLength).fill("null");
+            playerTurn ? boardPieces[index]=[...boardPieces[index], ...ArrayToConcat, "x"] : boardPieces[index]=[...boardPieces[index], ...ArrayToConcat, "O"];
+            forceUpdate();
+            console.log(i);
+            console.log(boardPieces[index]);
+            await new Promise(resolve => setTimeout(resolve, 150));
+            boardPieces[index].splice(initialLength, 6);
+            forceUpdate();
+        }
+        console.log(boardPieces[index]);
+
         if (playerTurn && boardPieces[index].length < 6) {
-            console.log('whatRan')
-            boardPieces[index].push('x')
+            boardPieces[index].push('x');
             setTurn(false);
+            setInProgress(false);
             didWin();
         } else if (!playerTurn && boardPieces[index].length < 6) {
-            console.log('whatRan')
-            boardPieces[index].push('O')
+            boardPieces[index].push('O');
             setTurn(true);
+            setInProgress(false)
             didWin();
         };
     };
@@ -119,7 +138,7 @@ export default function Board() {
         const cellArray = [];
         for (let j=0; j<6; j++) {
             cellArray.push(
-                <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[columnIndex][j])}/></div>
+                <td key={`col:${columnIndex}-cell:${j}`} className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[columnIndex][j])}/></td>
             )
         }
         return cellArray;
@@ -129,7 +148,7 @@ export default function Board() {
         const colsArray = []
         for (let i=0; i<7; i++) {
             colsArray.push(
-                <tr data-index={i} onClick={whatPositionPicked} className="boardCell-wrapper">
+                <tr key={`col:${i}`} data-index={i} onClick={whatPositionPicked} className="boardCell-wrapper">
                     {renderCells(i)}
                 </tr>
             )
@@ -139,75 +158,14 @@ export default function Board() {
 
     return (
         <>
-            {/* <table style={{ transform: 'rotate(-90deg)', margin: 500 }}>
-                <tbody>
-                    {boardPieces.map((col, index) => <tr data-index={index} onClick={whatPositionPicked} key={`column #${index}`}>{boardPieces[index].map((piece, ind) => <td key={`col #${index} row #${ind}`}>{piece}</td>)}</tr>)}
-                </tbody>
-            </table> */}
             <div className="gameboard-wrapper">
-                <h1 className="player-turn-1" style={playerTurn ? {visibility: "visible"} : {visibility: "hidden"}}>Player one's turn</h1>
+                <h1 style={playerTurn ? {visibility: "visible", color: "lightgray"} : {visibility: "hidden"}}>Player <span className="player-turn-1">One's</span> Turn</h1>
                 <table style={{margin: "0px 50px 0px 50px"}}>
                     <tbody style={{transform: "rotate(-90deg)"}}>
                         {renderBoard()}
-                        {/* <tr data-index={0} onClick={whatPositionPicked} className="boardCell-wrapper">
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[0][0])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[0][1])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[0][2])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[0][3])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[0][4])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[0][5])}/></div>
-                        </tr>
-                        <tr data-index={1} onClick={whatPositionPicked} className="boardCell-wrapper">
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[1][0])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[1][1])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[1][2])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[1][3])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[1][4])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[1][5])}/></div>
-                        </tr>
-                        <tr data-index={2} onClick={whatPositionPicked} className="boardCell-wrapper">
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[2][0])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[2][1])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[2][2])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[2][3])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[2][4])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[2][5])}/></div>
-                        </tr>
-                        <tr data-index={3} onClick={whatPositionPicked} className="boardCell-wrapper">
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[3][0])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[3][1])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[3][2])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[3][3])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[3][4])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[3][5])}/></div>
-                        </tr>
-                        <tr data-index={4} onClick={whatPositionPicked} className="boardCell-wrapper">
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[4][0])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[4][1])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[4][2])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[4][3])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[4][4])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[4][5])}/></div>
-                        </tr>
-                        <tr data-index={5} onClick={whatPositionPicked} className="boardCell-wrapper">
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[5][0])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[5][1])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[5][2])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[5][3])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[5][4])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[5][5])}/></div>
-                        </tr>
-                        <tr data-index={6} onClick={whatPositionPicked} className="boardCell-wrapper">
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[6][0])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[6][1])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[6][2])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[6][3])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[6][4])}/></div>
-                            <div className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[6][5])}/></div>
-                        </tr> */}
                     </tbody>
                 </table>
-                <h1 className="player-turn-2" style={playerTurn ? {visibility: "hidden"} : {visibility: "visible"}}>Player two's turn</h1>
+                <h1 style={playerTurn ? {visibility: "hidden"} : {visibility: "visible", color: "lightgray"}}>Player <span className="player-turn-2">Two's</span> Turn</h1>
             </div>
         </>
     );
