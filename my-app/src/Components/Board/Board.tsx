@@ -1,6 +1,7 @@
 import { jsx } from "@emotion/react";
 import { useState, MouseEvent, useReducer } from "react";
 import {BsFillCircleFill} from "react-icons/bs"
+import { useGameContext } from "../../utils/statemanagment/globalstate";
 import './Board.css'
 let boardPieces: string[][] = [[], [], [], [], [], [], []];
 
@@ -8,6 +9,11 @@ export default function Board() {
     const [playerTurn, setTurn] = useState(true);
     const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
     const [inProgress, setInProgress] = useState(false);
+    const {state, dispatch} = useGameContext();
+    
+    const updateBoard = () =>{
+        
+    };
 
     const regexTest = (testString: string) => {
         const regexColX = /xxxx/;

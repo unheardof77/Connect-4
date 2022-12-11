@@ -17,16 +17,16 @@ function App() {
   return (
     <div className="App">
       <GameProvider>
-      <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-          <Router>
-            <Routes>
-              <Route path="/" element={<BoardPage/>}/>
-              <Route path="/gameOver/:player" element={<GameOver />}/>
-              <Route/>
-            </Routes>
-          </Router>
-        </ThemeProvider>
+        <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+            <Router>
+              <Routes>
+                <Route path="/" element={<BoardPage/>}/>
+                <Route path="/gameOver/:player" element={<GameOver />}/>
+                <Route/>
+              </Routes>
+            </Router>
+          </ThemeProvider>
       </GameProvider>
     </div>
   );
