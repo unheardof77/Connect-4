@@ -1,34 +1,32 @@
-import { jsx } from "@emotion/react";
-import { useState, MouseEvent, useReducer } from "react";
-import {BsFillCircleFill} from "react-icons/bs"
+import { useState, MouseEvent } from "react";
+import {BsFillCircleFill} from "react-icons/bs";
 import { useGameContext } from "../../utils/statemanagment/globalstate";
-import './Board.css'
-let boardPieces: string[][] = [[], [], [], [], [], [], []];
+import './Board.css';
+
 
 export default function Board() {
     const [playerTurn, setTurn] = useState(true);
-    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
     const [inProgress, setInProgress] = useState(false);
     const {state, dispatch} = useGameContext();
     
-    const updateBoard = () =>{
-        
+    const updateBoard = (index:number, piece:string) =>{
+        const newState = [...state];
+        newState[index].push(piece);
+        dispatch({type:'updateBoard', payload: newState});
     };
 
     const regexTest = (testString: string) => {
         const regexColX = /xxxx/;
         const regexColO = /OOOO/;
         if (regexColX.test(testString)) {
-            // boardPieces = [[], [], [], [], [], [], []];
             window.location.assign(`/#/gameOver/Player_One`);
         } else if (regexColO.test(testString)) {
-            // boardPieces = [[], [], [], [], [], [], []];
             window.location.assign(`/#/gameOver/Player_Two`);
         };
     };
 
     const checkColWin = () => {
-        boardPieces.forEach((col, index) => {
+        state.forEach((col, index) => {
             const stringCol = col.join('');
             regexTest(stringCol)
         });
@@ -36,7 +34,7 @@ export default function Board() {
 
     const checkRowWin = () => {
         for (let i = 0; i < 6; i++) {
-            const stringRow = boardPieces.map((col) => col[i] || ' ').join('');
+            const stringRow = state.map((col) => col[i] || ' ').join('');
             regexTest(stringRow)
         };
     };
@@ -45,8 +43,8 @@ export default function Board() {
         for (let i = 3; i < 6; i++) {
             let westDiagonal: string = '';
             for (let j = 0; j < 6; j++) {
-                if (boardPieces[j][i - j]) {
-                    westDiagonal += boardPieces[0 + j][i - j]
+                if (state[j][i - j]) {
+                    westDiagonal += state[0 + j][i - j]
                 } else {
                     westDiagonal += ' '
                 };
@@ -57,8 +55,8 @@ export default function Board() {
         for (let i=1; i<4; i++) {
             let northWestDiagonal:string = '';
             for (let j=0; j<6; j++) {
-                if (boardPieces?.[i+j]?.[5-j]) {
-                    northWestDiagonal += boardPieces[i+j][5-j];
+                if (state?.[i+j]?.[5-j]) {
+                    northWestDiagonal += state[i+j][5-j];
                 } else {
                     northWestDiagonal += ' '
                 };
@@ -69,8 +67,8 @@ export default function Board() {
         for (let i = 3; i < 6; i++) {
             let northEastDiagonal: string = '';
             for (let j = 0; j < 6; j++) {
-                if (boardPieces?.[i - j]?.[5 - j]) {
-                    northEastDiagonal += boardPieces[i - j][5 - j];
+                if (state?.[i - j]?.[5 - j]) {
+                    northEastDiagonal += state[i - j][5 - j];
                 } else {
                     northEastDiagonal += ' ';
                 };
@@ -81,8 +79,8 @@ export default function Board() {
         for (let i = 5; i > 2; i--) {
             let eastDiagonal: string = '';
             for (let j = 0; j < 6; j++) {
-                if (boardPieces[6 - j][i - j]) {
-                    eastDiagonal += boardPieces[6 - j][i - j];
+                if (state[6 - j][i - j]) {
+                    eastDiagonal += state[6 - j][i - j];
                 } else {
                     eastDiagonal += ' ';
                 };
@@ -104,26 +102,23 @@ export default function Board() {
         const index = Number(e.currentTarget.getAttribute('data-index'))
 
         //programatic changes to board pieces array of arrays to mock falling "animation"
-        const initialLength = boardPieces[index].length;
+        const initialLength = state[index].length;
         for (let i:number=5; i>=initialLength; i--) {
             const ArrayToConcat: string[] = Array(i-initialLength).fill("null");
-            playerTurn ? boardPieces[index]=[...boardPieces[index], ...ArrayToConcat, "x"] : boardPieces[index]=[...boardPieces[index], ...ArrayToConcat, "O"];
-            forceUpdate();
-            console.log(i);
-            console.log(boardPieces[index]);
+            playerTurn ? state[index]=[...state[index], ...ArrayToConcat, "x"] : state[index]=[...state[index], ...ArrayToConcat, "O"];
+            dispatch({type:'updateBoard', payload:state});
             await new Promise(resolve => setTimeout(resolve, 150));
-            boardPieces[index].splice(initialLength, 6);
-            forceUpdate();
+            state[index].splice(initialLength, 6);
+            dispatch({type:'updateBoard', payload:state});
         }
-        console.log(boardPieces[index]);
 
-        if (playerTurn && boardPieces[index].length < 6) {
-            boardPieces[index].push('x');
+        if (playerTurn && state[index].length < 6) {
+            updateBoard(index,'x');
             setTurn(false);
             setInProgress(false);
             didWin();
-        } else if (!playerTurn && boardPieces[index].length < 6) {
-            boardPieces[index].push('O');
+        } else if (!playerTurn && state[index].length < 6) {
+            updateBoard(index,'O');
             setTurn(true);
             setInProgress(false)
             didWin();
@@ -142,7 +137,7 @@ export default function Board() {
         const cellArray = [];
         for (let j:number=0; j<6; j++) {
             cellArray.push(
-                <td key={`col:${columnIndex}-cell:${j}`} className="boardCell"><BsFillCircleFill size="85px" color={renderColor(boardPieces[columnIndex][j])}/></td>
+                <td key={`col:${columnIndex}-cell:${j}`} className="boardCell"><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])}/></td>
             )
         }
         return cellArray;
