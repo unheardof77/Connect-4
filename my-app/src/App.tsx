@@ -1,11 +1,58 @@
 import BoardPage from "./Pages/BoardPage";
 import GameOver from "./Pages/GameOver";
-import { Route, Routes, HashRouter as Router, } from 'react-router-dom';
-import { useState } from 'react';
+import { Route, Routes, HashRouter as Router, } from 'react-router-dom'
 import {GameProvider} from './utils/statemanagment/globalstate';
 // import './utils/reset/reset.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { createClient } from 'graphql-ws';
+
+import { split, HttpLink } from '@apollo/client';
+import { getMainDefinition } from '@apollo/client/utilities';
+
+
+const httpLink = new HttpLink({
+  uri: 'graphql'
+});
+
+const wsLink = new GraphQLWsLink(createClient({
+  url: '/subscriptions',
+}));
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  httpLink,
+);
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('id_token');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
+const client = new ApolloClient({
+  link: authLink.concat(splitLink),
+  cache: new InMemoryCache(),
+});
 
 const darkTheme = createTheme({
   palette: {
@@ -17,18 +64,20 @@ function App() {
 
   return (
     <div className="App">
-      <GameProvider>
-      <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-          <Router>
-            <Routes>
-              <Route path="/" element={<BoardPage/>}/>
-              <Route path="/gameOver/:player" element={<GameOver />}/>
-              <Route/>
-            </Routes>
-          </Router>
-        </ThemeProvider>
-      </GameProvider>
+      <ApolloProvider client={client}>
+        <GameProvider>
+          <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+              <Router>
+                <Routes>
+                  <Route path="/" element={<BoardPage/>}/>
+                  <Route path="/gameOver/:player" element={<GameOver />}/>
+                  <Route/>
+                </Routes>
+              </Router>
+            </ThemeProvider>
+        </GameProvider>
+      </ApolloProvider>
     </div>
   );
 }
