@@ -105,7 +105,7 @@ export default function Board() {
         const initialLength = state[index].length;
         for (let i:number=5; i>=initialLength; i--) {
             const ArrayToConcat: string[] = Array(i-initialLength).fill("null");
-            playerTurn ? state[index]=[...state[index], ...ArrayToConcat, "x"] : state[index]=[...state[index], ...ArrayToConcat, "O"];
+            state[index] = playerTurn ? [...state[index], ...ArrayToConcat, "x"] : [...state[index], ...ArrayToConcat, "O"];
             dispatch({type:'updateBoard', payload:state});
             await new Promise(resolve => setTimeout(resolve, 150));
             state[index].splice(initialLength, 6);
