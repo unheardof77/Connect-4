@@ -5,6 +5,9 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { FormControl, TextField, Box, FormLabel, DialogContentText } from '@mui/material';
 import {forwardRef, useState, Dispatch, SetStateAction, FormEvent, ChangeEvent} from 'react';
+import { useMutation } from '@apollo/client';
+import { login } from '../../utils/crud/Mutation';
+import Auth from '../../utils/auth/auth';
 
 interface LoginProps {
     loginModalStatus: boolean;
@@ -24,6 +27,7 @@ const Transition = forwardRef(function Transition(
 export default function LoginModal({loginModalStatus, setLoginModalStatus, setSignupModalStatus}:LoginProps) {
     const [ username, setUsername] = useState("");
     const [ password, setPassword] = useState("");
+    const [loginQuery] = useMutation(login);
 
     const handleClose = () => {
         setUsername("");
@@ -31,11 +35,19 @@ export default function LoginModal({loginModalStatus, setLoginModalStatus, setSi
         setLoginModalStatus(false);
     };
 
-    const handleFormSubmit = (e:FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = async (e:FormEvent<HTMLFormElement>) => {
         console.log('insubmit')
         e.preventDefault();
         if(!username || !password){
             console.log('empty')
+        }else{
+            try{
+                const {data} = await loginQuery({variables:{username, password}});
+                Auth.login(data.login.token);
+                window.location.assign('/');
+            }catch(err){
+                console.error(err);
+            }
         }
     };
 

@@ -5,6 +5,10 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { FormControl, TextField, Box, FormLabel, DialogContentText } from '@mui/material';
 import {forwardRef, useState, Dispatch, SetStateAction, FormEvent, ChangeEvent} from 'react';
+import { useMutation } from '@apollo/client';
+import { signup } from '../../utils/crud/Mutation';
+
+import Auth from '../../utils/auth/auth'
 
 interface SignupProps {
     signupModalStatus: boolean;
@@ -26,6 +30,7 @@ export default function SignupModal({signupModalStatus, setSignupModalStatus, se
     const [ password, setPassword] = useState("");
     const [ confirmPassword, setConfirmPassword] = useState("");
     const [nonMatchPassword, setNonMatch] = useState(false);
+    const [signUpQuery] = useMutation(signup)
 
     const handleClose = () => {
         setUsername("");
@@ -34,15 +39,23 @@ export default function SignupModal({signupModalStatus, setSignupModalStatus, se
         setSignupModalStatus(false);
     };
 
-    const handleFormSubmit = (e:FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = async (e:FormEvent<HTMLFormElement>) => {
         console.log('insubmit')
         e.preventDefault();
         if(!username || !password || !confirmPassword){
             console.log('empty')
-        }
-        if(password !== confirmPassword){
+        } else if(password !== confirmPassword){
             console.log('happened')
             setNonMatch(true)
+        }else{
+            try{
+                const { data } = await signUpQuery({variables:{username, password}});
+                Auth.login(data.signup.token);
+                window.location.assign('/');
+            }catch(err){
+                console.error(err)
+            }
+            
         }
     };
 
