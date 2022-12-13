@@ -1,10 +1,15 @@
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, Dispatch, SetStateAction } from "react";
 import {BsFillCircleFill} from "react-icons/bs";
 import { useGameContext } from "../../utils/statemanagment/globalstate";
 import './Board.css';
 
+interface Props {
+    winner: string;
+    setWinner: Dispatch<SetStateAction<string>>;
+    setWinnerModalOpen: Dispatch<SetStateAction<boolean>>;
+}
 
-export default function Board() {
+export default function Board({winner, setWinner, setWinnerModalOpen}:Props) {
     const [playerTurn, setTurn] = useState(true);
     const [inProgress, setInProgress] = useState(false);
     const {state, dispatch} = useGameContext();
@@ -19,9 +24,13 @@ export default function Board() {
         const regexColX = /xxxx/;
         const regexColO = /OOOO/;
         if (regexColX.test(testString)) {
-            window.location.assign(`/#/gameOver/Player_One`);
+            setWinner("Player 1");
+            setWinnerModalOpen(true);
+            // window.location.assign(`/#/gameOver/Player_One`);
         } else if (regexColO.test(testString)) {
-            window.location.assign(`/#/gameOver/Player_Two`);
+            setWinner("Player 2");
+            setWinnerModalOpen(true);
+            // window.location.assign(`/#/gameOver/Player_Two`);
         };
     };
 
