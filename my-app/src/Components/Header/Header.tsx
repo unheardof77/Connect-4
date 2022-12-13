@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Dispatch, SetStateAction } from 'react';
+import Auth from '../../utils/auth/auth';
 
 interface HeaderProps {
     setLoginModalStatus: Dispatch<SetStateAction<boolean>>;
@@ -28,7 +29,7 @@ export default function Header({setLoginModalStatus}:HeaderProps) {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         News
                     </Typography>
-                    <Button onClick={()=>setLoginModalStatus(true)} color="inherit">Login</Button>
+                    {Auth.loggedIn()?<Button onClick={(e)=>{e.preventDefault(); Auth.logout();}} color="inherit">Logout</Button>:<Button onClick={()=>setLoginModalStatus(true)} color="inherit">Login</Button>}
                 </Toolbar>
             </AppBar>
         </Box>

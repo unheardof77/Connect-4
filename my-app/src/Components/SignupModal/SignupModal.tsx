@@ -6,13 +6,14 @@ import { TransitionProps } from '@mui/material/transitions';
 import { FormControl, TextField, Box, FormLabel, DialogContentText } from '@mui/material';
 import {forwardRef, useState, Dispatch, SetStateAction, FormEvent, ChangeEvent} from 'react';
 import { useMutation } from '@apollo/client';
-import { login } from '../../utils/crud/Mutation';
-import Auth from '../../utils/auth/auth';
+import { signup } from '../../utils/crud/Mutation';
 
-interface LoginProps {
-    loginModalStatus: boolean;
-    setLoginModalStatus: Dispatch<SetStateAction<boolean>>;
+import Auth from '../../utils/auth/auth'
+
+interface SignupProps {
+    signupModalStatus: boolean;
     setSignupModalStatus: Dispatch<SetStateAction<boolean>>;
+    setLoginModalStatus: Dispatch<SetStateAction<boolean>>;
 }
 
 const Transition = forwardRef(function Transition(
@@ -24,30 +25,37 @@ const Transition = forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function LoginModal({loginModalStatus, setLoginModalStatus, setSignupModalStatus}:LoginProps) {
+export default function SignupModal({signupModalStatus, setSignupModalStatus, setLoginModalStatus}:SignupProps) {
     const [ username, setUsername] = useState("");
     const [ password, setPassword] = useState("");
-    const [loginQuery] = useMutation(login);
+    const [ confirmPassword, setConfirmPassword] = useState("");
+    const [nonMatchPassword, setNonMatch] = useState(false);
+    const [signUpQuery] = useMutation(signup)
 
     const handleClose = () => {
         setUsername("");
         setPassword("");
-        setLoginModalStatus(false);
+        setConfirmPassword("");
+        setSignupModalStatus(false);
     };
 
     const handleFormSubmit = async (e:FormEvent<HTMLFormElement>) => {
         console.log('insubmit')
         e.preventDefault();
-        if(!username || !password){
+        if(!username || !password || !confirmPassword){
             console.log('empty')
+        } else if(password !== confirmPassword){
+            console.log('happened')
+            setNonMatch(true)
         }else{
             try{
-                const {data} = await loginQuery({variables:{username, password}});
-                Auth.login(data.login.token);
+                const { data } = await signUpQuery({variables:{username, password}});
+                Auth.login(data.signup.token);
                 window.location.assign('/');
             }catch(err){
-                console.error(err);
+                console.error(err)
             }
+            
         }
     };
 
@@ -56,19 +64,20 @@ export default function LoginModal({loginModalStatus, setLoginModalStatus, setSi
         switch(name){
             case 'UserName': setUsername(value); break;
             case 'Password': setPassword(value); break;
+            case 'confirmPassword': setConfirmPassword(value); break;
         };
     };
 
-    const renderSignup = () => {
+    const renderLogin = () =>{
         handleClose();
-        setSignupModalStatus(true);
-    };
+        setLoginModalStatus(true);
+    }
 
 
     return (
         <div>
             <Dialog
-                open={loginModalStatus}
+                open={signupModalStatus}
                 TransitionComponent={Transition}
                 keepMounted
                 onClose={handleClose}
@@ -77,12 +86,18 @@ export default function LoginModal({loginModalStatus, setLoginModalStatus, setSi
                 
             >
                 <Box component='form' onSubmit={handleFormSubmit} padding={5}>
-                    <TextField fullWidth id="standard-basic" name='UserName' value={username} onChange={handleUserNameValue} label="Username" variant="standard" />
-                    <TextField fullWidth name='Password'onChange={handleUserNameValue} value={password} id="standard-basic" label="Password" variant="standard" />
+                    <FormControl fullWidth>
+                        <TextField id="standard-basic" name='UserName' value={username} onChange={handleUserNameValue} label="UserName" variant="standard" />
+                        <FormControl fullWidth>
+                            <TextField fullWidth name='Password'onChange={handleUserNameValue} value={password} id="standard-basic" label="Password" variant="standard" />
+                            <TextField id="standard-basic" onChange={handleUserNameValue} name='confirmPassword' value={confirmPassword} label="Confirm Password" variant="standard" />
+                            {nonMatchPassword?<FormLabel>Passwords must match.</FormLabel>: null}
+                        </FormControl>
+                    </FormControl>
                     <DialogActions>
-                        <DialogContentText onClick={renderSignup}>Click here to signup instead.</DialogContentText>
+                        <DialogContentText onClick={renderLogin}>Click here to login instead.</DialogContentText>
                         <Button onClick={handleClose}>Cancel</Button>
-                        <Button type='submit' >Login</Button>
+                        <Button type='submit' >Signup</Button>
                     </DialogActions>
                 </Box>
 
