@@ -6,7 +6,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import {forwardRef, useState} from 'react';
+import { FormControl, TextField, Box } from '@mui/material';
+import {forwardRef, useState, Dispatch, SetStateAction} from 'react';
+
+interface LoginProps {
+    loginModalStatus: boolean;
+    setLoginModalStatus: Dispatch<SetStateAction<boolean>>;
+}
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -17,36 +23,41 @@ const Transition = forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AlertDialogSlide() {
-    const [open, setOpen] = useState(false);
+export default function LoginModal({loginModalStatus, setLoginModalStatus}:LoginProps) {
+    const [ username, setUsername] = useState();
+    const [ password, setPassword] = useState();
 
     const handleClickOpen = () => {
-        setOpen(true);
+        setLoginModalStatus(true);
     };
 
     const handleClose = () => {
-        setOpen(false);
+        setLoginModalStatus(false);
     };
+
+
 
     return (
         <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                Slide in alert dialog
-            </Button>
             <Dialog
-                open={open}
+                open={loginModalStatus}
                 TransitionComponent={Transition}
                 keepMounted
                 onClose={handleClose}
                 aria-describedby="alert-dialog-slide-description"
+                fullWidth
             >
-                <DialogTitle>{"Use Google's location service?"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-slide-description">
-                        Let Google help apps determine location. This means sending anonymous
-                        location data to Google, even when no apps are running.
-                    </DialogContentText>
-                </DialogContent>
+                <Box component='form' padding={5}>
+                    <FormControl>
+                        <TextField id="standard-basic" label="UserName" variant="standard" />
+                        <FormControl fullWidth>
+                            <TextField fullWidth id="standard-basic" label="Password" variant="standard" />
+                            <TextField id="standard-basic" label="Confirm Password" variant="standard" />
+                        </FormControl>
+                    </FormControl>
+
+                </Box>
+
                 <DialogActions>
                     <Button onClick={handleClose}>Disagree</Button>
                     <Button onClick={handleClose}>Agree</Button>
