@@ -5,8 +5,13 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import { Dispatch, SetStateAction } from 'react';
 
-export default function Header() {
+interface HeaderProps {
+    setLoginModalStatus: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function Header({setLoginModalStatus}:HeaderProps) {
     return (
         <Box sx={{ flexGrow: 1, bgcolor: "black" }}>
             <AppBar position="static">
@@ -23,7 +28,7 @@ export default function Header() {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         News
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    <Button onClick={()=>setLoginModalStatus(true)} color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>
         </Box>
