@@ -1,8 +1,8 @@
 import BoardPage from "./Pages/BoardPage";
 import GameOver from "./Pages/GameOver";
 import { Route, Routes, HashRouter as Router, } from 'react-router-dom'
-import {GameProvider} from './utils/statemanagment/globalstate';
-// import './utils/reset/reset.css';
+import {GameProvider, ModalStateProvider} from './utils/statemanagment/globalstate';
+import AboutPage from "./Pages/AboutPage";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -66,16 +66,18 @@ function App() {
     <div className="App">
       <ApolloProvider client={client}>
         <GameProvider>
-          <ThemeProvider theme={darkTheme}>
-          <CssBaseline />
-              <Router>
-                <Routes>
-                  <Route path="/" element={<BoardPage/>}/>
-                  <Route path="/gameOver/:player" element={<GameOver />}/>
-                  <Route/>
-                </Routes>
-              </Router>
-            </ThemeProvider>
+          <ModalStateProvider>
+            <ThemeProvider theme={darkTheme}>
+            <CssBaseline />
+                <Router>
+                  <Routes>
+                    <Route path="/" element={<BoardPage/>}/>
+                    <Route path="/gameOver/:player" element={<GameOver />}/>
+                    <Route path="/aboutUs" element={<AboutPage/>}/>
+                  </Routes>
+                </Router>
+              </ThemeProvider>
+          </ModalStateProvider>
         </GameProvider>
       </ApolloProvider>
     </div>

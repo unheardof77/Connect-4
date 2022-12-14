@@ -7,12 +7,11 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Dispatch, SetStateAction } from 'react';
 import Auth from '../../utils/auth/auth';
+import { useModalContext } from '../../utils/statemanagment/globalstate';
 
-interface HeaderProps {
-    setLoginModalStatus: Dispatch<SetStateAction<boolean>>;
-}
 
-export default function Header({setLoginModalStatus}:HeaderProps) {
+export default function Header() {
+    const {updateModalState } = useModalContext();
     return (
         <Box sx={{ flexGrow: 1, bgcolor: "black" }}>
             <AppBar position="static">
@@ -29,7 +28,7 @@ export default function Header({setLoginModalStatus}:HeaderProps) {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         News
                     </Typography>
-                    {Auth.loggedIn()?<Button onClick={(e)=>{e.preventDefault(); Auth.logout();}} color="inherit">Logout</Button>:<Button onClick={()=>setLoginModalStatus(true)} color="inherit">Login</Button>}
+                    {Auth.loggedIn()?<Button onClick={(e)=>{e.preventDefault(); Auth.logout();}} color="inherit">Logout</Button>:<Button onClick={()=>updateModalState({type:'showLogin'})} color="inherit">Login</Button>}
                 </Toolbar>
             </AppBar>
         </Box>
