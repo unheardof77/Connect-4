@@ -9,15 +9,13 @@ import { useState } from "react";
 export default function BoardPage() {
     const [winner, setWinner] = useState("");
     const [winnerModalOpen, setWinnerModalOpen] = useState(false);
-    const [loginModalStatus, setLoginModalStatus] = useState(false);
-    const [signupModalStatus, setSignupModalStatus] = useState(false);
     return (
         <>
-            <Header setLoginModalStatus={setLoginModalStatus}/>
+            <Header/>
             <Board winner={winner} setWinner={setWinner} setWinnerModalOpen={setWinnerModalOpen}/>
             <WinnerModal winnerModalOpen={winnerModalOpen} setWinnerModalOpen={setWinnerModalOpen} winner={winner}/>
-            <LoginModal setSignupModalStatus={setSignupModalStatus} loginModalStatus={loginModalStatus} setLoginModalStatus={setLoginModalStatus}/>
-            <SignupModal setLoginModalStatus={setLoginModalStatus} setSignupModalStatus={setSignupModalStatus} signupModalStatus={signupModalStatus} />
+            <LoginModal/>
+            <SignupModal/>
         </>
     )
 }

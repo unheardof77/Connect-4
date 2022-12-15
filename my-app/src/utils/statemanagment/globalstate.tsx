@@ -2,8 +2,9 @@ import { createContext, useContext } from 'react';
 import { useGameReducer } from './reducer';
 import { Dispatch } from 'react';
 
+import { useModalReducer, ModalState, modalAction } from './reducer';;
 
-
+const initialModalState = {login:false, signup:false};
 
 
 const GameContext = createContext<{state: string[][], dispatch: Dispatch<any>}>({state:[['']], dispatch:()=>null});
@@ -18,4 +19,17 @@ const GameProvider = ({value = [], ...props}) => {
 
 const useGameContext = () => useContext(GameContext);
 
-export { GameProvider, useGameContext};
+
+
+const modalContext = createContext<{modalState:ModalState, updateModalState:Dispatch<modalAction>}>({modalState: initialModalState, updateModalState: ()=>null});
+const { Provider: ModalProvider } = modalContext;
+
+const ModalStateProvider = ({value = [], ...props}) =>{
+    const [modalState, updateModalState] = useModalReducer(initialModalState);
+
+    return <ModalProvider value={{modalState, updateModalState}} {...props}/>;
+}
+
+const useModalContext = () => useContext(modalContext);
+
+export { GameProvider, useGameContext, ModalStateProvider, useModalContext};

@@ -7,14 +7,10 @@ import { FormControl, TextField, Box, FormLabel, DialogContentText } from '@mui/
 import {forwardRef, useState, Dispatch, SetStateAction, FormEvent, ChangeEvent} from 'react';
 import { useMutation } from '@apollo/client';
 import { signup } from '../../utils/crud/Mutation';
+import { useModalContext } from '../../utils/statemanagment/globalstate';
 
 import Auth from '../../utils/auth/auth'
 
-interface SignupProps {
-    signupModalStatus: boolean;
-    setSignupModalStatus: Dispatch<SetStateAction<boolean>>;
-    setLoginModalStatus: Dispatch<SetStateAction<boolean>>;
-}
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -25,7 +21,8 @@ const Transition = forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function SignupModal({signupModalStatus, setSignupModalStatus, setLoginModalStatus}:SignupProps) {
+export default function SignupModal() {
+    const { modalState, updateModalState } = useModalContext();
     const [ username, setUsername] = useState("");
     const [ password, setPassword] = useState("");
     const [ confirmPassword, setConfirmPassword] = useState("");
@@ -36,7 +33,7 @@ export default function SignupModal({signupModalStatus, setSignupModalStatus, se
         setUsername("");
         setPassword("");
         setConfirmPassword("");
-        setSignupModalStatus(false);
+        updateModalState({type:'hideSignup'});
     };
 
     const handleFormSubmit = async (e:FormEvent<HTMLFormElement>) => {
@@ -70,14 +67,14 @@ export default function SignupModal({signupModalStatus, setSignupModalStatus, se
 
     const renderLogin = () =>{
         handleClose();
-        setLoginModalStatus(true);
+        updateModalState({type:'showLogin'});
     }
 
 
     return (
         <div>
             <Dialog
-                open={signupModalStatus}
+                open={modalState.signup}
                 TransitionComponent={Transition}
                 keepMounted
                 onClose={handleClose}
