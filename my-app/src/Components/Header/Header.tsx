@@ -13,6 +13,16 @@ interface HeaderProps {
 }
 
 export default function Header({setLoginModalStatus}:HeaderProps) {
+    const user: any = Auth.getProfile();
+
+    function GenerateUsername() {
+        if (Auth.loggedIn()) {
+            return (user) ? user.data.username : "Guest";
+        } else {
+            return "Guest";
+        }
+    }
+
     return (
         <Box sx={{ flexGrow: 1, bgcolor: "black" }}>
             <AppBar position="static">
@@ -27,7 +37,7 @@ export default function Header({setLoginModalStatus}:HeaderProps) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        News
+                        {GenerateUsername()}
                     </Typography>
                     {Auth.loggedIn()?<Button onClick={(e)=>{e.preventDefault(); Auth.logout();}} color="inherit">Logout</Button>:<Button onClick={()=>setLoginModalStatus(true)} color="inherit">Login</Button>}
                 </Toolbar>

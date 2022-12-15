@@ -156,7 +156,7 @@ export default function Board({winner, setWinner, setWinnerModalOpen}:Props) {
         const colsArray = []
         for (let i:number=0; i<7; i++) {
             colsArray.push(
-                <tr key={`col:${i}`} data-index={i} onClick={whatPositionPicked} className="boardCell-wrapper">
+                <tr key={`col:${i}`} style={{margin: "20px"}} data-index={i} onClick={whatPositionPicked} className="boardCell-wrapper">
                     {renderCells(i)}
                 </tr>
             )
