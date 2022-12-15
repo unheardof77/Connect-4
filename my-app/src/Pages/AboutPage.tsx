@@ -2,9 +2,14 @@ import {Box, Typography} from '@mui/material';
 import Header from '../Components/Header/Header';
 import LoginModal from '../Components/LoginModal/LoginModal';
 import SignupModal from '../Components/SignupModal/SignupModal';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import CheckoutForm from '../Components/CheckoutForm/CheckoutForm';
 
+const stripePromise = loadStripe('pk_test_51MF246FhLt5A8AbKPxxbzKomjN1l6ggWollsfH66RgVcL9sQrObPHh1kOuZL1b7W7Q7IsO8SjIvh6TUNuiDZr96M006pbFiehi')
 
 export default function AboutPage(){
+
 
     return(
         <>
@@ -31,6 +36,9 @@ export default function AboutPage(){
             </Box>
             <LoginModal/>
             <SignupModal/>
+            <Elements stripe={stripePromise}>
+                <CheckoutForm/>
+            </Elements>
         </>
     )
 };
