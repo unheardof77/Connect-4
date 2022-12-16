@@ -15,7 +15,7 @@ import Logo from '../../assets/Logo.png';
 import { useState, MouseEvent } from 'react';
 import Auth from '../../utils/auth/auth';
 import { useModalContext } from '../../utils/statemanagment/globalstate';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const pages = ['Home', 'About', 'Coffee'];
 const settings = ['Profile', 'Account', 'Dashboard'];
@@ -23,6 +23,8 @@ const settings = ['Profile', 'Account', 'Dashboard'];
 export default function Header() {
     const user: any = Auth.getProfile();
     const { updateModalState } = useModalContext();
+
+    const navigate = useNavigate();
 
     function GenerateUsername() {
         if (Auth.loggedIn()) {
@@ -97,8 +99,8 @@ export default function Header() {
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <img src={Logo} style={{ maxHeight: "50px", margin: "10px 0px" }} />
                         <Link className='link-reset' to="/"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>Home</Button></Link>
-                        <Link className='link-reset' to="/"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>About</Button></Link>
-                        <Link className='link-reset' to="/aboutUs"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>Coffee</Button></Link>
+                        <Button onClick={()=>navigate('/aboutUs')} sx={{ my: 2, color: 'white', display: 'block' }}>About</Button>
+                        <Link className='link-reset' to="/"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>Coffee</Button></Link>
                     </Box>
 
                     {Auth.loggedIn() ?
