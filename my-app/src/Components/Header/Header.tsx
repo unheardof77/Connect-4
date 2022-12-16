@@ -14,17 +14,14 @@ import Avatar from '@mui/material/Avatar';
 import Logo from '../../assets/Logo.png'
 import { Dispatch, SetStateAction, useState, MouseEvent} from 'react';
 import Auth from '../../utils/auth/auth';
-
-interface HeaderProps {
-    setLoginModalStatus: Dispatch<SetStateAction<boolean>>;
-    setSignupModalStatus: Dispatch<SetStateAction<boolean>>;
-}
+import { useModalContext } from '../../utils/statemanagment/globalstate';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-export default function Header({ setLoginModalStatus, setSignupModalStatus }: HeaderProps) {
+export default function Header() {
     const user: any = Auth.getProfile();
+    const {updateModalState } = useModalContext();
 
     function GenerateUsername() {
         if (Auth.loggedIn()) {
@@ -163,8 +160,8 @@ export default function Header({ setLoginModalStatus, setSignupModalStatus }: He
                         </Box>
                     :
                     <>
-                        <Button onClick={()=>setLoginModalStatus(true)} sx={{ my: 2, color: 'white', display: 'block' }}>Log In</Button>
-                        <Button onClick={()=>setSignupModalStatus(true)} sx={{ my: 2, color: 'white', display: 'block' }}>Sign Up</Button>
+                        <Button onClick={()=>updateModalState({type:'showLogin'})} sx={{ my: 2, color: 'white', display: 'block' }}>Log In</Button>
+                        <Button onClick={()=>updateModalState({type:'showLogin'})} sx={{ my: 2, color: 'white', display: 'block' }}>Sign Up</Button>
                     </>
                     }
                 </Toolbar>

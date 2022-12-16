@@ -10,12 +10,8 @@ import {forwardRef, useState, Dispatch, SetStateAction, FormEvent, ChangeEvent} 
 import { useMutation } from '@apollo/client';
 import { login } from '../../utils/crud/Mutation';
 import Auth from '../../utils/auth/auth';
+import { useModalContext } from '../../utils/statemanagment/globalstate';
 
-interface LoginProps {
-    loginModalStatus: boolean;
-    setLoginModalStatus: Dispatch<SetStateAction<boolean>>;
-    setSignupModalStatus: Dispatch<SetStateAction<boolean>>;
-}
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -26,7 +22,8 @@ const Transition = forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function LoginModal({loginModalStatus, setLoginModalStatus, setSignupModalStatus}:LoginProps) {
+export default function LoginModal() {
+    const { modalState, updateModalState } = useModalContext();
     const [ username, setUsername] = useState("");
     const [ password, setPassword] = useState("");
     const [loginQuery] = useMutation(login);
@@ -34,7 +31,7 @@ export default function LoginModal({loginModalStatus, setLoginModalStatus, setSi
     const handleClose = () => {
         setUsername("");
         setPassword("");
-        setLoginModalStatus(false);
+        updateModalState({type:'hideLogin'});
     };
 
     const handleFormSubmit = async (e:FormEvent<HTMLFormElement>) => {
@@ -63,14 +60,14 @@ export default function LoginModal({loginModalStatus, setLoginModalStatus, setSi
 
     const renderSignup = () => {
         handleClose();
-        setSignupModalStatus(true);
+        updateModalState({type:'showSignup'});
     };
 
 
     return (
         <div>
             <Dialog
-                open={loginModalStatus}
+                open={modalState.login}
                 TransitionComponent={Transition}
                 keepMounted
                 onClose={handleClose}
