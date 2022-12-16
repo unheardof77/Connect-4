@@ -2,7 +2,11 @@ import { AuthenticationError } from 'apollo-server-express';
 import { Context, LoginSignup, CheckoutArgs } from '../utils/types';
 import { signToken } from '../utils/auth';
 import User from '../models/User';
-const stripe = require('stripe')('sk_test_51M9D8lCh7zP8YFj8qQc2yS0JUHWYlHuwAmFlnIKBAcCwDMGDPXRxejHkfGiJgqubNapnwhDXHtVTjXAitim0roVv000juBWcF9');
+
+import * as dotenv from 'dotenv'
+dotenv.config()
+
+const stripe = require('stripe')(process.env.STRIPEKEY);
 
 const resolvers = {
     Mutation:{
@@ -38,7 +42,11 @@ const resolvers = {
             const url = new URL(context.headers.referer).origin;
             const lineItems = [];
 
-            const stripeDonation = await stripe.products.create({name:'Donation'});
+            const stripeDonation = await stripe.products.create({
+                name:'Coffee Donation', 
+                description: 'Thank you so much!',
+                images: ["http://cdn.home-designing.com/wp-content/uploads/2015/10/marbled-ceramic-mug-600x400.jpg"]
+        });
 
             const price = await stripe.prices.create({
                 product: stripeDonation.id,
@@ -52,8 +60,8 @@ const resolvers = {
                 payment_method_types: ['card'],
                 line_items: lineItems,
                 mode: 'payment',
-                success_url: `${url}/thankyou`,
-                cancel_url: `${url}/canceled`
+                success_url: `${url}/#/thankyou`,
+                cancel_url: `${url}/#/canceled`
             });
 
             return { session: session.id}
