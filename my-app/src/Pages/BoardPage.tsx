@@ -13,7 +13,7 @@ export default function BoardPage() {
     const [signupModalStatus, setSignupModalStatus] = useState(false);
     return (
         <>
-            <Header setLoginModalStatus={setLoginModalStatus}/>
+            <Header setLoginModalStatus={setLoginModalStatus} setSignupModalStatus={setSignupModalStatus}/>
             <Board winner={winner} setWinner={setWinner} setWinnerModalOpen={setWinnerModalOpen}/>
             <WinnerModal winnerModalOpen={winnerModalOpen} setWinnerModalOpen={setWinnerModalOpen} winner={winner}/>
             <LoginModal setSignupModalStatus={setSignupModalStatus} loginModalStatus={loginModalStatus} setLoginModalStatus={setLoginModalStatus}/>

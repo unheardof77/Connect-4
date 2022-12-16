@@ -17,12 +17,13 @@ import Auth from '../../utils/auth/auth';
 
 interface HeaderProps {
     setLoginModalStatus: Dispatch<SetStateAction<boolean>>;
+    setSignupModalStatus: Dispatch<SetStateAction<boolean>>;
 }
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-export default function Header({ setLoginModalStatus }: HeaderProps) {
+export default function Header({ setLoginModalStatus, setSignupModalStatus }: HeaderProps) {
     const user: any = Auth.getProfile();
 
     function GenerateUsername() {
@@ -77,26 +78,6 @@ export default function Header({ setLoginModalStatus }: HeaderProps) {
         <AppBar position="static">
             <Container maxWidth={false}>
                 <Toolbar disableGutters>
-                    {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="/"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        LOGO
-                    </Typography> */}
-                    <img src={Logo} style={{maxHeight: "50px", margin: "10px 0px"}}/>
-
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
@@ -132,27 +113,10 @@ export default function Header({ setLoginModalStatus }: HeaderProps) {
                                 </MenuItem>
                             ))}
                         </Menu>
+                        <img src={Logo} style={{maxHeight: "50px", margin: "10px 0px"}}/>
                     </Box>
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="a"
-                        href=""
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'flex', md: 'none' },
-                            flexGrow: 1,
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        LOGO
-                    </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                    <img src={Logo} style={{maxHeight: "50px", margin: "10px 0px"}}/>
                         {pages.map((page) => (
                             <Button
                                 key={page}
@@ -163,36 +127,46 @@ export default function Header({ setLoginModalStatus }: HeaderProps) {
                             </Button>
                         ))}
                     </Box>
-
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                    
+                    {Auth.loggedIn() ? 
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip title="Open settings">
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                {settings.map((setting) => (
+                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                        <Typography textAlign="center">{setting}</Typography>
+                                    </MenuItem>
+                                ))}
+                                <MenuItem onClick={(e)=>{e.preventDefault(); Auth.logout();}}>
+                                    <Typography textAlign="center">Sign Out</Typography>
                                 </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
+                            </Menu>
+                        </Box>
+                    :
+                    <>
+                        <Button onClick={()=>setLoginModalStatus(true)} sx={{ my: 2, color: 'white', display: 'block' }}>Log In</Button>
+                        <Button onClick={()=>setSignupModalStatus(true)} sx={{ my: 2, color: 'white', display: 'block' }}>Sign Up</Button>
+                    </>
+                    }
                 </Toolbar>
             </Container>
         </AppBar>
