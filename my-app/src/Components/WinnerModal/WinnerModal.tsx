@@ -6,7 +6,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import { forwardRef, useState, Dispatch, SetStateAction } from 'react';
+import { forwardRef } from 'react';
+import { useModalContext } from "../../utils/statemanagment/globalstate";
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -17,21 +18,20 @@ const Transition = forwardRef(function Transition(
     return <Slide direction="down" ref={ref} {...props} />;
 });
 
-interface WinnerModalProps {
-    winnerModalOpen: boolean;
-    setWinnerModalOpen: Dispatch<SetStateAction<boolean>>;
-    winner: string;
+interface winnerState {
+    winner: string
 }
 
-export default function WinnerModal({ winnerModalOpen, setWinnerModalOpen, winner }: WinnerModalProps) {
+export default function WinnerModal({ winner }: winnerState) {
+    const { modalState, updateModalState } = useModalContext();
 
     const handleClose = () => {
-        setWinnerModalOpen(false);
+        updateModalState({type: "hideWinnerModal"});
     };
 
     return (
         <Dialog
-            open={winnerModalOpen}
+            open={modalState.winner}
             TransitionComponent={Transition}
             keepMounted
             onClose={handleClose}

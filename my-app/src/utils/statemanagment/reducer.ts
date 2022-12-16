@@ -6,9 +6,10 @@ type Action = | {type: 'Finished Game', payload: string[][]} | {type: 'updateBoa
 export interface ModalState {
     login: boolean;
     signup: boolean;
+    winner: boolean;
 }
 
-export type modalAction = {type: 'showSignup'} | {type: 'hideSignup'} | {type: 'showLogin'} | {type: 'hideLogin'}
+export type modalAction = {type: 'showSignup'} | {type: 'hideSignup'} | {type: 'showLogin'} | {type: 'hideLogin'} | {type: 'showWinnerModal'} | {type: 'hideWinnerModal'}
 
 export default function reducer(state: string[][], action: Action):string[][] {
     switch(action.type){
@@ -28,6 +29,8 @@ export function modalReducer(state:ModalState, action:modalAction): ModalState{
         case 'hideSignup': return {...state, signup: false};
         case 'showLogin': return {...state, login: true};
         case 'showSignup': return {...state, signup: true};
+        case 'showWinnerModal': return {...state, winner: true};
+        case 'hideWinnerModal': return {...state, winner: false}
         default: return state;
     }
 };

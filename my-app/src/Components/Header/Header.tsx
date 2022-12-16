@@ -6,13 +6,12 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import AdbIcon from '@mui/icons-material/Adb';
 import Menu from '@mui/material/Menu';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Avatar from '@mui/material/Avatar';
 import Logo from '../../assets/Logo.png'
-import { Dispatch, SetStateAction, useState, MouseEvent} from 'react';
+import { useState, MouseEvent } from 'react';
 import Auth from '../../utils/auth/auth';
 import { useModalContext } from '../../utils/statemanagment/globalstate';
 
