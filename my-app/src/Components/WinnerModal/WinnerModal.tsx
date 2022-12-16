@@ -3,7 +3,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef } from 'react';
@@ -38,15 +39,17 @@ export default function WinnerModal({ winner }: winnerState) {
             aria-describedby="alert-dialog-slide-description"
             fullWidth
         >
-            <DialogTitle>{winner} Won!</DialogTitle>
-            <DialogContent>
-                <DialogContentText id="alert-dialog-slide-description">
-                    Congratulations
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose}>Close</Button>
-            </DialogActions>
+            <Box padding={3}>
+                <DialogContent>
+                    <Typography variant="h4" component="h6" sx={{margin: "0px 0px 25px 0px"}}>{winner} Won!</Typography>
+                    <DialogContentText id="alert-dialog-slide-description">
+                        Congrats!
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} variant="outlined">Close</Button>
+                </DialogActions>
+            </Box>
         </Dialog>
     );
 }

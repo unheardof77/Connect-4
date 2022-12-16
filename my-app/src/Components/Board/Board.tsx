@@ -28,7 +28,7 @@ export default function Board({winner, setWinner}:Props) {
             updateModalState({type:'showWinnerModal'})
         } else if (regexColO.test(testString)) {
             setWinner("Player 2");
-            updateModalState({type:'hideWinnerModal'})
+            updateModalState({type:'showWinnerModal'})
         };
     };
 
