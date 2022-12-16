@@ -1,18 +1,18 @@
 import { useState, MouseEvent, Dispatch, SetStateAction } from "react";
 import {BsFillCircleFill} from "react-icons/bs";
-import { useGameContext } from "../../utils/statemanagment/globalstate";
+import { useGameContext, useModalContext } from "../../utils/statemanagment/globalstate";
 import './Board.css';
 
 interface Props {
     winner: string;
     setWinner: Dispatch<SetStateAction<string>>;
-    setWinnerModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function Board({winner, setWinner, setWinnerModalOpen}:Props) {
+export default function Board({winner, setWinner}:Props) {
     const [playerTurn, setTurn] = useState(true);
     const [inProgress, setInProgress] = useState(false);
     const {state, dispatch} = useGameContext();
+    const { modalState, updateModalState } = useModalContext();
     
     const updateBoard = (index:number, piece:string) =>{
         const newState = [...state];
@@ -25,12 +25,10 @@ export default function Board({winner, setWinner, setWinnerModalOpen}:Props) {
         const regexColO = /OOOO/;
         if (regexColX.test(testString)) {
             setWinner("Player 1");
-            setWinnerModalOpen(true);
-            // window.location.assign(`/#/gameOver/Player_One`);
+            updateModalState({type:'showWinnerModal'})
         } else if (regexColO.test(testString)) {
             setWinner("Player 2");
-            setWinnerModalOpen(true);
-            // window.location.assign(`/#/gameOver/Player_Two`);
+            updateModalState({type:'showWinnerModal'})
         };
     };
 
@@ -156,7 +154,7 @@ export default function Board({winner, setWinner, setWinnerModalOpen}:Props) {
         const colsArray = []
         for (let i:number=0; i<7; i++) {
             colsArray.push(
-                <tr key={`col:${i}`} data-index={i} onClick={whatPositionPicked} className="boardCell-wrapper">
+                <tr key={`col:${i}`} style={{margin: "20px"}} data-index={i} onClick={whatPositionPicked} className="boardCell-wrapper">
                     {renderCells(i)}
                 </tr>
             )

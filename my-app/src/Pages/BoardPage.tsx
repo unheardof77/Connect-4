@@ -8,12 +8,11 @@ import { useState } from "react";
 
 export default function BoardPage() {
     const [winner, setWinner] = useState("");
-    const [winnerModalOpen, setWinnerModalOpen] = useState(false);
     return (
         <>
             <Header/>
-            <Board winner={winner} setWinner={setWinner} setWinnerModalOpen={setWinnerModalOpen}/>
-            <WinnerModal winnerModalOpen={winnerModalOpen} setWinnerModalOpen={setWinnerModalOpen} winner={winner}/>
+            <Board winner={winner} setWinner={setWinner}/>
+            <WinnerModal winner={winner}/>
             <LoginModal/>
             <SignupModal/>
         </>
