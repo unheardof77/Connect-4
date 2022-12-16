@@ -1,8 +1,8 @@
 import BoardPage from "./Pages/BoardPage";
-import GameOver from "./Pages/GameOver";
 import { Route, Routes, HashRouter as Router, } from 'react-router-dom'
 import {GameProvider, ModalStateProvider} from './utils/statemanagment/globalstate';
 import AboutPage from "./Pages/AboutPage";
+import CanceledPage from "./Pages/CanceledPage";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -72,8 +72,8 @@ function App() {
                 <Router>
                   <Routes>
                     <Route path="/" element={<BoardPage/>}/>
-                    <Route path="/gameOver/:player" element={<GameOver />}/>
                     <Route path="/aboutUs" element={<AboutPage/>}/>
+                    <Route path="/canceled" element={<CanceledPage/>} />
                   </Routes>
                 </Router>
               </ThemeProvider>

@@ -11,12 +11,17 @@ const typeDefs = gql`
         password: String
         friends: [User]!
     }
+    type Checkout {
+        session: ID
+    }
     type Mutation {
         login(username:String!, password:String!): Auth
         signup(username:String!, password:String!): Auth
+        
     }
     type Query {
         user: User
+        checkout(donationAmount:Int): Checkout
     }
 `;
 

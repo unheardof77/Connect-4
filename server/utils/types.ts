@@ -21,3 +21,6 @@ export interface signTokenProp {
     friends: mongoose.Schema.Types.ObjectId[];
     _id: mongoose.Types.ObjectId;
 };
+export interface CheckoutArgs {
+    donationAmount: number;
+}
