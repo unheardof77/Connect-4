@@ -1,7 +1,8 @@
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import Slide from '@mui/material/Slide';
+import DialogContent from '@mui/material/DialogContent';
+import Typography from '@mui/material/Typography';
 import { TransitionProps } from '@mui/material/transitions';
 import { FormControl, TextField, Box, FormLabel, DialogContentText } from '@mui/material';
 import {forwardRef, useState, Dispatch, SetStateAction, FormEvent, ChangeEvent} from 'react';
@@ -22,7 +23,7 @@ const Transition = forwardRef(function Transition(
     },
     ref: React.Ref<unknown>,
 ) {
-    return <Slide direction="up" ref={ref} {...props} />;
+    return <Slide direction="down" ref={ref} {...props} />;
 });
 
 export default function SignupModal({signupModalStatus, setSignupModalStatus, setLoginModalStatus}:SignupProps) {
@@ -87,18 +88,17 @@ export default function SignupModal({signupModalStatus, setSignupModalStatus, se
             >
                 <Box component='form' onSubmit={handleFormSubmit} padding={5}>
                     <FormControl fullWidth>
-                        <TextField id="standard-basic" name='UserName' value={username} onChange={handleUserNameValue} label="UserName" variant="standard" />
+                        <Typography variant="h4" component="h6" sx={{margin: "0px 0px 15px 0px"}}>Sign Up</Typography>
+                        <TextField id="standard-basic" name='Username' value={username} onChange={handleUserNameValue} label="Username" variant="standard" sx={{margin: "0px 0px 10px 0px"}} />
                         <FormControl fullWidth>
-                            <TextField fullWidth name='Password'onChange={handleUserNameValue} value={password} id="standard-basic" label="Password" variant="standard" />
-                            <TextField id="standard-basic" onChange={handleUserNameValue} name='confirmPassword' value={confirmPassword} label="Confirm Password" variant="standard" />
+                            <TextField fullWidth name='Password'onChange={handleUserNameValue} value={password} id="standard-basic" label="Password" variant="standard" sx={{margin: "0px 0px 10px 0px"}}/>
+                            <TextField id="standard-basic" onChange={handleUserNameValue} name='confirmPassword' value={confirmPassword} label="Confirm Password" variant="standard" sx={{margin: "0px 0px 10px 0px"}}/>
                             {nonMatchPassword?<FormLabel>Passwords must match.</FormLabel>: null}
                         </FormControl>
                     </FormControl>
-                    <DialogActions>
-                        <DialogContentText onClick={renderLogin}>Click here to login instead.</DialogContentText>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button type='submit' >Signup</Button>
-                    </DialogActions>
+                    <p style={{margin: "20px 0px 20px 0px"}}>Already have an account? Click <span className='hover-cursor' onClick={renderLogin}>here</span> to login instead.</p>
+                    <Button onClick={handleClose} sx={{paddingLeft: "0px"}}>Cancel</Button>
+                    <Button type='submit' >Signup</Button>
                 </Box>
 
             </Dialog>

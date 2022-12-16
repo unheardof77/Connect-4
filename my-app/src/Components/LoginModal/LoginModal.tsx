@@ -1,7 +1,9 @@
+import './LoginModal.css'
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import Slide from '@mui/material/Slide';
+import Typography from '@mui/material/Typography';
 import { TransitionProps } from '@mui/material/transitions';
 import { FormControl, TextField, Box, FormLabel, DialogContentText } from '@mui/material';
 import {forwardRef, useState, Dispatch, SetStateAction, FormEvent, ChangeEvent} from 'react';
@@ -77,15 +79,13 @@ export default function LoginModal({loginModalStatus, setLoginModalStatus, setSi
                 
             >
                 <Box component='form' onSubmit={handleFormSubmit} padding={5}>
-                    <TextField fullWidth id="standard-basic" name='UserName' value={username} onChange={handleUserNameValue} label="Username" variant="standard" />
-                    <TextField fullWidth name='Password'onChange={handleUserNameValue} value={password} id="standard-basic" label="Password" variant="standard" />
-                    <DialogActions>
-                        <DialogContentText onClick={renderSignup}>Click here to signup instead.</DialogContentText>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button type='submit' >Login</Button>
-                    </DialogActions>
+                    <Typography variant="h4" component="h6" sx={{margin: "0px 0px 15px 0px"}}>Login</Typography>
+                    <TextField fullWidth id="standard-basic" name='UserName' value={username} onChange={handleUserNameValue} label="Username" variant="standard" sx={{margin: "0px 0px 10px 0px"}}/>
+                    <TextField fullWidth name='Password'onChange={handleUserNameValue} value={password} id="standard-basic" label="Password" variant="standard" sx={{margin: "0px 0px 20px 0px"}}/>
+                    <p style={{margin: "10px 0px 20px 0px"}}>Don't have an account? Click <span onClick={renderSignup} className='hover-cursor'>here</span> to signup instead.</p>
+                    <Button onClick={handleClose} sx={{paddingLeft: "0px"}}>Cancel</Button>
+                    <Button type='submit' >Login</Button>
                 </Box>
-
             </Dialog>
         </div>
     );
