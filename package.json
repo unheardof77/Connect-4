@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Connect-4 clone",
   "main": "index.js",
+  "engines": {
+    "node": "v16.17.1"
+  },
   "scripts": {
     "start": "cd server && npx tsc && cd build && node server.js",
     "build": "concurrently \" npm run start \" \"cd my-app && npm run build\" ",
