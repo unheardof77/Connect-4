@@ -2,16 +2,17 @@
   "name": "connect-4",
   "version": "1.0.0",
   "description": "Connect-4 clone",
-  "main": "index.js",
   "engines": {
     "node": "v16.17.1"
   },
   "scripts": {
-    "start": "cd server && npx tsc && cd build && node server.js",
+    "start:server": "cd server && npx tsc && cd build && node server.js",
     "build": "concurrently \" npm run start \" \"cd my-app && npm run build\" ",
     "serve": "cd my-app && npx serve -s build",
     "develop": "concurrently \" npm run start\" \"cd my-app && npm run start\"",
-    "install": "cd server && npm i && cd ../my-app && npm i"
+    "install": "cd server && npm i && cd ../my-app && npm i",
+    "postinstall": "cd server && npx tsc",
+    "start": "node server/build/server.js"
   },
   "repository": {
     "type": "git",
