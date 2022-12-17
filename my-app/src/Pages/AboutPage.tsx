@@ -5,21 +5,19 @@ import SignupModal from '../Components/SignupModal/SignupModal';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CheckoutForm from '../Components/CheckoutForm/CheckoutForm';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import { getCheckout } from '../utils/crud/Query';
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ToacinBio from '../Components/ToacinBio/ToacinBio';
 import MorganBio from '../Components/MorganBio/MorganBio';
+import EndeavorSlides from '../Components/EndeavorSlides/EndeavorSlides';
 
-const stripePromise = loadStripe('pk_test_51MF246FhLt5A8AbKPxxbzKomjN1l6ggWollsfH66RgVcL9sQrObPHh1kOuZL1b7W7Q7IsO8SjIvh6TUNuiDZr96M006pbFiehi')
+const stripePromise = loadStripe('pk_test_51MF246FhLt5A8AbKPxxbzKomjN1l6ggWollsfH66RgVcL9sQrObPHh1kOuZL1b7W7Q7IsO8SjIvh6TUNuiDZr96M006pbFiehi');
 
 export default function AboutPage() {
     const [donationAmount, setDonationAmount] = useState('');
-    
+
     const [createCheckout, { data: checkoutData }] = useLazyQuery(getCheckout);
 
     useEffect(() => {
@@ -56,7 +54,8 @@ export default function AboutPage() {
                 <ToacinBio />
 
                 <Box component='article' sx={{ width: "50%" }} >
-                    <Typography variant='h2' component='h2' sx={{ fontSize: "3em", color: "lightgray" }}>History</Typography>
+                    <Typography variant='h2' component='h2' sx={{ fontSize: "3em", color: "lightgray", marginBottom: "5%" }}>The Endeavor</Typography>
+                        <EndeavorSlides/>
                     <Divider light sx={{ width: "100%", marginBottom: "60px", marginTop: "40px" }} />
                 </Box>
 
