@@ -30,7 +30,7 @@ export default function ToacinBio() {
                     </Box>
                 </Box>
             </Box>
-            <Divider light sx={{ width: "100%", marginBottom: "60px", marginTop: "40px" }} />
+            <Divider light sx={{ width: "100%", marginBottom: "60px", marginTop: "40px", borderBottomWidth: 2, borderColor: "#303030" }} />
         </Box>
     )
 }

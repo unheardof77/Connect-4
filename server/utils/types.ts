@@ -24,3 +24,6 @@ export interface signTokenProp {
 export interface CheckoutArgs {
     donationAmount: number;
 }
+export interface GameNameArgs {
+    name: string;
+}

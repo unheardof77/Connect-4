@@ -28,7 +28,7 @@ export default function ToacinBio() {
                     <img src={Morgan} style={{ height: "300px", width: "300px", marginBottom: "20%", marginLeft: "7%", borderRadius: "50%" }} />
                 </Box>
             </Box>
-            <Divider light sx={{ width: "100%", marginBottom: "60px", marginTop: "40px" }} />
+            <Divider light sx={{ width: "100%", marginBottom: "60px", marginTop: "40px", borderBottomWidth: 2, borderColor: "#303030" }} />
         </Box>
     )
 }

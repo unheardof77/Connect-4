@@ -1,7 +1,8 @@
 import { AuthenticationError } from 'apollo-server-express';
-import { Context, LoginSignup, CheckoutArgs } from '../utils/types';
+import { Context, LoginSignup, CheckoutArgs, GameNameArgs } from '../utils/types';
 import { signToken } from '../utils/auth';
 import User from '../models/User';
+import GameLobby from '../models/Lobby';
 
 import * as dotenv from 'dotenv'
 dotenv.config()
@@ -32,6 +33,29 @@ const resolvers = {
 
             return { token, user };
         },
+        createGameLobby:async (_: any, args: GameNameArgs, context: Context) => {
+            const gameLobby = await GameLobby.create(args);
+            const updatedGameLobby = await GameLobby.findOneAndUpdate({_id: gameLobby._id}, {$push: {members: context.user._id}}, {new: true}).populate("members")
+
+            return updatedGameLobby;
+        },
+        deleteGameLobby:async (_: any, args: any) => {
+            return await GameLobby.findOneAndDelete({_id: args.GameLobby_id})
+        },
+        updateGameLobby:async (_: any, args: any, context: Context) => {
+            const lobby = await GameLobby.findOne({name: args.lobbyName});
+            if (Object.keys(args).length>1) { // update the gameboard
+                return await GameLobby.findOneAndUpdate({name: args.lobbyName}, {gameboard: args.gameboard}, {new: true})
+            } else { // add member to game lobby
+                if (lobby && !lobby.lobbyIsFull) {
+                    return await GameLobby.findOneAndUpdate({name: args.lobbyName}, {$push: {members: context.user._id}}, {new: true})
+                } else if (!lobby) {
+                    throw new AuthenticationError('Lobby doesn\'t exist');
+                } else {
+                    throw new AuthenticationError('Lobby is full')
+                }
+            }
+        }
 
     },
     Query:{
@@ -65,6 +89,11 @@ const resolvers = {
             });
 
             return { session: session.id}
+        }
+    }, 
+    Subscription: {
+        gameLobbyChanged: async (_:any, args: any) => {
+            return await GameLobby.findOne({_id: args.GameLobby_id});
         }
     }
 };

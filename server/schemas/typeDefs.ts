@@ -11,17 +11,29 @@ const typeDefs = gql`
         password: String
         friends: [User]!
     }
+    type GameLobby {
+        _id: ID
+        name: String
+        gameboard: Array
+        members: [User]!
+        lobbyIsFull: Boolean
+    }
     type Checkout {
         session: ID
     }
     type Mutation {
         login(username:String!, password:String!): Auth
         signup(username:String!, password:String!): Auth
-        
+        createGameLobby(name: String!): GameLobby
+        deleteGameLobby(GameLobby_id: ID!): GameLobby
+        updateGameLobby(gameboard: Array, lobbyName: String!): GameLobby
     }
     type Query {
         user: User
         checkout(donationAmount:Int): Checkout
+    }
+    type Subscription {
+        gameLobbyChanged(GameLobby_id: ID!): GameLobby
     }
 `;
 

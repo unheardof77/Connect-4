@@ -10,6 +10,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import Vintage from '../../assets/Vintage.jpg'
 import Modern2 from '../../assets/Modern2.jpg'
 import InverseLogo from '../../assets/InverseLogo.jpg'
+import { width } from '@mui/system';
 
 interface slideInfo {
     label: string;
@@ -59,36 +60,40 @@ export default function EndeavorSlides() {
                     <img src={steps[activeStep].image} style={{ height: "400px", width: "400px", marginLeft: "4%", borderRadius: "5px" }} />
                 </Box>
             </Box>
-            <MobileStepper
-                variant="text"
-                steps={maxSteps}
-                position="static"
-                activeStep={activeStep}
-                nextButton={
-                    <Button
-                        size="small"
-                        onClick={handleNext}
-                        disabled={activeStep === maxSteps - 1}
-                    >
-                        Next
-                        {theme.direction === 'rtl' ? (
-                            <KeyboardArrowLeft />
-                        ) : (
-                            <KeyboardArrowRight />
-                        )}
-                    </Button>
-                }
-                backButton={
-                    <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-                        {theme.direction === 'rtl' ? (
-                            <KeyboardArrowRight />
-                        ) : (
-                            <KeyboardArrowLeft />
-                        )}
-                        Back
-                    </Button>
-                }
-            />
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "center"}}>
+                <MobileStepper
+                    steps={maxSteps}
+                    position="static"
+                    activeStep={activeStep}
+                    nextButton={
+                        <Button
+                            size="small"
+                            onClick={handleNext}
+                            disabled={activeStep === maxSteps - 1}
+                        >
+                            Next
+                            {theme.direction === 'rtl' ? (
+                                <KeyboardArrowLeft />
+                            ) : (
+                                <KeyboardArrowRight />
+                            )}
+                        </Button>
+                    }
+                    backButton={
+                        <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                            {theme.direction === 'rtl' ? (
+                                <KeyboardArrowRight />
+                            ) : (
+                                <KeyboardArrowLeft />
+                            )}
+                            Back
+                        </Button>
+                    }
+                    sx={{
+                        width: "40%"
+                    }}
+                />
+            </Box>
         </Box>
     );
 }
