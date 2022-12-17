@@ -57,7 +57,7 @@ export default function LoginModal() {
             try {
                 const { data } = await loginQuery({ variables: { username, password } });
                 Auth.login(data.login.token);
-                window.location.assign('/');
+                handleClose();
             } catch (err) {
                 console.error(err);
                 setInvalidCredentials(true)

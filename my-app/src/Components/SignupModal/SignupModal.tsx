@@ -24,7 +24,7 @@ const Transition = forwardRef(function Transition(
     },
     ref: React.Ref<unknown>,
 ) {
-    return <Slide direction="down" ref={ref} {...props} />;
+    return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function SignupModal() {
@@ -69,7 +69,7 @@ export default function SignupModal() {
             try {
                 const { data } = await signUpQuery({ variables: { username, password } });
                 Auth.login(data.signup.token);
-                window.location.assign('/');
+                handleClose();
             } catch (err) {
                 console.error(err)
             }
