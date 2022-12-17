@@ -56,7 +56,7 @@ export default function AboutPage() {
                 <Box component='article' sx={{ width: "50%" }} >
                     <Typography variant='h2' component='h2' sx={{ fontSize: "3em", color: "lightgray", marginBottom: "5%" }}>The Endeavor</Typography>
                         <EndeavorSlides/>
-                    <Divider light sx={{ width: "100%", marginBottom: "60px", marginTop: "40px" }} />
+                    <Divider light sx={{ width: "100%", marginBottom: "60px", marginTop: "40px", borderBottomWidth: 2, borderColor: "#303030" }} />
                 </Box>
 
                 <Box component='article' sx={{ width: "50%" }} >
