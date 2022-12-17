@@ -1,4 +1,4 @@
-import {Box, Typography, Divider} from '@mui/material';
+import { Box, Typography, Divider, Stack, Chip } from '@mui/material';
 import Header from '../Components/Header/Header';
 import LoginModal from '../Components/LoginModal/LoginModal';
 import SignupModal from '../Components/SignupModal/SignupModal';
@@ -12,76 +12,70 @@ import { getCheckout } from '../utils/crud/Query';
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import ToacinBio from '../Components/ToacinBio/ToacinBio';
+import MorganBio from '../Components/MorganBio/MorganBio';
 
 const stripePromise = loadStripe('pk_test_51MF246FhLt5A8AbKPxxbzKomjN1l6ggWollsfH66RgVcL9sQrObPHh1kOuZL1b7W7Q7IsO8SjIvh6TUNuiDZr96M006pbFiehi')
 
-export default function AboutPage(){
+export default function AboutPage() {
     const [donationAmount, setDonationAmount] = useState('');
+    
+    const [createCheckout, { data: checkoutData }] = useLazyQuery(getCheckout);
 
-    const [ createCheckout, {data: checkoutData}] = useLazyQuery(getCheckout);
-
-    useEffect(()=>{
-        if(checkoutData){
-            stripePromise.then((res)=>{
-                res?.redirectToCheckout({sessionId: checkoutData.checkout.session})
+    useEffect(() => {
+        if (checkoutData) {
+            stripePromise.then((res) => {
+                res?.redirectToCheckout({ sessionId: checkoutData.checkout.session })
             })
         }
     }, [checkoutData]);
 
-    const handleDonationChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const handleDonationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDonationAmount(e.target.value)
     }
 
-    const handleDonationSubmit = async (e:React.FormEvent) =>{
+    const handleDonationSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        try{
-            await createCheckout({variables: { donationAmount: parseInt(donationAmount) }})
-        }catch(err){
+        try {
+            await createCheckout({ variables: { donationAmount: parseInt(donationAmount) } })
+        } catch (err) {
             console.error(err);
         }
     }
 
-    return(
+    return (
         <>
-            <Header/>
-            <Box component='div' sx={{width:"100%", height: "300px", display: 'flex', justifyContent:'center', alignItems:'center' }}>
-                <Typography variant='h1' component='h1'>Meet the Developers</Typography>
+            <Header />
+            <Box component='div' sx={{ width: "100%", height: "300px", display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '80px' }}>
+                <Typography variant='h1' component='h1'>Meet The Devs</Typography>
             </Box>
-            <Box component='section' sx={{width:"100%", display:'flex', flexDirection:'column', alignItems:'center'}}>
-                <Box component='article' sx={{width: "50%"}} >
-                    <Typography variant='h2' component='h2' sx={{fontSize: "3em", color: "lightgray", marginBottom: "20px"}}>Morgan Tolman</Typography>
-                    <Typography variant='h2' component='h2' sx={{fontSize: "1.5em", color: "gray", marginBottom: "20px"}}> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore assumenda aut dolor a accusantium alias sequi ratione sunt dignissimos esse dicta deleniti, consequuntur voluptatibus quo voluptates! Perspiciatis corrupti accusamus cupiditate! </Typography>
-                    <Box sx={{marginBottom: "20px"}}>
-                        <GitHubIcon sx={{fontSize: "3em", color: 'gray', marginRight: "10px"}}/>
-                        <LinkedInIcon sx={{fontSize: "3em", color: 'gray', marginRight: "10px"}}/>
-                        <BusinessCenterIcon sx={{fontSize: "3em", color: 'gray', marginRight: "10px"}}/>
-                    </Box>
-                    <Divider light sx={{width: "100%"}}/>
+
+            <Box component='section' sx={{ width: "100%", display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <MorganBio />
+
+                <ToacinBio />
+
+                <Box component='article' sx={{ width: "50%" }} >
+                    <Typography variant='h2' component='h2' sx={{ fontSize: "3em", color: "lightgray" }}>History</Typography>
+                    <Divider light sx={{ width: "100%", marginBottom: "60px", marginTop: "40px" }} />
                 </Box>
-                <Box component='article' sx={{width: "50%"}} >
-                    <Typography variant='h2' component='h2' sx={{fontSize: "3em", textAlign: "end", color: "gray"}}>Toacin Patwary</Typography>
-                    <Divider light sx={{width: "100%"}}/>
+
+                <Box component='article' sx={{ width: "50%" }} >
+                    <Typography variant='h2' component='h2' sx={{ fontSize: "3em", textAlign: "end", color: "gray" }}>Connect4 in the news</Typography>
+                    <Divider light sx={{ width: "100%", marginBottom: "60px", marginTop: "40px" }} />
                 </Box>
-                <Divider />
-                <Box component='article' sx={{width: "50%"}} >
-                    <Typography variant='h2' component='h2' sx={{fontSize: "3em", color: "gray"}}>History</Typography>
-                    <Divider />
-                </Box>
-                <Box component='article' sx={{width: "50%"}} >
-                    <Typography variant='h2' component='h2' sx={{fontSize: "3em", textAlign: "end", color: "gray"}}>Connect4 in the news</Typography>
-                    <Divider />
-                </Box>
-                <Box component='article' sx={{width: "50%"}} >
-                    <Typography variant='h2' component='h2' sx={{fontSize: "3em", color: "gray"}}>Content & Engagement</Typography>
-                    <Divider />
+
+                <Box component='article' sx={{ width: "50%" }} >
+                    <Typography variant='h2' component='h2' sx={{ fontSize: "3em", color: "gray" }}>Content & Engagement</Typography>
+                    <Divider light sx={{ width: "100%", marginBottom: "60px", marginTop: "40px" }} />
                 </Box>
             </Box>
             <form onSubmit={handleDonationSubmit}>
-                <input type='number'  value={donationAmount} onChange={handleDonationChange}></input>
+                <input type='number' value={donationAmount} onChange={handleDonationChange}></input>
                 <button type='submit'>submit</button>
             </form>
-            <LoginModal/>
-            <SignupModal/>
+            <LoginModal />
+            <SignupModal />
             {/* <Elements stripe={stripePromise}>
                 <CheckoutForm/>
             </Elements> */}
