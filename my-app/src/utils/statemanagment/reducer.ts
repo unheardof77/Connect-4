@@ -7,9 +7,11 @@ export interface ModalState {
     login: boolean;
     signup: boolean;
     winner: boolean;
+    createLobby: boolean;
+    joinModal: boolean;
 }
 
-export type modalAction = {type: 'showSignup'} | {type: 'hideSignup'} | {type: 'showLogin'} | {type: 'hideLogin'} | {type: 'showWinnerModal'} | {type: 'hideWinnerModal'}
+export type modalAction = {type: 'showSignup'} | {type: 'hideSignup'} | {type: 'showLogin'} | {type: 'hideLogin'} | {type: 'showWinnerModal'} | {type: 'hideWinnerModal'} | {type: 'showLobbyModal'} | {type: 'hideLobbyModal'} | {type: 'showJoinModal'} | {type: 'hideJoinModal'}
 
 export default function reducer(state: string[][], action: Action):string[][] {
     switch(action.type){
@@ -31,6 +33,10 @@ export function modalReducer(state:ModalState, action:modalAction): ModalState{
         case 'showSignup': return {...state, signup: true};
         case 'showWinnerModal': return {...state, winner: true};
         case 'hideWinnerModal': return {...state, winner: false}
+        case 'showLobbyModal': return {...state, createLobby: true};
+        case 'hideLobbyModal': return {...state, createLobby: false}
+        case 'showJoinModal': return {...state, joinModal: true};
+        case 'hideJoinModal': return {...state, joinModal: false}
         default: return state;
     }
 };
