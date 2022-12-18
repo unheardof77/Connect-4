@@ -1,8 +1,9 @@
 import { AuthenticationError } from 'apollo-server-express';
-import { Context, LoginSignup, CheckoutArgs, GameNameArgs } from '../utils/types';
+import { Context, LoginSignup, CheckoutArgs, GameNameArgs, CreateMessageArgs } from '../utils/types';
 import { signToken } from '../utils/auth';
 import User from '../models/User';
 import GameLobby from '../models/Lobby';
+import Message from '../models/Message';
 import { PubSub, withFilter } from 'graphql-subscriptions';
 
 import * as dotenv from 'dotenv'
@@ -39,8 +40,8 @@ const resolvers = {
         },
         createGameLobby:async (_: any, args: GameNameArgs, context: Context) => {
             const gameLobby = await GameLobby.create(args);
-            const updatedGameLobby = await GameLobby.findOneAndUpdate({_id: gameLobby._id}, {$push: {members: context.user._id}}, {new: true}).populate("members")
-
+            const updatedGameLobby = await GameLobby.findOneAndUpdate({_id: gameLobby._id}, {$push: {members: context.user._id}}, {new: true}).populate("members").populate('messages');
+            await pubSub.publish('UPDATED_LOBBY', {gameLobbyChanged: updatedGameLobby});
             return updatedGameLobby;
         },
         deleteGameLobby:async (_: any, args: any) => {
@@ -49,18 +50,26 @@ const resolvers = {
         updateGameLobby:async (_: any, args: any, context: Context) => {
             const lobby = await GameLobby.findOne({name: args.lobbyName});
             if (Object.keys(args).length>1) { // update the gameboard
-                const updatedLobby = await GameLobby.findOneAndUpdate({name: args.lobbyName}, {gameboard: args.gameboard}, {new: true}).populate('members');
+                const updatedLobby = await GameLobby.findOneAndUpdate({name: args.lobbyName}, {gameboard: args.gameboard}, {new: true}).populate('members').populate('messages');
                 await pubSub.publish('UPDATED_LOBBY', {gameLobbyChanged: updatedLobby});
                 return updatedLobby;
             } else { // add member to game lobby
                 if (lobby && !lobby.lobbyIsFull) {
-                    return await GameLobby.findOneAndUpdate({name: args.lobbyName}, {$push: {members: context.user._id}}, {new: true}).populate('members');
+                    const updatedLobby = await GameLobby.findOneAndUpdate({name: args.lobbyName}, {$push: {members: context.user._id}}, {new: true}).populate('members').populate('messages');
+                    await pubSub.publish('UPDATED_LOBBY', {gameLobbyChanged: updatedLobby});
+                    return updatedLobby;
                 } else if (!lobby) {
                     throw new AuthenticationError('Lobby doesn\'t exist');
                 } else {
                     throw new AuthenticationError('Lobby is full')
                 }
             }
+        },
+        sendMessage: async (_:any, { message, GameLobby_id}:CreateMessageArgs, context:Context)=>{
+            const sentMessage = await Message.create({name: context.user.username, message});
+            const updatedLobby = await GameLobby.findOneAndUpdate({_id: GameLobby_id}, {$addToSet:{messages: sentMessage._id}}, {new:true}).populate('members').populate('messages');
+            await pubSub.publish('UPDATED_LOBBY', {gameLobbyChanged: updatedLobby});
+            return updatedLobby;
         }
 
     },

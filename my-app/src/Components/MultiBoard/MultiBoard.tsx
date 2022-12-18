@@ -3,7 +3,7 @@ import {BsFillCircleFill} from "react-icons/bs";
 import { useGameContext, useModalContext } from "../../utils/statemanagment/globalstate";
 import '../Board/Board.css';
 import { useMutation, useSubscription } from "@apollo/client";
-import { UPDATELOBBY } from "../../utils/crud/Mutation";
+import { UPDATELOBBY, SENDMESSAGE } from "../../utils/crud/Mutation";
 import { GAMELOBBYSUB } from "../../utils/crud/Subscription";
 
 
@@ -16,17 +16,32 @@ interface Props {
 export default function MultiBoard({winner, setWinner, playerType}:Props) {
     const [playerTurn, setTurn] = useState(playerType === 'host');
     const [inProgress, setInProgress] = useState(false);
-    const [state, dispatch] = useState<string[][]>([[],[],[],[],[],[],[]]);;
-    const { modalState, updateModalState } = useModalContext();
+    const [state, dispatch] = useState<string[][]>([[],[],[],[],[],[],[]]);
+    const [sentMessage, setSendMessage] = useState("");
+    const { updateModalState } = useModalContext();
     const  [ignored, forceUpdate] = useReducer(x=> x+ 1, 0);
     const gameId = JSON.parse(localStorage.getItem('GameBoard') || '')._id;
-    console.log(gameId)
     const name = JSON.parse(localStorage.getItem('GameBoard') || '').name;
-    
+
+
+    const [sendMessage] = useMutation(SENDMESSAGE);
     const [updateLobby, ] = useMutation(UPDATELOBBY);
+
     const { data, loading, error} = useSubscription(GAMELOBBYSUB, {variables:{lobbyName:name}});
-    console.log( data)
-    console.log(error)
+
+    const handleMessageChange = (e:React.ChangeEvent<HTMLInputElement>) =>{
+        setSendMessage(e.currentTarget.value);
+    };
+
+    const handleMessageSubmit = async (e:React.FormEvent)=>{
+        e.preventDefault();
+        try{
+            await sendMessage({variables:{message: sentMessage, GameLobby_id: gameId}});
+        }catch(err){
+            console.error(err);
+        }
+    };
+
     useEffect(()=>{
         if(!loading){
             console.log(data);
@@ -200,6 +215,10 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
                 </table>
                 <h1 style={playerTurn ? {visibility: "hidden"} : {visibility: "visible", color: "lightgray"}}>Player <span className="player-turn-2">Two's</span> Turn</h1>
             </div>
+            <form onSubmit={handleMessageSubmit}>
+                <input value={sentMessage} onChange={handleMessageChange} ></input>
+                <button type="submit">SendMessage</button>
+            </form>
         </>
     );
 };

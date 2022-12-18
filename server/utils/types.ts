@@ -27,3 +27,8 @@ export interface CheckoutArgs {
 export interface GameNameArgs {
     name: string;
 }
+export interface CreateMessageArgs {
+    name: string;
+    message: string;
+    GameLobby_id: mongoose.Types.ObjectId;
+}
