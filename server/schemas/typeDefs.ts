@@ -14,7 +14,7 @@ const typeDefs = gql`
     type GameLobby {
         _id: ID
         name: String
-        gameboard: Array
+        gameboard: [[string]!]!
         members: [User]!
         lobbyIsFull: Boolean
     }
@@ -26,7 +26,7 @@ const typeDefs = gql`
         signup(username:String!, password:String!): Auth
         createGameLobby(name: String!): GameLobby
         deleteGameLobby(GameLobby_id: ID!): GameLobby
-        updateGameLobby(gameboard: Array, lobbyName: String!): GameLobby
+        updateGameLobby(gameboard: [[string]], lobbyName: String!): GameLobby
     }
     type Query {
         user: User
