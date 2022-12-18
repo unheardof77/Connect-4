@@ -20,12 +20,13 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     const [sentMessage, setSendMessage] = useState("");
     const { updateModalState } = useModalContext();
     const  [ignored, forceUpdate] = useReducer(x=> x+ 1, 0);
+
     const gameId = JSON.parse(localStorage.getItem('GameBoard') || '')._id;
     const name = JSON.parse(localStorage.getItem('GameBoard') || '').name;
 
 
     const [sendMessage] = useMutation(SENDMESSAGE);
-    const [updateLobby, ] = useMutation(UPDATELOBBY);
+    const [updateLobby] = useMutation(UPDATELOBBY);
 
     const { data, loading, error} = useSubscription(GAMELOBBYSUB, {variables:{lobbyName:name}});
 
@@ -50,19 +51,31 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
         }
         
     }, [data]);
+
+    useEffect(()=>{
+        didWin();
+    }, [playerTurn]);
     
     const updateBoard = async (index:number, piece:string) =>{
         const newState = [...state];
         newState[index].push(piece);
         dispatch(newState);
-        await updateLobby({variables:{gameboard: newState, lobbyName:name }})
-        
-
+        await updateLobby({variables:{gameboard: newState, lobbyName:name }});
     };
+
+    const whatPiece = ()=>{
+        if(playerType === 'host'){
+            return 'x';
+        }else{
+            return 'O';
+        };
+    };
+    const piece = whatPiece();
 
     const regexTest = (testString: string) => {
         const regexColX = /xxxx/;
         const regexColO = /OOOO/;
+        console.log(testString)
         if (regexColX.test(testString)) {
             setWinner("Player 1");
             updateModalState({type:'showWinnerModal'})
@@ -73,7 +86,7 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     };
 
     const checkColWin = () => {
-        state.forEach((col, index) => {
+        state.forEach((col) => {
             const stringCol = col.join('');
             regexTest(stringCol)
         });
@@ -137,6 +150,7 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     };
 
     function didWin() {
+        console.log('didwin did run')
         checkColWin();
         checkRowWin();
         checkDiagonalWin();
@@ -152,7 +166,7 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
         const initialLength = state[index].length;
         for (let i:number=5; i>=initialLength; i--) {
             const ArrayToConcat: string[] = Array(i-initialLength).fill("null");
-            state[index] = playerTurn ? [...state[index], ...ArrayToConcat, "x"] : [...state[index], ...ArrayToConcat, "O"];
+            state[index] = piece === 'x' ? [...state[index], ...ArrayToConcat, "x"] : [...state[index], ...ArrayToConcat, "O"];
             dispatch(state);
             forceUpdate();
             await new Promise(resolve => setTimeout(resolve, 150));
@@ -162,16 +176,9 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
         }
 
         if (playerTurn && state[index].length < 6) {
-            updateBoard(index,'x');
-            setTurn(false);
+            updateBoard(index, piece);
             setInProgress(false);
-            didWin();
-        } else if (!playerTurn && state[index].length < 6) {
-            updateBoard(index,'O');
-            setTurn(true);
-            setInProgress(false)
-            didWin();
-        };
+        }
     };
 
     function renderColor(boardCell: string) {
