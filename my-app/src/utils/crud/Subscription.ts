@@ -1,13 +1,12 @@
 import { gql } from "@apollo/client";
 
 export const GAMELOBBYSUB = gql`
-subscription Subscription($gameLobbyId: ID!) {
-  gameLobbyChanged(GameLobby_id: $gameLobbyId) {
+subscription Subscription {
+  gameLobbyChanged {
+    _id
     gameboard
-    members {
-      _id
-      username
-    }
+    lobbyIsFull
+    name
   }
 }
 `;

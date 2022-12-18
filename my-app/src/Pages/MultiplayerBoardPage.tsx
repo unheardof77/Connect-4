@@ -6,13 +6,16 @@ import WinnerModal from "../Components/WinnerModal/WinnerModal";
 
 
 export default function MultiBoardPage(){
-    const { playerType } = useParams();
+    const param = useParams();
+    const playerType = param.playerType || 'host';
     const [winner, setWinner] = useState('');
-    
+
+
+
     return (
         <>
             <Header/>
-            <MultiBoard winner={winner} setWinner={setWinner} />
+            <MultiBoard playerType={playerType} winner={winner} setWinner={setWinner} />
             <WinnerModal winner={winner} />
         </>
     )

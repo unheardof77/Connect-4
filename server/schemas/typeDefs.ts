@@ -33,7 +33,7 @@ const typeDefs = gql`
         checkout(donationAmount:Int): Checkout
     }
     type Subscription {
-        gameLobbyChanged(GameLobby_id: ID!): GameLobby
+        gameLobbyChanged: GameLobby
     }
 `;
 

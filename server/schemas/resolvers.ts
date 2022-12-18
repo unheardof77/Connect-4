@@ -3,11 +3,15 @@ import { Context, LoginSignup, CheckoutArgs, GameNameArgs } from '../utils/types
 import { signToken } from '../utils/auth';
 import User from '../models/User';
 import GameLobby from '../models/Lobby';
+import { PubSub, withFilter } from 'graphql-subscriptions';
 
 import * as dotenv from 'dotenv'
 dotenv.config()
 
 const stripe = require('stripe')(process.env.STRIPEKEY);
+const pubSub = new PubSub();
+
+
 
 const resolvers = {
     Mutation:{
@@ -45,10 +49,12 @@ const resolvers = {
         updateGameLobby:async (_: any, args: any, context: Context) => {
             const lobby = await GameLobby.findOne({name: args.lobbyName});
             if (Object.keys(args).length>1) { // update the gameboard
-                return await GameLobby.findOneAndUpdate({name: args.lobbyName}, {gameboard: args.gameboard}, {new: true})
+                const updatedLobby = await GameLobby.findOneAndUpdate({name: args.lobbyName}, {gameboard: args.gameboard}, {new: true}).populate('members');
+                await pubSub.publish('UPDATED_LOBBY', {gameLobbyChanged: updatedLobby});
+                return updatedLobby;
             } else { // add member to game lobby
                 if (lobby && !lobby.lobbyIsFull) {
-                    return await GameLobby.findOneAndUpdate({name: args.lobbyName}, {$push: {members: context.user._id}}, {new: true})
+                    return await GameLobby.findOneAndUpdate({name: args.lobbyName}, {$push: {members: context.user._id}}, {new: true}).populate('members');
                 } else if (!lobby) {
                     throw new AuthenticationError('Lobby doesn\'t exist');
                 } else {
@@ -92,8 +98,10 @@ const resolvers = {
         }
     }, 
     Subscription: {
-        gameLobbyChanged: async (_:any, args: any) => {
-            return await GameLobby.findOne({_id: args.GameLobby_id});
+        gameLobbyChanged:{
+            subscribe: 
+                ()=>pubSub.asyncIterator(['UPDATED_LOBBY'])
+
         }
     }
 };

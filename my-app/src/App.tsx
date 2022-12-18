@@ -25,11 +25,11 @@ import { getMainDefinition } from '@apollo/client/utilities';
 
 
 const httpLink = new HttpLink({
-  uri: 'graphql'
+  uri: '/graphql'
 });
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: '/subscriptions',
+  url: 'ws://localhost:3001/graphql',
 }));
 
 const splitLink = split(
@@ -56,7 +56,7 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
   link: authLink.concat(splitLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache()
 });
 
 const darkTheme = createTheme({

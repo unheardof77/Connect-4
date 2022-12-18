@@ -1,28 +1,47 @@
-import { useState, MouseEvent, Dispatch, SetStateAction, useReducer } from "react";
+import { useState, MouseEvent, Dispatch, SetStateAction, useReducer, useEffect } from "react";
 import {BsFillCircleFill} from "react-icons/bs";
 import { useGameContext, useModalContext } from "../../utils/statemanagment/globalstate";
 import '../Board/Board.css';
-import { useMutation } from "@apollo/client";
+import { useMutation, useSubscription } from "@apollo/client";
 import { UPDATELOBBY } from "../../utils/crud/Mutation";
+import { GAMELOBBYSUB } from "../../utils/crud/Subscription";
+
 
 interface Props {
     winner: string;
     setWinner: Dispatch<SetStateAction<string>>;
+    playerType: string;
 }
 
-export default function MultiBoard({winner, setWinner}:Props) {
-    const [playerTurn, setTurn] = useState(true);
+export default function MultiBoard({winner, setWinner, playerType}:Props) {
+    const [playerTurn, setTurn] = useState(playerType === 'host');
     const [inProgress, setInProgress] = useState(false);
     const [state, dispatch] = useState<string[][]>([[],[],[],[],[],[],[]]);;
     const { modalState, updateModalState } = useModalContext();
-    const [updateLobby, {loading, data, error}] = useMutation(UPDATELOBBY);
     const  [ignored, forceUpdate] = useReducer(x=> x+ 1, 0);
-
+    const gameId = JSON.parse(localStorage.getItem('GameBoard') || '')._id;
+    console.log(gameId)
+    const name = JSON.parse(localStorage.getItem('GameBoard') || '').name;
     
-    const updateBoard = (index:number, piece:string) =>{
+    const [updateLobby, ] = useMutation(UPDATELOBBY);
+    const { data, loading, error} = useSubscription(GAMELOBBYSUB, {variables:{GameLobby_id:gameId}});
+    console.log( data)
+    console.log(error)
+    useEffect(()=>{
+        if(!loading){
+            console.log(data);
+            dispatch(data.gameLobbyChanged.gameboard);
+            setTurn(!playerTurn);
+        }
+        
+    }, [data]);
+    
+    const updateBoard = async (index:number, piece:string) =>{
         const newState = [...state];
         newState[index].push(piece);
         dispatch(newState);
+        await updateLobby({variables:{gameboard: newState, lobbyName:name }})
+        
 
     };
 
@@ -109,7 +128,7 @@ export default function MultiBoard({winner, setWinner}:Props) {
     };
 
     async function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {
-        if (inProgress) return;
+        if (inProgress || !playerTurn) return;
 
         setInProgress(true);
         const index = Number(e.currentTarget.getAttribute('data-index'))
