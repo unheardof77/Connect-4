@@ -24,7 +24,7 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     const name = JSON.parse(localStorage.getItem('GameBoard') || '').name;
     
     const [updateLobby, ] = useMutation(UPDATELOBBY);
-    const { data, loading, error} = useSubscription(GAMELOBBYSUB, {variables:{GameLobby_id:gameId}});
+    const { data, loading, error} = useSubscription(GAMELOBBYSUB, {variables:{lobbyName:name}});
     console.log( data)
     console.log(error)
     useEffect(()=>{

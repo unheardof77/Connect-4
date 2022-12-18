@@ -45,8 +45,8 @@ mutation Mutation($name: String!) {
 `;
 
 export const DELETELOBBY = gql`
-mutation DeleteGameLobby($gameLobbyId: ID!) {
-  deleteGameLobby(GameLobby_id: $gameLobbyId) {
+mutation DeleteGameLobby($GameLobby_id: ID!) {
+  deleteGameLobby(GameLobby_id: $GameLobby_id) {
     _id
     lobbyIsFull
     name
