@@ -4,7 +4,7 @@ import { Dispatch } from 'react';
 
 import { useModalReducer, ModalState, modalAction } from './reducer';;
 
-const initialModalState = {login:false, signup:false, winner: false};
+const initialModalState = {login:false, signup:false, winner: false, createLobby: false, joinModal: false};
 
 
 const GameContext = createContext<{state: string[][], dispatch: Dispatch<any>}>({state:[['']], dispatch:()=>null});

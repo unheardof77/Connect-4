@@ -52,6 +52,7 @@ export default function Header() {
         setAnchorElUser(null);
     };
 
+
     return (
         <AppBar position="static">
             <Container maxWidth={false}>
@@ -101,6 +102,8 @@ export default function Header() {
                         <Link className='link-reset' to="/"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>Home</Button></Link>
                         <Button onClick={()=>navigate('/aboutUs')} sx={{ my: 2, color: 'white', display: 'block' }}>About</Button>
                         <Link className='link-reset' to="/"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>Coffee</Button></Link>
+                        <Button onClick={()=> updateModalState({type: 'showLobbyModal'})} sx={{ my: 2, color: 'white', display: 'block' }}>Create Game</Button>
+                        <Button onClick={()=> updateModalState({type: 'showJoinModal'})} sx={{ my: 2, color: 'white', display: 'block' }}>Join Game</Button>
                     </Box>
 
                     {Auth.loggedIn() ?

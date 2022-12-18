@@ -15,7 +15,7 @@ import { width } from '@mui/system';
 interface slideInfo {
     label: string;
     description: string;
-    image: any;
+    image?: any;
 }
 
 const steps: slideInfo[] = [

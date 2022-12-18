@@ -5,6 +5,11 @@ import AboutPage from "./Pages/AboutPage";
 import CanceledPage from "./Pages/CanceledPage";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import MultiBoardPage from "./Pages/MultiplayerBoardPage";
+import LoginModal from "./Components/CreateLobbyModal/CreateLobbyModal";
+import SignupModal from "./Components/SignupModal/SignupModal";
+import JoinGameModal from "./Components/JoinGameModal/JoinGameModal";
+import LobbyModal from "./Components/CreateLobbyModal/CreateLobbyModal";
 
 import {
   ApolloClient,
@@ -20,11 +25,11 @@ import { getMainDefinition } from '@apollo/client/utilities';
 
 
 const httpLink = new HttpLink({
-  uri: 'graphql'
+  uri: '/graphql'
 });
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: '/subscriptions',
+  url: 'ws://localhost:3001/graphql',
 }));
 
 const splitLink = split(
@@ -51,7 +56,7 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
   link: authLink.concat(splitLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache()
 });
 
 const darkTheme = createTheme({
@@ -74,7 +79,12 @@ function App() {
                     <Route path="/" element={<BoardPage/>}/>
                     <Route path="/aboutUs" element={<AboutPage/>}/>
                     <Route path="/canceled" element={<CanceledPage/>} />
+                    <Route path="/multiplayer/:playerType" element={<MultiBoardPage/>}/>
                   </Routes>
+                  <LobbyModal/>
+                  <LoginModal/>
+                  <SignupModal/>
+                  <JoinGameModal/>
                 </Router>
               </ThemeProvider>
           </ModalStateProvider>
