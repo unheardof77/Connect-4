@@ -11,6 +11,11 @@ subscription Subscription($lobbyName: String!) {
       _id
       username
     }
+    messages {
+      name
+      message
+      formattedTime
+    }
   }
 }
 `;

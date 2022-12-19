@@ -10,6 +10,7 @@ interface LobbySchema {
     gameboard: string[][];
     members: mongoose.Types.ObjectId[];
     lobbyIsFull: boolean;
+    messages: mongoose.Types.ObjectId[];
 }
 
 type LobbyModel = Model<LobbySchema, {}, LobbyVirtuals>
@@ -30,6 +31,12 @@ const gameLobbySchema = new Schema(
             {
                 type: Schema.Types.ObjectId,
                 ref: 'User'
+            }
+        ],
+        messages: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Message'
             }
         ]
     },

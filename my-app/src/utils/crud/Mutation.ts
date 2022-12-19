@@ -74,3 +74,20 @@ mutation UpdateGameLobby($lobbyName: String!, $gameboard: [[String]!]) {
   }
 }
 `;
+
+export const SENDMESSAGE = gql`
+mutation SendMessage( $message: String!, $GameLobby_id: ID!) {
+  sendMessage( message: $message, GameLobby_id: $GameLobby_id) {
+    gameboard
+    _id
+    lobbyIsFull
+    name
+    messages {
+      _id
+      formattedTime
+      message
+      name
+    }
+  }
+}
+`;
