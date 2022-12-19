@@ -11,7 +11,7 @@ export default function BoardPage() {
     return (
         <>
             <Header/>
-            <Board winner={winner} setWinner={setWinner}/>
+            <Board setWinner={setWinner}/>
             <WinnerModal winner={winner}/>
             <LoginModal/>
             <SignupModal/>

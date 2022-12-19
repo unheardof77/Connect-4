@@ -6,7 +6,8 @@ import '../Board/Board.css';
 import { useMutation, useSubscription } from "@apollo/client";
 import { UPDATELOBBY, SENDMESSAGE } from "../../utils/crud/Mutation";
 import { GAMELOBBYSUB } from "../../utils/crud/Subscription";
-import Auth from "../../utils/auth/auth"
+import Auth from "../../utils/auth/auth";
+import ChatBox from "../ChatBox/ChatBox";
 
 
 interface Props {
@@ -32,6 +33,8 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     const [inProgress, setInProgress] = useState(false); //this is the state for the animation when a piece is dropped from the top
     const [state, dispatch] = useState<string[][]>([[],[],[],[],[],[],[]]);//local state for the game board
     const [sentMessage, setSendMessage] = useState("");//state representing the value of the message they can send;
+    const [playAgain, setPlayAgain] = useState(false);
+    const [chatMessages, setChatMessages] = useState([]);
 
     const { updateModalState } = useModalContext();// this is the dispatch action for the modals
     const [ignored, forceUpdate] = useReducer(x=> x+ 1, 0);// gives us access to force rerender the game board, used when animated the pieces falling
@@ -39,6 +42,7 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     //these two lines of code get the id and name of the game lobby and parse it
     const gameId = JSON.parse(localStorage.getItem('GameBoard') || '')._id;
     const name = JSON.parse(localStorage.getItem('GameBoard') || '').name;
+
     const profile = Auth.getProfile() as Profile;
     const username = profile.data.username;
     let opponentUsername: string = "";
@@ -56,8 +60,6 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     //this use effect runs whenever data changes the if condition checks if the subscription is loading.  If it is not loading the local state gets updated to the newest gameboard and the turn is set to the opposite of what it was originally
     useEffect(()=>{
         if(!loading){
-            console.log(data)
-            console.log(data.gameLobbyChanged.members[1].username)
             let didBoardChange: boolean | undefined;
             let indexOfChange: number | undefined;
             const newState: string[][] = [...state]
@@ -68,11 +70,8 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
                     console.log("detected change")
                 }
             })
-            // const renderAnimationUE = async function() {
-            //     console.log("AnimationStarted")
-            //     await renderAnimation(newState, indexOfChange)
-            //     console.log("Animation Completed")
-            // }
+            setPlayAgain(data.gameLobbyChanged.isGameFinished);
+            setChatMessages(data.gameLobbyChanged.messages)
             if (didBoardChange && indexOfChange !== undefined) {
                 renderAnimation(newState, indexOfChange, "opponentMove", () => {
                     console.log("beyond animation function")
@@ -104,6 +103,7 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
         e.preventDefault();
         try{
             await sendMessage({variables:{message: sentMessage, GameLobby_id: gameId}});
+            setSendMessage("");
         }catch(err){
             console.error(err);
         }
@@ -123,15 +123,17 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     };
 
     //this function takes in a string to test and uses regex to see if there are four x or O next to each other in the string
-    const regexTest = (testString: string) => {
+    const regexTest = async (testString: string) => {
         const regexColX = /xxxx/;
         const regexColO = /OOOO/;
         if (regexColX.test(testString)) {// the .test returns a boolean, if its true that means x has gotten four in a row
             setWinner("Player 1");
             updateModalState({type:'showWinnerModal'})//updates the global modal state to display the winner modal;
+            await updateLobby({variables:{gameboard: state, lobbyName:name, isGameFinished:true }});
         } else if (regexColO.test(testString)) {// if this test returns true then O has gotten four in a row
             setWinner("Player 2");
-            updateModalState({type:'showWinnerModal'})
+            updateModalState({type:'showWinnerModal'});
+            await updateLobby({variables:{gameboard: state, lobbyName:name, isGameFinished:true }});
         };
     };
 
@@ -230,7 +232,7 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     }
 
     async function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {
-        if (inProgress || !playerTurn) return;
+        if (inProgress || !playerTurn || playAgain) return;
 
         setInProgress(true);
         const index = Number(e.currentTarget.getAttribute('data-index'))
@@ -257,7 +259,7 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
         for (let j:number=0; j<6; j++) {
             cellArray.push(
                 ((data && data.gameLobbyChanged.lobbyIsFull) || playerType === "sub") ?
-                    <td key={`col:${columnIndex}-cell:${j}`} className="boardCell"><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])}/></td>
+                    <td key={`col:${columnIndex}-cell:${j}`} className={playAgain?"boardCell":"boardCell hover"}><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])}/></td>
                 :
                     <Skeleton variant="rectangular" width={110} height={110} sx={{margin: "0px 10px"}}/>
             )
@@ -277,6 +279,10 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
         return colsArray;
     }
 
+    const handlePlayAgain = async ()=>{
+        await updateLobby({variables:{gameboard: [[],[],[],[],[],[],[]], lobbyName:name, isGameFinished:false }});
+    };
+
     return (
         <>
             <div className="gameboard-wrapper">
@@ -292,14 +298,16 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
                         {renderBoard()}
                     </tbody>
                 </table>
-                <h1 style={playerTurn ? {visibility: "hidden"} : {visibility: "visible", color: "lightgray"}}>
+                {/* <h1 style={playerTurn ? {visibility: "hidden"} : {visibility: "visible", color: "lightgray"}}>
                     <span className={playerType ==="host" ? "player-turn-2" : "player-turn-1"}>{opponentUsername}'s</span> Turn
-                </h1>
+                </h1> */}
+                <ChatBox username={username} piece={piece} handleMessageSubmit={handleMessageSubmit} chatMessages={chatMessages} sentMessage={sentMessage} handleMessageChange={handleMessageChange}/>
             </div>
-            <form onSubmit={handleMessageSubmit}>
-                <input value={sentMessage} onChange={handleMessageChange} ></input>
-                <button type="submit">SendMessage</button>
-            </form>
+            {playAgain? 
+            <div>
+                <button onClick={handlePlayAgain}>Play again?</button>
+            </div> : null }
+
         </>
     );
 };

@@ -61,12 +61,13 @@ mutation DeleteGameLobby($GameLobby_id: ID!) {
 `;
 
 export const UPDATELOBBY = gql`
-mutation UpdateGameLobby($lobbyName: String!, $gameboard: [[String]!]) {
-  updateGameLobby(lobbyName: $lobbyName, gameboard: $gameboard) {
+mutation UpdateGameLobby($lobbyName: String!, $gameboard: [[String]!], $isGameFinished: Boolean) {
+  updateGameLobby(lobbyName: $lobbyName, gameboard: $gameboard, isGameFinished: $isGameFinished) {
     _id
     gameboard
     lobbyIsFull
     name
+    isGameFinished
     members {
       _id
       username

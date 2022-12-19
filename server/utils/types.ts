@@ -38,4 +38,5 @@ export interface DeleteGameLobbyArgs {
 export interface UpdateGameLobbyArgs {
     gameboard?: string[][];
     lobbyName: string;
+    isGameFinished: boolean;
 }
