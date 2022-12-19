@@ -7,6 +7,7 @@ import { useMutation, useSubscription } from "@apollo/client";
 import { UPDATELOBBY, SENDMESSAGE } from "../../utils/crud/Mutation";
 import { GAMELOBBYSUB } from "../../utils/crud/Subscription";
 import Auth from "../../utils/auth/auth"
+import { useNavigate } from "react-router-dom";
 
 
 interface Props {
@@ -14,24 +15,14 @@ interface Props {
     setWinner: Dispatch<SetStateAction<string>>;
     playerType: string;
 }
-
-interface ProfileData {
-    friends: [];
-    username: string;
-    _id: string;
-}
-
-interface Profile {
-    data: ProfileData;
-    exp: number;
-    iat: number;
-}
-
+    
 export default function MultiBoard({winner, setWinner, playerType}:Props) {
     const [playerTurn, setTurn] = useState(playerType === 'host');//sets initial state value for the player turn if there host they go first
     const [inProgress, setInProgress] = useState(false); //this is the state for the animation when a piece is dropped from the top
     const [state, dispatch] = useState<string[][]>([[],[],[],[],[],[],[]]);//local state for the game board
     const [sentMessage, setSendMessage] = useState("");//state representing the value of the message they can send;
+
+    const navigate = useNavigate();
 
     const { updateModalState } = useModalContext();// this is the dispatch action for the modals
     const [ignored, forceUpdate] = useReducer(x=> x+ 1, 0);// gives us access to force rerender the game board, used when animated the pieces falling
@@ -39,8 +30,7 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     //these two lines of code get the id and name of the game lobby and parse it
     const gameId = JSON.parse(localStorage.getItem('GameBoard') || '')._id;
     const name = JSON.parse(localStorage.getItem('GameBoard') || '').name;
-    const profile = Auth.getProfile() as Profile;
-    const username = profile.data.username;
+    const username = Auth.getProfile()?.data.username;
     let opponentUsername: string = "";
 
 
@@ -83,6 +73,13 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
         }
     }, [data]);
 
+    useEffect(()=> {
+        if (!Auth.loggedIn()) {
+            navigate("/");
+        }
+    })
+
+    // retrieve username of opponent
     if (!loading && playerType === "host") {
         opponentUsername = data.gameLobbyChanged.members[1].username;
     } else {

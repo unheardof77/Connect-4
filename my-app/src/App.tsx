@@ -10,7 +10,6 @@ import LoginModal from "./Components/CreateLobbyModal/CreateLobbyModal";
 import SignupModal from "./Components/SignupModal/SignupModal";
 import JoinGameModal from "./Components/JoinGameModal/JoinGameModal";
 import LobbyModal from "./Components/CreateLobbyModal/CreateLobbyModal";
-
 import {
   ApolloClient,
   InMemoryCache,
@@ -19,9 +18,9 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
-
 import { split, HttpLink } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
+import DonationProcessed from "./Pages/DonationProcessed";
 
 
 const httpLink = new HttpLink({
@@ -80,6 +79,7 @@ function App() {
                     <Route path="/aboutUs" element={<AboutPage/>}/>
                     <Route path="/canceled" element={<CanceledPage/>} />
                     <Route path="/multiplayer/:playerType" element={<MultiBoardPage/>}/>
+                    <Route path="/donation-processed" element={<DonationProcessed/>}/>
                   </Routes>
                   <LobbyModal/>
                   <LoginModal/>
