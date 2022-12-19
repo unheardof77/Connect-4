@@ -1,5 +1,6 @@
 import { useState, MouseEvent, Dispatch, SetStateAction, useReducer, useEffect } from "react";
 import {BsFillCircleFill} from "react-icons/bs";
+import { Skeleton } from "@mui/material/";
 import { useModalContext } from "../../utils/statemanagment/globalstate";
 import '../Board/Board.css';
 import { useMutation, useSubscription } from "@apollo/client";
@@ -28,16 +29,38 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
 
     //mutation for sending a message
     const [sendMessage] = useMutation(SENDMESSAGE);
+
     //mutation for updating the lobby ie mutation thats used whenever a move is made
     const [updateLobby] = useMutation(UPDATELOBBY);
+
     //subscription that listens for updated lobby data
     const { data, loading } = useSubscription(GAMELOBBYSUB, {variables:{lobbyName:name}});
 
     //this use effect runs whenever data changes the if condition checks if the subscription is loading.  If it is not loading the local state gets updated to the newest gameboard and the turn is set to the opposite of what it was originally
     useEffect(()=>{
         if(!loading){
-            dispatch(data.gameLobbyChanged.gameboard);
-            setTurn(!playerTurn);
+            let didBoardChange: boolean | undefined;
+            let indexOfChange: number | undefined;
+            const newState: string[][] = [...state]
+            newState.forEach((column: string[], index: number) => {
+                if (column.length !== data.gameLobbyChanged.gameboard[index].length) {
+                    didBoardChange = true;
+                    indexOfChange = index;
+                    console.log("detected change")
+                }
+            })
+            // const renderAnimationUE = async function() {
+            //     console.log("AnimationStarted")
+            //     await renderAnimation(newState, indexOfChange)
+            //     console.log("Animation Completed")
+            // }
+            if (didBoardChange && indexOfChange !== undefined) {
+                renderAnimation(newState, indexOfChange, "opponentMove", () => {
+                    console.log("beyond animation function")
+                    dispatch(data.gameLobbyChanged.gameboard);
+                    setTurn(!playerTurn);
+                });
+            }
         }
     }, [data]);
 
@@ -61,24 +84,18 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
         }
     };
 
+    // this checks if they are the host.  If they are they are represented with an x if not an O
+    const piece = (playerType === 'host') ? 'x' : 'O';
 
     //creates a new state then pushes either an x or O to the column that was clicked on 
-    const updateBoard = async (index:number, piece:string) =>{
+    const updateBoard = async (index:number) =>{
         const newState = [...state];
         newState[index].push(piece);
-        dispatch(newState); //updates the gameboard local state to the new one
+        // const promisedSetState = (newState: string[][]) => new Promise(resolve => dispatch(newState, resolve)); //updates the gameboard local state to the new one
+        dispatch(newState);
+        setTurn(!playerTurn);
         await updateLobby({variables:{gameboard: newState, lobbyName:name }}); //uses the updateLobby mutation to update the gameboard in mongodb
     };
-
-    // this checks if they are the host.  If they are they are represented with an x if not an O
-    const whatPiece = ()=>{
-        if(playerType === 'host'){
-            return 'x';
-        }else{
-            return 'O';
-        };
-    };
-    const piece = whatPiece();
 
     //this function takes in a string to test and uses regex to see if there are four x or O next to each other in the string
     const regexTest = (testString: string) => {
@@ -166,18 +183,15 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
         checkDiagonalWin();
     };
 
-    async function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {
-        if (inProgress || !playerTurn) return;
-
-        setInProgress(true);
-        const index = Number(e.currentTarget.getAttribute('data-index'))
-        const newState = [...state];
-
-        //programatic changes to board pieces array of arrays to mock falling "animation"
+    const renderAnimation = async function(newState: string[][], index: number, moveType: string, cb?: ()=>void) {
         const initialLength = newState[index].length;
         for (let i:number=5; i>=initialLength; i--) {
             const ArrayToConcat: string[] = Array(i-initialLength).fill("null");
-            newState[index] = piece === 'x' ? [...newState[index], ...ArrayToConcat, "x"] : [...newState[index], ...ArrayToConcat, "O"];
+            if (moveType === "hostMove") {
+                newState[index] = piece === 'x' ? [...newState[index], ...ArrayToConcat, "x"] : [...newState[index], ...ArrayToConcat, "O"];
+            } else {
+                newState[index] = piece === 'x' ? [...newState[index], ...ArrayToConcat, "O"] : [...newState[index], ...ArrayToConcat, "x"];
+            }
             dispatch(newState);
             forceUpdate();
             await new Promise(resolve => setTimeout(resolve, 125));
@@ -185,9 +199,22 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
             dispatch(newState);
             forceUpdate();
         }
+        if (cb) {
+            cb();
+        }
+    }
+
+    async function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {
+        if (inProgress || !playerTurn) return;
+
+        setInProgress(true);
+        const index = Number(e.currentTarget.getAttribute('data-index'))
+        let newState = [...state];
+
+        await renderAnimation(newState, index, "hostMove");
 
         if (playerTurn && newState[index].length < 6) {
-            updateBoard(index, piece);
+            updateBoard(index);
             setInProgress(false);
         }
     };
@@ -204,7 +231,10 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
         const cellArray = [];
         for (let j:number=0; j<6; j++) {
             cellArray.push(
-                <td key={`col:${columnIndex}-cell:${j}`} className="boardCell"><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])}/></td>
+                ((data && data.gameLobbyChanged.lobbyIsFull) || playerType === "sub") ?
+                    <td key={`col:${columnIndex}-cell:${j}`} className="boardCell"><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])}/></td>
+                :
+                    <Skeleton variant="rectangular" width={110} height={110} sx={{margin: "0px 10px"}}/>
             )
         }
         return cellArray;

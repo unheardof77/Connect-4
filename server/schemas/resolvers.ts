@@ -1,5 +1,5 @@
 import { AuthenticationError } from 'apollo-server-express';
-import { Context, LoginSignup, CheckoutArgs, GameNameArgs, CreateMessageArgs } from '../utils/types';
+import { Context, LoginSignup, CheckoutArgs, GameNameArgs, CreateMessageArgs, DeleteGameLobbyArgs, UpdateGameLobbyArgs } from '../utils/types';
 import { signToken } from '../utils/auth';
 import User from '../models/User';
 import GameLobby from '../models/Lobby';
@@ -44,10 +44,10 @@ const resolvers = {
             await pubSub.publish('UPDATED_LOBBY', {gameLobbyChanged: updatedGameLobby});
             return updatedGameLobby;
         },
-        deleteGameLobby:async (_: any, args: any) => {
+        deleteGameLobby:async (_: any, args: DeleteGameLobbyArgs) => {
             return await GameLobby.findOneAndDelete({_id: args.GameLobby_id})
         },
-        updateGameLobby:async (_: any, args: any, context: Context) => {
+        updateGameLobby:async (_: any, args: UpdateGameLobbyArgs, context: Context) => {
             const lobby = await GameLobby.findOne({name: args.lobbyName});
             if (Object.keys(args).length>1) { // update the gameboard
                 const updatedLobby = await GameLobby.findOneAndUpdate({name: args.lobbyName}, {gameboard: args.gameboard}, {new: true}).populate('members').populate('messages');

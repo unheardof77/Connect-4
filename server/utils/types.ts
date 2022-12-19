@@ -32,3 +32,10 @@ export interface CreateMessageArgs {
     message: string;
     GameLobby_id: mongoose.Types.ObjectId;
 }
+export interface DeleteGameLobbyArgs {
+    GameLobby_id: mongoose.Types.ObjectId;
+}
+export interface UpdateGameLobbyArgs {
+    gameboard?: string[][];
+    lobbyName: string;
+}
