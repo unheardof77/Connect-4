@@ -102,11 +102,12 @@ export default function Header() {
                         <Link className='link-reset' to="/"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>Home</Button></Link>
                         <Button onClick={()=>navigate('/aboutUs')} sx={{ my: 2, color: 'white', display: 'block' }}>About</Button>
                         <Link className='link-reset' to="/"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>Coffee</Button></Link>
-                        <Button onClick={()=> updateModalState({type: 'showLobbyModal'})} sx={{ my: 2, color: 'white', display: 'block' }}>Create Game</Button>
-                        <Button onClick={()=> updateModalState({type: 'showJoinModal'})} sx={{ my: 2, color: 'white', display: 'block' }}>Join Game</Button>
                     </Box>
 
                     {Auth.loggedIn() ?
+                    <>
+                        <Button onClick={()=> updateModalState({type: 'showLobbyModal'})} sx={{ my: 2, color: 'white', display: 'block' }}>Create Game</Button>
+                        <Button onClick={()=> updateModalState({type: 'showJoinModal'})} sx={{ my: 2, color: 'white', display: 'block', mr: 2 }}>Join Game</Button>
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="Open settings">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -139,6 +140,7 @@ export default function Header() {
                                 </MenuItem>
                             </Menu>
                         </Box>
+                    </>
                         :
                         <>
                             <Button onClick={() => updateModalState({ type: 'showLogin' })} sx={{ my: 2, color: 'white', display: 'block' }}>Log In</Button>
