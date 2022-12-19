@@ -6,12 +6,25 @@ import '../Board/Board.css';
 import { useMutation, useSubscription } from "@apollo/client";
 import { UPDATELOBBY, SENDMESSAGE } from "../../utils/crud/Mutation";
 import { GAMELOBBYSUB } from "../../utils/crud/Subscription";
+import Auth from "../../utils/auth/auth"
 
 
 interface Props {
     winner: string;
     setWinner: Dispatch<SetStateAction<string>>;
     playerType: string;
+}
+
+interface ProfileData {
+    friends: [];
+    username: string;
+    _id: string;
+}
+
+interface Profile {
+    data: ProfileData;
+    exp: number;
+    iat: number;
 }
 
 export default function MultiBoard({winner, setWinner, playerType}:Props) {
@@ -26,6 +39,10 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     //these two lines of code get the id and name of the game lobby and parse it
     const gameId = JSON.parse(localStorage.getItem('GameBoard') || '')._id;
     const name = JSON.parse(localStorage.getItem('GameBoard') || '').name;
+    const profile = Auth.getProfile() as Profile;
+    const username = profile.data.username;
+    let opponentUsername: string = "";
+
 
     //mutation for sending a message
     const [sendMessage] = useMutation(SENDMESSAGE);
@@ -39,6 +56,8 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     //this use effect runs whenever data changes the if condition checks if the subscription is loading.  If it is not loading the local state gets updated to the newest gameboard and the turn is set to the opposite of what it was originally
     useEffect(()=>{
         if(!loading){
+            console.log(data)
+            console.log(data.gameLobbyChanged.members[1].username)
             let didBoardChange: boolean | undefined;
             let indexOfChange: number | undefined;
             const newState: string[][] = [...state]
@@ -63,6 +82,12 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
             }
         }
     }, [data]);
+
+    if (!loading && playerType === "host") {
+        opponentUsername = data.gameLobbyChanged.members[1].username;
+    } else {
+        opponentUsername = JSON.parse(localStorage.getItem('GameBoard') || '').members[0].username;
+    }
 
     //this use effect runs whenever the player turn changes this allows the board to be checked for wins after data is recieved from the subscription
     useEffect(()=>{
@@ -255,13 +280,21 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     return (
         <>
             <div className="gameboard-wrapper">
-                <h1 style={playerTurn ? {visibility: "visible", color: "lightgray"} : {visibility: "hidden"}}>Player <span className="player-turn-1">One's</span> Turn</h1>
+            {((data && data.gameLobbyChanged.lobbyIsFull) || playerType === "sub") ?
+                <h1 style={playerTurn ? {visibility: "visible", color: "lightgray"} : {visibility: "hidden"}}>
+                    <span className={playerType ==="host" ? "player-turn-1" : "player-turn-2"}>{username}'s</span> Turn
+                </h1>
+            :
+                <h1 style={{visibility: "visible", color: "lightgray"}}>Opponent Joining</h1>
+            }
                 <table style={{margin: "0px 50px 0px 50px"}}>
                     <tbody style={{transform: "rotate(-90deg)"}}>
                         {renderBoard()}
                     </tbody>
                 </table>
-                <h1 style={playerTurn ? {visibility: "hidden"} : {visibility: "visible", color: "lightgray"}}>Player <span className="player-turn-2">Two's</span> Turn</h1>
+                <h1 style={playerTurn ? {visibility: "hidden"} : {visibility: "visible", color: "lightgray"}}>
+                    <span className={playerType ==="host" ? "player-turn-2" : "player-turn-1"}>{opponentUsername}'s</span> Turn
+                </h1>
             </div>
             <form onSubmit={handleMessageSubmit}>
                 <input value={sentMessage} onChange={handleMessageChange} ></input>
