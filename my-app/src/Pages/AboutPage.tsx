@@ -1,4 +1,5 @@
 import './PageStyles/AboutPage.css';
+import * as React from 'react';
 import { Box, Typography, Divider, TextField, FormControl, InputLabel, FilledInput, InputAdornment, IconButton, Button } from '@mui/material';
 import Header from '../Components/Header/Header';
 import LoginModal from '../Components/LoginModal/LoginModal';
@@ -8,16 +9,38 @@ import { loadStripe } from '@stripe/stripe-js';
 import CheckoutForm from '../Components/CheckoutForm/CheckoutForm';
 import { getCheckout } from '../utils/crud/Query';
 import { useLazyQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, forwardRef } from 'react';
 import { useParams } from 'react-router-dom';
 import ToacinBio from '../Components/ToacinBio/ToacinBio';
 import MorganBio from '../Components/MorganBio/MorganBio';
 import EndeavorSlides from '../Components/EndeavorSlides/EndeavorSlides';
+import Stack from '@mui/material/Stack';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
 const stripePromise = loadStripe('pk_test_51MF246FhLt5A8AbKPxxbzKomjN1l6ggWollsfH66RgVcL9sQrObPHh1kOuZL1b7W7Q7IsO8SjIvh6TUNuiDZr96M006pbFiehi');
 
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
+    props,
+    ref,
+) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function AboutPage() {
     const [donationAmount, setDonationAmount] = useState('');
+    const [open, setOpen] = useState(false);
+    const handleToast = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
 
     const [createCheckout, { data: checkoutData }] = useLazyQuery(getCheckout);
 
@@ -35,6 +58,7 @@ export default function AboutPage() {
 
     const handleDonationSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        handleToast();
         try {
             await createCheckout({ variables: { donationAmount: parseInt(donationAmount) } })
         } catch (err) {
@@ -67,17 +91,17 @@ export default function AboutPage() {
 
                     <Typography variant='h2' component='h2' sx={{ fontSize: "1.5em", color: "gray", marginBottom: "2%", width: "100%" }}> Lastly, we'd like to quickly mention that both of us are recent graduates on an active journey to becoming more learned developers. If you enjoyed our application, and would like to help us continue, please consider supporting by buying us a coffee! We'd greatly appreciate it :) </Typography>
 
-                    <Box component='form' onSubmit={handleDonationSubmit} padding={4} sx={{marginBottom: "10%"}}>
-                        <Box sx={{display: "flex", justifyContent: "center"}}>
-                        <TextField
-                            // error={(invalidCredentials) ? true : false}
-                            value={donationAmount} onChange={handleDonationChange} label="Donation Amount"
-                            variant="filled"
-                            sx={{ margin: "0px 0px 0px 0px" }}
-                            required
-                        />
-                        {/* {invalidCredentials ? <Typography variant="subtitle1" component="p" sx={{ color: "#f44332", margin: "0px 0px 12px 0px" }}>Invalid Credentials</Typography> : null} */}
-                        <Button sx={{ margin: "0px 0px 0px 20px" }} variant="outlined" type='submit'>Donate</Button>
+                    <Box component='form' onSubmit={handleDonationSubmit} padding={4} sx={{ marginBottom: "10%" }}>
+                        <Box sx={{ display: "flex", justifyContent: "center" }}>
+                            <TextField
+                                // error={(invalidCredentials) ? true : false}
+                                value={donationAmount} onChange={handleDonationChange} label="Donation Amount"
+                                variant="filled"
+                                sx={{ margin: "0px 0px 0px 0px" }}
+                                required
+                            />
+                            {/* {invalidCredentials ? <Typography variant="subtitle1" component="p" sx={{ color: "#f44332", margin: "0px 0px 12px 0px" }}>Invalid Credentials</Typography> : null} */}
+                            <Button sx={{ margin: "0px 0px 0px 20px" }} variant="outlined" type='submit'>Donate</Button>
                         </Box>
                     </Box>
                 </Box>
@@ -87,6 +111,13 @@ export default function AboutPage() {
             {/* <Elements stripe={stripePromise}>
                 <CheckoutForm/>
             </Elements> */}
+            <Stack spacing={2} sx={{ width: '100%' }}>
+                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
+                        Redirecting
+                    </Alert>
+                </Snackbar>
+            </Stack>
         </>
     )
 };

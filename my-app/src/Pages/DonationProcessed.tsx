@@ -1,6 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
-import { useEffect, useState, useReducer } from 'react'
+import { useEffect, useState, useReducer } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
+import CancelIcon from '@mui/icons-material/Cancel';
 
 import Logo from "../assets/Logo.png";
 
@@ -35,24 +37,8 @@ function CircularProgressWithLabel(
 
 export default function DonationProcessed() {
     const [progress, setProgress] = useState(0);
-    // const [ignored, forceUpdate] = useReducer(x=> x+ 1, 0);
-    // let progress = 0;
-
-    // useEffect(() => {
-    //     const timer = setInterval(() => {
-    //         if (progress<100) {
-    //             setProgress((prevProgress) => ( prevProgress + 1));
-    //         }
-    //     }, 50);
-    //     if(progress==100) {
-    //         clearInterval(timer);
-    //     }
-    //     // return () => {
-    //     //     clearInterval(timer);
-    //     // };
-    // }, []);
-    // useEffect(()=> {
-    // })
+    const { responseType } = useParams();
+    const navigate = useNavigate();
     async function progressIncreaser() {
             await new Promise(resolve => setTimeout(resolve, 10));
             if (progress === 100) {
@@ -62,12 +48,22 @@ export default function DonationProcessed() {
     }
     progressIncreaser();
 
+    useEffect(()=>{
+        setTimeout(()=>{
+            navigate('/')
+        }, 3500)
+    }, [])
 
     return (
         <Box component="div" sx={{ width: "100%", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-            <img src={Logo} style={{ marginLeft: "2%", marginBottom: "1%" }} />
-            <Typography variant='h2' component='h2' sx={{ color: "lightgray", marginBottom: "2%" }}>Donation Processed</Typography>
-            <CircularProgressWithLabel value={progress} size="80px"/>
+            <img src={Logo} style={{ marginLeft: "2%", marginBottom: ".4%" }} />
+            <Typography variant='h2' component='h2' sx={{ color: "lightgray", marginBottom: ".5%" }}>Donation {responseType === "success" ? "Processed" : "Cancelled"}</Typography>
+            {responseType === "success" ?
+                <Typography variant='h4' component='h4' sx={{ color: "gray", marginBottom: "1.1%"}}>Thank you so much!</Typography> 
+            :
+                <Typography variant='h5' component='h5' sx={{ color: "gray", marginBottom: "1.1%"}}>Don't worry, we still like you &#x1F609;</Typography>
+            }
+            {responseType === "success" ? <CircularProgressWithLabel value={progress} size="80px"/> : <CancelIcon sx={{color: "#c93030", fontSize: "4em"}}/>}
         </Box>
     )
 }

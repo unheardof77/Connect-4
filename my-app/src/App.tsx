@@ -79,7 +79,7 @@ function App() {
                     <Route path="/aboutUs" element={<AboutPage/>}/>
                     <Route path="/canceled" element={<CanceledPage/>} />
                     <Route path="/multiplayer/:playerType" element={<MultiBoardPage/>}/>
-                    <Route path="/donation-processed" element={<DonationProcessed/>}/>
+                    <Route path="/donation-processed/:responseType" element={<DonationProcessed/>}/>
                   </Routes>
                   <LobbyModal/>
                   <LoginModal/>
