@@ -11,6 +11,7 @@ interface LobbySchema {
     members: mongoose.Types.ObjectId[];
     lobbyIsFull: boolean;
     messages: mongoose.Types.ObjectId[];
+    isGameFinished: boolean;
 }
 
 type LobbyModel = Model<LobbySchema, {}, LobbyVirtuals>
@@ -38,7 +39,11 @@ const gameLobbySchema = new Schema(
                 type: Schema.Types.ObjectId,
                 ref: 'Message'
             }
-        ]
+        ],
+        isGameFinished: {
+            type: Boolean,
+            default: false
+        }
     },
     {
         toJSON: {

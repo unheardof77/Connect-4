@@ -7,6 +7,7 @@ subscription Subscription($lobbyName: String!) {
     gameboard
     lobbyIsFull
     name
+    isGameFinished
     members {
       _id
       username

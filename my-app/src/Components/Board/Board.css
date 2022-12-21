@@ -19,7 +19,7 @@
     align-items: center;
 }
 
-.boardCell:hover {
+.hover {
     cursor: pointer;
 }
 
