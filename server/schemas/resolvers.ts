@@ -48,12 +48,16 @@ const resolvers = {
             return await GameLobby.findOneAndDelete({_id: args.GameLobby_id})
         },
         updateGameLobby:async (_: any, args: UpdateGameLobbyArgs, context: Context) => {
-            const lobby = await GameLobby.findOne({name: args.lobbyName});
-            if (Object.keys(args).length>1) { // update the gameboard
+            if(Object.keys(args).length > 2){
+                const updatedLobby = await GameLobby.findOneAndUpdate({name: args.lobbyName}, {gameboard: args.gameboard, isGameFinished: args.isGameFinished}, { new:true }).populate('members').populate('messages');
+                await pubSub.publish('UPDATED_LOBBY', {gameLobbyChanged: updatedLobby});
+                return updatedLobby;
+            }else if (Object.keys(args).length>1) { // update the gameboard
                 const updatedLobby = await GameLobby.findOneAndUpdate({name: args.lobbyName}, {gameboard: args.gameboard}, {new: true}).populate('members').populate('messages');
                 await pubSub.publish('UPDATED_LOBBY', {gameLobbyChanged: updatedLobby});
                 return updatedLobby;
             } else { // add member to game lobby
+                const lobby = await GameLobby.findOne({name: args.lobbyName});
                 if (lobby && !lobby.lobbyIsFull) {
                     const updatedLobby = await GameLobby.findOneAndUpdate({name: args.lobbyName}, {$push: {members: context.user._id}}, {new: true}).populate('members').populate('messages');
                     await pubSub.publish('UPDATED_LOBBY', {gameLobbyChanged: updatedLobby});

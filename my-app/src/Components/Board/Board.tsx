@@ -1,18 +1,18 @@
-import { useState, MouseEvent, Dispatch, SetStateAction } from "react";
+import React, { useState, MouseEvent, Dispatch, SetStateAction } from "react";
 import {BsFillCircleFill} from "react-icons/bs";
 import { useGameContext, useModalContext } from "../../utils/statemanagment/globalstate";
 import './Board.css';
 
 interface Props {
-    winner: string;
     setWinner: Dispatch<SetStateAction<string>>;
 }
 
-export default function Board({winner, setWinner}:Props) {
+export default function Board({setWinner}:Props) {
     const [playerTurn, setTurn] = useState(true);
     const [inProgress, setInProgress] = useState(false);
+    const [playAgain, setPlayAgain] = useState(false);
     const {state, dispatch} = useGameContext();
-    const { modalState, updateModalState } = useModalContext();
+    const { updateModalState } = useModalContext();
     
     const updateBoard = (index:number, piece:string) =>{
         const newState = [...state];
@@ -26,14 +26,16 @@ export default function Board({winner, setWinner}:Props) {
         if (regexColX.test(testString)) {
             setWinner("Player 1");
             updateModalState({type:'showWinnerModal'})
+            setPlayAgain(true);
         } else if (regexColO.test(testString)) {
             setWinner("Player 2");
             updateModalState({type:'showWinnerModal'})
+            setPlayAgain(true);
         };
     };
 
     const checkColWin = () => {
-        state.forEach((col, index) => {
+        state.forEach((col) => {
             const stringCol = col.join('');
             regexTest(stringCol)
         });
@@ -103,7 +105,7 @@ export default function Board({winner, setWinner}:Props) {
     };
 
     async function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {
-        if (inProgress) return;
+        if (inProgress || playAgain) return;
 
         setInProgress(true);
         const index = Number(e.currentTarget.getAttribute('data-index'))
@@ -114,7 +116,7 @@ export default function Board({winner, setWinner}:Props) {
             const ArrayToConcat: string[] = Array(i-initialLength).fill("null");
             state[index] = playerTurn ? [...state[index], ...ArrayToConcat, "x"] : [...state[index], ...ArrayToConcat, "O"];
             dispatch({type:'updateBoard', payload:state});
-            await new Promise(resolve => setTimeout(resolve, 150));
+            await new Promise(resolve => setTimeout(resolve, 125));
             state[index].splice(initialLength, 6);
             dispatch({type:'updateBoard', payload:state});
         }
@@ -132,19 +134,20 @@ export default function Board({winner, setWinner}:Props) {
         };
     };
 
-    function renderColor(boardCell: string) {
+    function renderColor(boardCell: string):string {
         switch(boardCell) {
             case "x": return "#b69f34";
             case "O": return "#c93030";
             default: return "#121212";
         }
+        
     }
 
     function renderCells(columnIndex: number) {
         const cellArray = [];
         for (let j:number=0; j<6; j++) {
             cellArray.push(
-                <td key={`col:${columnIndex}-cell:${j}`} className="boardCell"><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])}/></td>
+                <td key={`col:${columnIndex}-cell:${j}`} className={playAgain?"boardCell":"boardCell hover"}><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])}/></td>
             )
         }
         return cellArray;
@@ -162,6 +165,12 @@ export default function Board({winner, setWinner}:Props) {
         return colsArray;
     }
 
+    const handlePlayAgain = (e:React.MouseEvent)=>{
+        dispatch({type:'updateBoard', payload: [[],[],[],[],[],[],[]]});
+        setTurn(true);
+        setPlayAgain(false);
+    };
+
     return (
         <>
             <div className="gameboard-wrapper">
@@ -173,6 +182,10 @@ export default function Board({winner, setWinner}:Props) {
                 </table>
                 <h1 style={playerTurn ? {visibility: "hidden"} : {visibility: "visible", color: "lightgray"}}>Player <span className="player-turn-2">Two's</span> Turn</h1>
             </div>
+            {playAgain? 
+            <div>
+                <button onClick={handlePlayAgain}>Play again?</button>
+            </div> : null }
         </>
     );
 };
