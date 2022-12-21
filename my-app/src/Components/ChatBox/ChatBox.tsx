@@ -1,10 +1,13 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography, Skeleton } from "@mui/material";
 import React from "react";
 interface Message {
     name: string;
     message: string;
     formattedTime: string;
 }
+interface SubScriptionData {
+
+};
 
 interface ChatBoxProp {
     sentMessage: string;
@@ -13,35 +16,47 @@ interface ChatBoxProp {
     handleMessageSubmit: (e:React.FormEvent)=>void;
     piece: string;
     username:string;
+    data: {
+        gameLobbyChanged:{
+            lobbyIsFull: boolean;
+        }
+    }
 };
 interface MessageColorObj {
-    color:string
+    color:string;
+    padding: string;
 }
 
-export default function ChatBox({sentMessage, handleMessageChange, chatMessages, handleMessageSubmit, piece, username}:ChatBoxProp){
+export default function ChatBox({sentMessage, handleMessageChange, chatMessages, handleMessageSubmit, piece, username, data}:ChatBoxProp){
 
     const renderMessageColor = (messageUsername:string):MessageColorObj =>{
         if(piece === 'x'){
-            return username === messageUsername? {color: "#b69f34"}: {color:"#c93030"};
+            return username === messageUsername? {color: "#b69f34", padding:'1%'}: {color:"#c93030", padding:'1%'};
         }else {
-            return username === messageUsername? {color:"#c93030"}:{color: "#b69f34"};
+            return username === messageUsername? {color:"#c93030", padding:'1%'}:{color: "#b69f34", padding:'1%'};
         }
     };
 
     return (
         <Box component='section' sx={{width: '400px', height: '500px', border: '#444444 2px solid'}}>
-            <Box component='div' sx={{height: '425px', overflow:'scroll', overflowWrap:'normal', overflowX: 'hidden', scrollbarColor:'#444444' }} >
-                {chatMessages.map((mesObj) =><Typography key={mesObj.formattedTime.concat(mesObj.message)}><span  style={renderMessageColor(mesObj.name)}>{mesObj.name}</span>: {mesObj.message}</Typography> )}
-            </Box>
+            {((data && data.gameLobbyChanged.lobbyIsFull) || piece === "O") ?
+                <Box component='div' sx={{height: '425px', overflow:'scroll', overflowWrap:'normal', overflowX: 'hidden', scrollbarColor:'#444444' }} >
+                    {chatMessages.map((mesObj) =><Typography key={mesObj.formattedTime.concat(mesObj.message)}><span  style={renderMessageColor(mesObj.name)}>{mesObj.name}</span>: {mesObj.message}</Typography> )}
+                </Box>
+                :<Skeleton variant="rectangular" height={420} sx={{margin:'2% 2% 0% 2%'}} />}
             <Box component='form' onSubmit={handleMessageSubmit} sx={{display: 'flex', height: '75px'}}>
-                <TextField
-                        fullWidth
-                        id="standard-basic" name='UserName' value={sentMessage} onChange={handleMessageChange} label="Type Message"
-                        variant="filled"
-                        
-                        sx={{ margin: '2%'}}
-                />
-                <Button sx={{ margin: '2%'}} variant="outlined" type='submit'>Send</Button>
+            {((data && data.gameLobbyChanged.lobbyIsFull) || piece === "O") ?
+                    <>
+                        <TextField
+                                fullWidth
+                                id="standard-basic" name='UserName' value={sentMessage} onChange={handleMessageChange} label="Type Message"
+                                variant="filled"
+                                
+                                sx={{ margin: '2%'}}
+                        />
+                        <Button sx={{ margin: '2%'}} variant="outlined" type='submit'>Send</Button>
+                    </>
+                    :<><Skeleton variant="rectangular" sx={{width: '100%', height: '70%', margin:'2% '}}/></>}
             </Box>
         </Box>
     )

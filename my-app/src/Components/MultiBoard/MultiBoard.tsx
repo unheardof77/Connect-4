@@ -301,7 +301,7 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
                 {/* <h1 style={playerTurn ? {visibility: "hidden"} : {visibility: "visible", color: "lightgray"}}>
                     <span className={playerType ==="host" ? "player-turn-2" : "player-turn-1"}>{opponentUsername}'s</span> Turn
                 </h1> */}
-                <ChatBox username={username} piece={piece} handleMessageSubmit={handleMessageSubmit} chatMessages={chatMessages} sentMessage={sentMessage} handleMessageChange={handleMessageChange}/>
+                <ChatBox data={data} username={username} piece={piece} handleMessageSubmit={handleMessageSubmit} chatMessages={chatMessages} sentMessage={sentMessage} handleMessageChange={handleMessageChange}/>
             </div>
             {playAgain? 
             <div>
