@@ -3,3 +3,17 @@
     color: #8ac1eb;
     cursor: pointer;
 }
+
+body::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+body::-webkit-scrollbar {
+    width: 10px;
+    background-color: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+    border-radius: 7px;
+    background-color: rgba(255, 255, 255, 0.13);
+}

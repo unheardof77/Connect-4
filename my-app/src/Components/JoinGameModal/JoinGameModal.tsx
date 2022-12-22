@@ -55,7 +55,6 @@ export default function JoinGameModal() {
     };
 
     return (
-        <div>
             <Dialog
                 open={modalState.joinModal}
                 TransitionComponent={Transition}
@@ -82,6 +81,5 @@ export default function JoinGameModal() {
                     
                 </Box>
             </Dialog>
-        </div>
     );
 }

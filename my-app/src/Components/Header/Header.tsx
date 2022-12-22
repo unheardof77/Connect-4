@@ -119,9 +119,9 @@ export default function Header() {
                     {/* right side of Nav Bar */}
                     {Auth.loggedIn() ?
                         <>
-                            <Button variant='outlined' onClick={() => navigate('/')} sx={{ my: 2, mr: 2, color: 'white', display: 'block' }}>Local Game</Button>
-                            <Button variant='outlined' onClick={() => updateModalState({ type: 'showLobbyModal' })} sx={{ my: 2, mr: 2, color: 'white', display: 'block' }}>Create Game</Button>
-                            <Button variant='outlined' onClick={() => updateModalState({ type: 'showJoinModal' })} sx={{ my: 2, mr: 3, color: 'white', display: 'block' }}>Join Game</Button>
+                            <Button onClick={() => navigate('/')} sx={{ my: 2, color: 'white', display: 'block' }}>Local Game</Button>
+                            <Button onClick={() => updateModalState({ type: 'showLobbyModal' })} sx={{ my: 2, color: 'white', display: 'block' }}>Create Game</Button>
+                            <Button onClick={() => updateModalState({ type: 'showJoinModal' })} sx={{ my: 2, mr: 2, color: 'white', display: 'block' }}>Join Game</Button>
                             <Box sx={{ flexGrow: 0 }}>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -157,8 +157,8 @@ export default function Header() {
                         </>
                         :
                         <>
-                            <Button variant='outlined' onClick={() => updateModalState({ type: 'showLogin' })} sx={{ my: 2, mr: 2, color: 'white', display: 'block' }}>Log In</Button>
-                            <Button variant='outlined' onClick={() => updateModalState({ type: 'showSignup' })} sx={{ my: 2, color: 'white', display: 'block' }}>Sign Up</Button>
+                            <Button onClick={() => updateModalState({ type: 'showLogin' })} sx={{ my: 2, color: 'white', display: 'block' }}>Log In</Button>
+                            <Button onClick={() => updateModalState({ type: 'showSignup' })} sx={{ my: 2, color: 'white', display: 'block' }}>Sign Up</Button>
                         </>
                     }
                 </Toolbar>

@@ -228,7 +228,7 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
     }
 
     async function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {
-        if (inProgress || !playerTurn || playAgain) return;
+        if (inProgress || !playerTurn || playAgain || !data) return;
 
         setInProgress(true);
         const index = Number(e.currentTarget.getAttribute('data-index'))
@@ -257,7 +257,7 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
                 ((data && data.gameLobbyChanged.lobbyIsFull) || playerType === "sub") ?
                     <td key={`col:${columnIndex}-cell:${j}`} className={playAgain ? "boardCell" : "boardCell hover"}><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])} /></td>
                     :
-                    <Skeleton key={`skel-col:${columnIndex}-cell:${j}`} width={110} height={110} sx={{ margin: "0px 10px" }} />
+                    <Skeleton key={`skel-col:${columnIndex}-cell:${j}`} variant="rectangular" width={110} height={110} sx={{ margin: "0px 10px" }} />
             )
         }
         return cellArray;

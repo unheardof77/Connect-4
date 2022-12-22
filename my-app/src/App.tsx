@@ -27,7 +27,7 @@ const httpLink = new HttpLink({
 });
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'wss://localhost:3001/graphql',
+  url: 'ws://localhost:3001/graphql',
 }));
 
 // const wsLink = new GraphQLWsLink(createClient({
@@ -75,20 +75,20 @@ function App() {
         <GameProvider>
           <ModalStateProvider>
             <ThemeProvider theme={darkTheme}>
-            <CssBaseline />
-                <Router>
-                  <Routes>
-                    <Route path="/" element={<BoardPage/>}/>
-                    <Route path="/aboutUs" element={<AboutPage/>}/>
-                    <Route path="/multiplayer/:playerType" element={<MultiBoardPage/>}/>
-                    <Route path="/donation-processed/:responseType" element={<DonationProcessed/>}/>
-                  </Routes>
-                  <LobbyModal/>
-                  <LoginModal/>
-                  <SignupModal/>
-                  <JoinGameModal/>
-                </Router>
-              </ThemeProvider>
+              <CssBaseline />
+              <Router>
+                <Routes>
+                  <Route path="/" element={<BoardPage/>}/>
+                  <Route path="/aboutUs" element={<AboutPage/>}/>
+                  <Route path="/multiplayer/:playerType" element={<MultiBoardPage/>}/>
+                  <Route path="/donation-processed/:responseType" element={<DonationProcessed/>}/>
+                </Routes>
+                <LobbyModal/>
+                <LoginModal/>
+                <SignupModal/>
+                <JoinGameModal/>
+              </Router>
+            </ThemeProvider>
           </ModalStateProvider>
         </GameProvider>
       </ApolloProvider>
