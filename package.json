@@ -11,7 +11,7 @@
     "build": "concurrently \" npm run start \" \"cd my-app && npm run build\" ",
     "serve": "cd my-app && npx serve -s build",
     "develop": "concurrently \" npm run start\" \"cd my-app && npm run start\"",
-    "install": "npm i && cd server && npm i && cd ../my-app && npm i"
+    "install": "cd server && npm i && cd ../my-app && npm i"
   },
   "repository": {
     "type": "git",
