@@ -115,8 +115,6 @@ const resolvers = {
             subscribe: withFilter(
                 ()=>pubSub.asyncIterator(['UPDATED_LOBBY']),
                 (payload, variables) => {
-                    console.log(payload)
-                    console.log(variables)
                     return (
                         payload.gameLobbyChanged.name === variables.lobbyName
                     )

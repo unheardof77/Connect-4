@@ -1,6 +1,6 @@
 import { useState, MouseEvent, Dispatch, SetStateAction, useReducer, useEffect } from "react";
-import {BsFillCircleFill} from "react-icons/bs";
-import { Skeleton } from "@mui/material/";
+import { BsFillCircleFill } from "react-icons/bs";
+import { Skeleton, Button, Box } from "@mui/material/";
 import { useModalContext } from "../../utils/statemanagment/globalstate";
 import '../Board/Board.css';
 import { useMutation, useSubscription } from "@apollo/client";
@@ -16,11 +16,11 @@ interface Props {
     setWinner: Dispatch<SetStateAction<string>>;
     playerType: string;
 }
-    
-export default function MultiBoard({winner, setWinner, playerType}:Props) {
+
+export default function MultiBoard({ winner, setWinner, playerType }: Props) {
     const [playerTurn, setTurn] = useState(playerType === 'host');//sets initial state value for the player turn if there host they go first
     const [inProgress, setInProgress] = useState(false); //this is the state for the animation when a piece is dropped from the top
-    const [state, dispatch] = useState<string[][]>([[],[],[],[],[],[],[]]);//local state for the game board
+    const [state, dispatch] = useState<string[][]>([[], [], [], [], [], [], []]);//local state for the game board
     const [sentMessage, setSendMessage] = useState("");//state representing the value of the message they can send;
     const [playAgain, setPlayAgain] = useState(false);
     const [chatMessages, setChatMessages] = useState([]);
@@ -28,7 +28,7 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     const navigate = useNavigate();
 
     const { updateModalState } = useModalContext();// this is the dispatch action for the modals
-    const [ignored, forceUpdate] = useReducer(x=> x+ 1, 0);// gives us access to force rerender the game board, used when animated the pieces falling
+    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);// gives us access to force rerender the game board, used when animated the pieces falling
 
     //these two lines of code get the id and name of the game lobby and parse it
     const gameId = JSON.parse(localStorage.getItem('GameBoard') || '')._id;
@@ -44,11 +44,11 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     const [updateLobby] = useMutation(UPDATELOBBY);
 
     //subscription that listens for updated lobby data
-    const { data, loading } = useSubscription(GAMELOBBYSUB, {variables:{lobbyName:name}});
+    const { data, loading } = useSubscription(GAMELOBBYSUB, { variables: { lobbyName: name } });
 
     //this use effect runs whenever data changes the if condition checks if the subscription is loading.  If it is not loading the local state gets updated to the newest gameboard and the turn is set to the opposite of what it was originally
-    useEffect(()=>{
-        if(!loading){
+    useEffect(() => {
+        if (!loading) {
             let didBoardChange: boolean | undefined;
             let indexOfChange: number | undefined;
             const newState: string[][] = [...state]
@@ -71,7 +71,7 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
         }
     }, [data]);
 
-    useEffect(()=> {
+    useEffect(() => {
         if (!Auth.loggedIn()) {
             navigate("/");
         }
@@ -85,22 +85,22 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     }
 
     //this use effect runs whenever the player turn changes this allows the board to be checked for wins after data is recieved from the subscription
-    useEffect(()=>{
+    useEffect(() => {
         didWin();
     }, [playerTurn]);
 
     //sets the value of the sentMessage state 
-    const handleMessageChange = (e:React.ChangeEvent<HTMLInputElement>) =>{
+    const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSendMessage(e.currentTarget.value);
     };
 
     //when the message is sent(form is submitted) it prevents a refresh and uses the sendMessage mutation to update the game lobby model in the mongodb 
-    const handleMessageSubmit = async (e:React.FormEvent)=>{
+    const handleMessageSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        try{
-            await sendMessage({variables:{message: sentMessage, GameLobby_id: gameId}});
+        try {
+            await sendMessage({ variables: { message: sentMessage, GameLobby_id: gameId } });
             setSendMessage("");
-        }catch(err){
+        } catch (err) {
             console.error(err);
         }
     };
@@ -109,13 +109,13 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     const piece = (playerType === 'host') ? 'x' : 'O';
 
     //creates a new state then pushes either an x or O to the column that was clicked on 
-    const updateBoard = async (index:number) =>{
+    const updateBoard = async (index: number) => {
         const newState = [...state];
         newState[index].push(piece);
         // const promisedSetState = (newState: string[][]) => new Promise(resolve => dispatch(newState, resolve)); //updates the gameboard local state to the new one
         dispatch(newState);
         setTurn(!playerTurn);
-        await updateLobby({variables:{gameboard: newState, lobbyName:name }}); //uses the updateLobby mutation to update the gameboard in mongodb
+        await updateLobby({ variables: { gameboard: newState, lobbyName: name } }); //uses the updateLobby mutation to update the gameboard in mongodb
     };
 
     //this function takes in a string to test and uses regex to see if there are four x or O next to each other in the string
@@ -123,13 +123,13 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
         const regexColX = /xxxx/;
         const regexColO = /OOOO/;
         if (regexColX.test(testString)) {// the .test returns a boolean, if its true that means x has gotten four in a row
-            setWinner("Player 1");
-            updateModalState({type:'showWinnerModal'})//updates the global modal state to display the winner modal;
-            await updateLobby({variables:{gameboard: state, lobbyName:name, isGameFinished:true }});
+            setWinner(data.gameLobbyChanged.members[0].username);
+            updateModalState({ type: 'showWinnerModal' })//updates the global modal state to display the winner modal;
+            await updateLobby({ variables: { gameboard: state, lobbyName: name, isGameFinished: true } });
         } else if (regexColO.test(testString)) {// if this test returns true then O has gotten four in a row
-            setWinner("Player 2");
-            updateModalState({type:'showWinnerModal'});
-            await updateLobby({variables:{gameboard: state, lobbyName:name, isGameFinished:true }});
+            setWinner(data.gameLobbyChanged.members[1].username);
+            updateModalState({ type: 'showWinnerModal' });
+            await updateLobby({ variables: { gameboard: state, lobbyName: name, isGameFinished: true } });
         };
     };
 
@@ -162,11 +162,11 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
             regexTest(westDiagonal);
         };
 
-        for (let i=1; i<4; i++) {
-            let northWestDiagonal:string = '';
-            for (let j=0; j<6; j++) {
-                if (state?.[i+j]?.[5-j]) {
-                    northWestDiagonal += state[i+j][5-j];
+        for (let i = 1; i < 4; i++) {
+            let northWestDiagonal: string = '';
+            for (let j = 0; j < 6; j++) {
+                if (state?.[i + j]?.[5 - j]) {
+                    northWestDiagonal += state[i + j][5 - j];
                 } else {
                     northWestDiagonal += ' '
                 };
@@ -206,10 +206,10 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
         checkDiagonalWin();
     };
 
-    const renderAnimation = async function(newState: string[][], index: number, moveType: string, cb?: ()=>void) {
+    const renderAnimation = async function (newState: string[][], index: number, moveType: string, cb?: () => void) {
         const initialLength = newState[index].length;
-        for (let i:number=5; i>=initialLength; i--) {
-            const ArrayToConcat: string[] = Array(i-initialLength).fill("null");
+        for (let i: number = 5; i >= initialLength; i--) {
+            const ArrayToConcat: string[] = Array(i - initialLength).fill("null");
             if (moveType === "hostMove") {
                 newState[index] = piece === 'x' ? [...newState[index], ...ArrayToConcat, "x"] : [...newState[index], ...ArrayToConcat, "O"];
             } else {
@@ -243,7 +243,7 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
     };
 
     function renderColor(boardCell: string) {
-        switch(boardCell) {
+        switch (boardCell) {
             case "x": return "#b69f34";
             case "O": return "#c93030";
             default: return "#121212";
@@ -252,12 +252,12 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
 
     function renderCells(columnIndex: number) {
         const cellArray = [];
-        for (let j:number=0; j<6; j++) {
+        for (let j: number = 0; j < 6; j++) {
             cellArray.push(
                 ((data && data.gameLobbyChanged.lobbyIsFull) || playerType === "sub") ?
-                    <td key={`col:${columnIndex}-cell:${j}`} className={playAgain?"boardCell":"boardCell hover"}><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])}/></td>
-                :
-                    <Skeleton variant="rectangular" width={110} height={110} sx={{margin: "0px 10px"}}/>
+                    <td key={`col:${columnIndex}-cell:${j}`} className={playAgain ? "boardCell" : "boardCell hover"}><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])} /></td>
+                    :
+                    <Skeleton variant="rectangular" width={110} height={110} sx={{ margin: "0px 10px" }} />
             )
         }
         return cellArray;
@@ -265,9 +265,9 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
 
     function renderBoard() {
         const colsArray = []
-        for (let i:number=0; i<7; i++) {
+        for (let i: number = 0; i < 7; i++) {
             colsArray.push(
-                <tr key={`col:${i}`} style={{margin: "20px"}} data-index={i} onClick={whatPositionPicked} className="boardCell-wrapper">
+                <tr key={`col:${i}`} style={{ margin: "20px" }} data-index={i} onClick={whatPositionPicked} className="boardCell-wrapper">
                     {renderCells(i)}
                 </tr>
             )
@@ -275,35 +275,45 @@ export default function MultiBoard({winner, setWinner, playerType}:Props) {
         return colsArray;
     }
 
-    const handlePlayAgain = async ()=>{
-        await updateLobby({variables:{gameboard: [[],[],[],[],[],[],[]], lobbyName:name, isGameFinished:false }});
+    const handlePlayAgain = async () => {
+        await updateLobby({ variables: { gameboard: [[], [], [], [], [], [], []], lobbyName: name, isGameFinished: false } });
     };
 
     return (
         <>
             <div className="gameboard-wrapper">
-            {((data && data.gameLobbyChanged.lobbyIsFull) || playerType === "sub") ?
-                <h1 style={playerTurn ? {visibility: "visible", color: "lightgray"} : {visibility: "hidden"}}>
-                    <span className={playerType ==="host" ? "player-turn-1" : "player-turn-2"}>{username}'s</span> Turn
-                </h1>
-            :
-                <h1 style={{visibility: "visible", color: "lightgray"}}>Opponent Joining</h1>
-            }
-                <table style={{margin: "0px 50px 0px 50px"}}>
-                    <tbody style={{transform: "rotate(-90deg)"}}>
+                {((data && data.gameLobbyChanged.lobbyIsFull) || playerType === "sub") ?
+                    <>
+                        {playAgain ?
+                            <Box sx={{width: "17%", display: "flex", flexDirection: "column", justifyContent: "center"}}>
+                                <h1 style={playerTurn ? { display: "none" } : { color: "lightgray", textAlign: "center" }}>
+                                    Game Over
+                                </h1>
+                                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                                    <Button variant="outlined" onClick={handlePlayAgain}>Play again?</Button>
+                                </Box>
+                            </Box>
+                        :
+                            <>
+                                <h1 style={playerTurn ? { color: "lightgray", width: "17%", textAlign: "center" } : { display: "none" }}>
+                                    <span className={playerType === "host" ? "player-turn-1" : "player-turn-2"}>Your</span> Turn
+                                </h1>
+                                <h1 style={playerTurn ? { display: "none" } : { color: "lightgray", width: "17%", textAlign: "center" }}>
+                                    <span className={playerType === "host" ? "player-turn-2" : "player-turn-1"}>{opponentUsername}'s</span> Turn
+                                </h1>
+                            </>
+                        }
+                    </>
+                    :
+                    <h1 style={{ visibility: "visible", color: "lightgray", width: "17%", textAlign: "center" }}>Waiting for Opponent</h1>
+                }
+                <table style={{ margin: "0px 50px 0px 50px" }}>
+                    <tbody style={{ transform: "rotate(-90deg)" }}>
                         {renderBoard()}
                     </tbody>
                 </table>
-                {/* <h1 style={playerTurn ? {visibility: "hidden"} : {visibility: "visible", color: "lightgray"}}>
-                    <span className={playerType ==="host" ? "player-turn-2" : "player-turn-1"}>{opponentUsername}'s</span> Turn
-                </h1> */}
-                <ChatBox data={data} username={username} piece={piece} handleMessageSubmit={handleMessageSubmit} chatMessages={chatMessages} sentMessage={sentMessage} handleMessageChange={handleMessageChange}/>
+                <ChatBox data={data} username={username} piece={piece} handleMessageSubmit={handleMessageSubmit} chatMessages={chatMessages} sentMessage={sentMessage} handleMessageChange={handleMessageChange} />
             </div>
-            {playAgain? 
-            <div>
-                <button onClick={handlePlayAgain}>Play again?</button>
-            </div> : null }
-
         </>
     );
 };
