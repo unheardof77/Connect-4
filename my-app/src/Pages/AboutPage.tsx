@@ -4,13 +4,13 @@ import { Box, Typography, Divider, TextField, FormControl, InputLabel, FilledInp
 import Header from '../Components/Header/Header';
 import LoginModal from '../Components/LoginModal/LoginModal';
 import SignupModal from '../Components/SignupModal/SignupModal';
-import { Elements } from '@stripe/react-stripe-js';
+
 import { loadStripe } from '@stripe/stripe-js';
-import CheckoutForm from '../Components/CheckoutForm/CheckoutForm';
+
 import { getCheckout } from '../utils/crud/Query';
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState, forwardRef } from 'react';
-import { useParams } from 'react-router-dom';
+
 import ToacinBio from '../Components/ToacinBio/ToacinBio';
 import MorganBio from '../Components/MorganBio/MorganBio';
 import EndeavorSlides from '../Components/EndeavorSlides/EndeavorSlides';
@@ -108,9 +108,6 @@ export default function AboutPage() {
             </Box>
             <LoginModal />
             <SignupModal />
-            {/* <Elements stripe={stripePromise}>
-                <CheckoutForm/>
-            </Elements> */}
             <Stack spacing={2} sx={{ width: '100%' }}>
                 <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>

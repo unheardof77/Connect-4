@@ -39,7 +39,6 @@ const typeDefs = gql`
         sendMessage(message:String!, GameLobby_id:ID!): GameLobby
     }
     type Query {
-        user: User
         checkout(donationAmount:Int): Checkout
     }
     type Subscription {

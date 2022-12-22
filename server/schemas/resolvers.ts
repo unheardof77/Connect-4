@@ -78,9 +78,6 @@ const resolvers = {
 
     },
     Query:{
-        user: ()=> {
-            
-        },
         checkout: async (_:any, args:CheckoutArgs, context:any)=>{
             const url = new URL(context.headers.referer).origin;
             const lineItems = [];
