@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node server/build/server.js",
     "build": " cd server && npx tsc",
-    "install": "npm i && cd server && npm i && cd ../my-app && npm i"
+    "install": "npm install && cd server && npm install && cd ../my-app && npm install"
   },
   "repository": {
     "type": "git",
