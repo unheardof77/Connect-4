@@ -2,10 +2,10 @@ import BoardPage from "./Pages/BoardPage";
 import { Route, Routes, HashRouter as Router, } from 'react-router-dom'
 import {GameProvider, ModalStateProvider} from './utils/statemanagment/globalstate';
 import AboutPage from "./Pages/AboutPage";
-import CanceledPage from "./Pages/CanceledPage";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MultiBoardPage from "./Pages/MultiplayerBoardPage";
+import HomePage from "./Pages/HomePage";
 import LoginModal from "./Components/CreateLobbyModal/CreateLobbyModal";
 import SignupModal from "./Components/SignupModal/SignupModal";
 import JoinGameModal from "./Components/JoinGameModal/JoinGameModal";
@@ -27,8 +27,12 @@ const httpLink = new HttpLink({
   uri: '/graphql'
 });
 
+// const wsLink = new GraphQLWsLink(createClient({
+//   url: 'wss://connect4clone.herokuapp.com/graphql',
+// }));
+
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'wss://connect4clone.herokuapp.com/graphql',
+  url: 'ws://localhost:3001/graphql',
 }));
 
 const splitLink = split(
@@ -75,9 +79,9 @@ function App() {
             <CssBaseline />
                 <Router>
                   <Routes>
-                    <Route path="/" element={<BoardPage/>}/>
+                    <Route path="/" element={<HomePage/>}/>
+                    <Route path="/singleplayer" element={<BoardPage/>}/>
                     <Route path="/aboutUs" element={<AboutPage/>}/>
-                    <Route path="/canceled" element={<CanceledPage/>} />
                     <Route path="/multiplayer/:playerType" element={<MultiBoardPage/>}/>
                     <Route path="/donation-processed/:responseType" element={<DonationProcessed/>}/>
                   </Routes>
