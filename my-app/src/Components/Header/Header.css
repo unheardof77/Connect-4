@@ -1,5 +1,6 @@
 .link-reset {
     text-decoration: none;
+    color: inherit
 }
 
 .link-reset:active {

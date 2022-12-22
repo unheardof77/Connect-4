@@ -257,7 +257,7 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
                 ((data && data.gameLobbyChanged.lobbyIsFull) || playerType === "sub") ?
                     <td key={`col:${columnIndex}-cell:${j}`} className={playAgain ? "boardCell" : "boardCell hover"}><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])} /></td>
                     :
-                    <Skeleton variant="rectangular" width={110} height={110} sx={{ margin: "0px 10px" }} />
+                    <Skeleton key={`skel-col:${columnIndex}-cell:${j}`} width={110} height={110} sx={{ margin: "0px 10px" }} />
             )
         }
         return cellArray;

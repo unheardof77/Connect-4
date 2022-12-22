@@ -94,7 +94,7 @@ export default function LoginModal() {
                     <TextField
                         error={(invalidCredentials) ? true : false}
                         fullWidth
-                        id="standard-basic" name='UserName' value={username} onChange={handleUserNameValue} label="Username"
+                        name='UserName' value={username} onChange={handleUserNameValue} label="Username"
                         variant="filled"
                         sx={{ margin: "0px 0px 15px 0px" }}
                         required
