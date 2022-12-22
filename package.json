@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node server/build/server.js",
-    "postinstall": "tsc"
+    "postinstall": " cd server && npx tsc"
   },
   "repository": {
     "type": "git",
