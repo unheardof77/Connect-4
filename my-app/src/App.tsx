@@ -28,7 +28,7 @@ const httpLink = new HttpLink({
 });
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'ws://localhost:3001/graphql',
+  url: 'ws://connect4clone.herokuapp.com/graphql',
 }));
 
 const splitLink = split(
