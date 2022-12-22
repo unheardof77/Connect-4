@@ -79,7 +79,6 @@ export default function LoginModal() {
     };
 
     return (
-        <div>
             <Dialog
                 open={modalState.login}
                 TransitionComponent={Transition}
@@ -94,7 +93,7 @@ export default function LoginModal() {
                     <TextField
                         error={(invalidCredentials) ? true : false}
                         fullWidth
-                        id="standard-basic" name='UserName' value={username} onChange={handleUserNameValue} label="Username"
+                        name='UserName' value={username} onChange={handleUserNameValue} label="Username"
                         variant="filled"
                         sx={{ margin: "0px 0px 15px 0px" }}
                         required
@@ -129,6 +128,5 @@ export default function LoginModal() {
                     <p style={{ margin: "40px 0px 0px 0px" }}>Don't have an account? Click <span onClick={renderSignup} className='hover-cursor'>here</span> to signup instead!</p>
                 </Box>
             </Dialog>
-        </div>
     );
 }

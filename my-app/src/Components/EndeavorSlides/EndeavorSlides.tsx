@@ -21,17 +21,17 @@ interface slideInfo {
 const steps: slideInfo[] = [
     {
         label: 'History',
-        description: `Connect 4, as you know it today, is the game that was trademarked and released by Milton Bradley in 1974. If you have a Connect 4 game that was bought after 1974, then you have the original Milton Bradley version of the game. Milton Bradley was actually a game company that was started by Milton Bradley in Massachusetts in 1860.`,
+        description: `"Connect 4, as you know it today, is the game that was trademarked and released by Milton Bradley in 1974. If you have a Connect 4 game that was bought after 1974, then you have the original Milton Bradley version of the game. Milton Bradley was actually a game company that was started by Milton Bradley in Massachusetts in 1860." -Gamesver Team`,
         image: Vintage
     },
     {
         label: 'Contemporary Connect Four',
-        description: 'Connect 4 is a game that has come a long way over the years and that has not been stagnant by any means. Right now, Connect 4 is still making history as more versions of it are created and released. ',
+        description: `"Connect 4 is a game that has come a long way over the years and that has not been stagnant by any means. Right now, Connect 4 is still making history as more versions of it are created and released." -Gamesver Team`,
         image: Modern2
     },
     {
         label: 'Our Mission',
-        description: `Many attribute the earlier concept of the game to one Theodore R. Duncan. Not much is known of this man except that he has a patent in his name for a type of 3D stacking Tic Tac Toe game that involved dropping or stacking in a row. This particular patent was filed on the 6th of August 1946.`,
+        description: `Morgan and I (Toacin) were sitting in a discord call one day, many miles apart, wishing we can get together to play a game of connect four. With no great alternative online, we decided to make a multiplayer connect four clone, and after some work, we made it happen!`,
         image: InverseLogo
     },
 ];

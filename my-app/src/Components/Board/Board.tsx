@@ -1,24 +1,25 @@
 import React, { useState, MouseEvent, Dispatch, SetStateAction } from "react";
-import {BsFillCircleFill} from "react-icons/bs";
+import { BsFillCircleFill } from "react-icons/bs";
 import { useGameContext, useModalContext } from "../../utils/statemanagment/globalstate";
 import './Board.css';
-import {Box, Button} from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 interface Props {
     setWinner: Dispatch<SetStateAction<string>>;
+    winner: string;
 }
 
-export default function Board({setWinner}:Props) {
+export default function Board({ setWinner, winner }: Props) {
     const [playerTurn, setTurn] = useState(true);
     const [inProgress, setInProgress] = useState(false);
     const [playAgain, setPlayAgain] = useState(false);
-    const {state, dispatch} = useGameContext();
+    const { state, dispatch } = useGameContext();
     const { updateModalState } = useModalContext();
-    
-    const updateBoard = (index:number, piece:string) =>{
+
+    const updateBoard = (index: number, piece: string) => {
         const newState = [...state];
         newState[index].push(piece);
-        dispatch({type:'updateBoard', payload: newState});
+        dispatch({ type: 'updateBoard', payload: newState });
     };
 
     const regexTest = (testString: string) => {
@@ -26,11 +27,11 @@ export default function Board({setWinner}:Props) {
         const regexColO = /OOOO/;
         if (regexColX.test(testString)) {
             setWinner("Player 1");
-            updateModalState({type:'showWinnerModal'})
+            updateModalState({ type: 'showWinnerModal' })
             setPlayAgain(true);
         } else if (regexColO.test(testString)) {
             setWinner("Player 2");
-            updateModalState({type:'showWinnerModal'})
+            updateModalState({ type: 'showWinnerModal' })
             setPlayAgain(true);
         };
     };
@@ -62,11 +63,11 @@ export default function Board({setWinner}:Props) {
             regexTest(westDiagonal);
         };
 
-        for (let i=1; i<4; i++) {
-            let northWestDiagonal:string = '';
-            for (let j=0; j<6; j++) {
-                if (state?.[i+j]?.[5-j]) {
-                    northWestDiagonal += state[i+j][5-j];
+        for (let i = 1; i < 4; i++) {
+            let northWestDiagonal: string = '';
+            for (let j = 0; j < 6; j++) {
+                if (state?.[i + j]?.[5 - j]) {
+                    northWestDiagonal += state[i + j][5 - j];
                 } else {
                     northWestDiagonal += ' '
                 };
@@ -113,42 +114,41 @@ export default function Board({setWinner}:Props) {
 
         //programatic changes to board pieces array of arrays to mock falling "animation"
         const initialLength = state[index].length;
-        for (let i:number=5; i>=initialLength; i--) {
-            const ArrayToConcat: string[] = Array(i-initialLength).fill("null");
+        for (let i: number = 5; i >= initialLength; i--) {
+            const ArrayToConcat: string[] = Array(i - initialLength).fill("null");
             state[index] = playerTurn ? [...state[index], ...ArrayToConcat, "x"] : [...state[index], ...ArrayToConcat, "O"];
-            dispatch({type:'updateBoard', payload:state});
+            dispatch({ type: 'updateBoard', payload: state });
             await new Promise(resolve => setTimeout(resolve, 125));
             state[index].splice(initialLength, 6);
-            dispatch({type:'updateBoard', payload:state});
+            dispatch({ type: 'updateBoard', payload: state });
         }
 
         if (playerTurn && state[index].length < 6) {
-            updateBoard(index,'x');
+            updateBoard(index, 'x');
             setTurn(false);
             setInProgress(false);
             didWin();
         } else if (!playerTurn && state[index].length < 6) {
-            updateBoard(index,'O');
+            updateBoard(index, 'O');
             setTurn(true);
             setInProgress(false)
             didWin();
         };
     };
 
-    function renderColor(boardCell: string):string {
-        switch(boardCell) {
+    function renderColor(boardCell: string): string {
+        switch (boardCell) {
             case "x": return "#b69f34";
             case "O": return "#c93030";
             default: return "#121212";
         }
-        
     }
 
     function renderCells(columnIndex: number) {
         const cellArray = [];
-        for (let j:number=0; j<6; j++) {
+        for (let j: number = 0; j < 6; j++) {
             cellArray.push(
-                <td key={`col:${columnIndex}-cell:${j}`} className={playAgain?"boardCell":"boardCell hover"}><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])}/></td>
+                <td key={`col:${columnIndex}-cell:${j}`} className={playAgain ? "boardCell" : "boardCell hover"}><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])} /></td>
             )
         }
         return cellArray;
@@ -156,9 +156,9 @@ export default function Board({setWinner}:Props) {
 
     function renderBoard() {
         const colsArray = []
-        for (let i:number=0; i<7; i++) {
+        for (let i: number = 0; i < 7; i++) {
             colsArray.push(
-                <tr key={`col:${i}`} style={{margin: "20px"}} data-index={i} onClick={whatPositionPicked} className="boardCell-wrapper">
+                <tr key={`col:${i}`} style={{ margin: "20px" }} data-index={i} onClick={whatPositionPicked} className="boardCell-wrapper">
                     {renderCells(i)}
                 </tr>
             )
@@ -166,27 +166,37 @@ export default function Board({setWinner}:Props) {
         return colsArray;
     }
 
-    const handlePlayAgain = (e:React.MouseEvent)=>{
-        dispatch({type:'updateBoard', payload: [[],[],[],[],[],[],[]]});
+    const handlePlayAgain = (e: React.MouseEvent) => {
+        dispatch({ type: 'updateBoard', payload: [[], [], [], [], [], [], []] });
         setTurn(true);
         setPlayAgain(false);
     };
 
     return (
-        <>
-            <div className="gameboard-wrapper">
-                <h1 style={playerTurn ? {visibility: "visible", color: "lightgray"} : {visibility: "hidden"}}>Player <span className="player-turn-1">One's</span> Turn</h1>
-                <table style={{margin: "0px 50px 0px 50px"}}>
-                    <tbody style={{transform: "rotate(-90deg)"}}>
-                        {renderBoard()}
-                    </tbody>
-                </table>
-                <h1 style={playerTurn ? {visibility: "hidden"} : {visibility: "visible", color: "lightgray"}}>Player <span className="player-turn-2">Two's</span> Turn</h1>
-            </div>
-            {playAgain? 
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    <Button variant="outlined" onClick={handlePlayAgain}>Play again?</Button>
-                </Box>: null }
-        </>
+        <div className="gameboard-wrapper">
+            {playAgain ?
+                <Box sx={{ width: "17%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                    <h1 style={{ color: "lightgray", textAlign: "center", margin: "0", fontSize: "3em" }}>
+                        Game Over!
+                    </h1>
+                    <h2 style={{ color: "gray", textAlign: "center", margin: "0 0 4% 0"}}>
+                        {winner} Won
+                    </h2>
+                    <Box sx={{ display: "flex", justifyContent: "center"}}>
+                        <Button variant="outlined" onClick={handlePlayAgain}>Play again?</Button>
+                    </Box>
+                </Box>
+                :
+                <>
+                    <h1 style={playerTurn ? { color: "lightgray" } : { display: "none" }}>Player <span className="player-turn-1">One's</span> Turn</h1>
+                    <h1 style={playerTurn ? { display: "none" } : { color: "lightgray" }}>Player <span className="player-turn-2">Two's</span> Turn</h1>
+                </>
+            }
+            <table style={{ margin: "0px 50px 0px 50px" }}>
+                <tbody style={{ transform: "rotate(-90deg)" }}>
+                    {renderBoard()}
+                </tbody>
+            </table>
+        </div>
     );
 };

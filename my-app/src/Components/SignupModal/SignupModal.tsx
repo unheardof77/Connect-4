@@ -93,7 +93,6 @@ export default function SignupModal() {
 
 
     return (
-        <div>
             <Dialog
                 open={modalState.signup}
                 TransitionComponent={Transition}
@@ -106,7 +105,7 @@ export default function SignupModal() {
                 <Box component='form' onSubmit={handleFormSubmit} padding={4}>
                     <FormControl fullWidth>
                         <Typography variant="h4" component="h6" sx={{ margin: "0px 0px 25px 0px" }}>Sign Up</Typography>
-                        <TextField id="standard-basic" name='Username' value={username} onChange={handleUserNameValue} label="Username" variant="filled" sx={{ margin: "0px 0px 15px 0px" }} required />
+                        <TextField inputProps={{ maxLength: 15 }} name='Username' value={username} onChange={handleUserNameValue} label="Username" variant="filled" sx={{ margin: "0px 0px 15px 0px" }} required />
                         <FormControl variant="filled" fullWidth required>
                             <InputLabel htmlFor="filled-adornment-password" error={(nonMatchPassword) ? true : false}>Password</InputLabel>
                             <FilledInput
@@ -161,8 +160,6 @@ export default function SignupModal() {
                     <Button onClick={handleClose} sx={{ margin: "10px 0px 0px 0px" }} variant="outlined">Cancel</Button>
                     <p style={{ margin: "40px 0px 0px 0px" }}>Already have an account? Click <span className='hover-cursor' onClick={renderLogin}>here</span> to login instead!</p>
                 </Box>
-
             </Dialog>
-        </div>
     );
 }
