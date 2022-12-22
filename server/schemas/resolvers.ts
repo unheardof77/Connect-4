@@ -103,8 +103,8 @@ const resolvers = {
                 payment_method_types: ['card'],
                 line_items: lineItems,
                 mode: 'payment',
-                success_url: `${url}/#/thankyou`,
-                cancel_url: `${url}/#/canceled`
+                success_url: `${url}/#/donation-processed/success`,
+                cancel_url: `${url}/#/donation-processed/cancelled`
             });
 
             return { session: session.id}
@@ -115,8 +115,6 @@ const resolvers = {
             subscribe: withFilter(
                 ()=>pubSub.asyncIterator(['UPDATED_LOBBY']),
                 (payload, variables) => {
-                    console.log(payload)
-                    console.log(variables)
                     return (
                         payload.gameLobbyChanged.name === variables.lobbyName
                     )

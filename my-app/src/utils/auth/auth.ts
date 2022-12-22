@@ -5,9 +5,21 @@ interface decodeOBJ {
     exp: number
 }
 
+interface ProfileData {
+    friends: [];
+    username: string;
+    _id: string;
+}
+
+interface Profile {
+    data: ProfileData;
+    exp: number;
+    iat: number;
+}
+
 class AuthService {
 
-    getProfile() {
+    getProfile(): Profile | undefined {
         const token: any = this.getToken();
         if(token){
             return decode(token);

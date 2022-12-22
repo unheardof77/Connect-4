@@ -12,7 +12,6 @@ export default function ThankYouPage(){
         <>
             <Header/>
             <Box component='section'>
-
             </Box>
             <SignupModal/>
             <LoginModal/>
