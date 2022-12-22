@@ -23,7 +23,7 @@ const userSchema = new Schema({
     friends:[
         {
             type: Schema.Types.ObjectId,
-            ref: 'User'
+            ref: 'ConnectFourUser'
         }
     ]
 });
@@ -41,6 +41,6 @@ userSchema.methods.isCorrectPassword = async function(password:string) {
     return await bcrypt.compare(password, this.password);
 };
 
-const User = model<userInt, UserModel>('User', userSchema);
+const User = model<userInt, UserModel>('ConnectFourUser', userSchema);
 
 export default User;
