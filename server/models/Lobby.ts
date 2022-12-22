@@ -31,13 +31,13 @@ const gameLobbySchema = new Schema(
         members: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'User'
+                ref: 'ConnectFourUser'
             }
         ],
         messages: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'Message'
+                ref: 'ConnectFourMessage'
             }
         ],
         isGameFinished: {
@@ -56,7 +56,7 @@ gameLobbySchema.virtual("lobbyIsFull").get(function () {
     return this.members.length >= 2;
 })
 
-const GameLobby = model<LobbySchema, LobbyModel>('GameLobby', gameLobbySchema);
+const GameLobby = model<LobbySchema, LobbyModel>('ConnectFourGameLobby', gameLobbySchema);
 
 export default GameLobby;
 

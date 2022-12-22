@@ -40,6 +40,6 @@ messageSchema.virtual("formattedTime").get(function () {
     return this.sentAt.toLocaleTimeString();
 })
 
-const Message = model<MessageSchema, MessageModel>('Message', messageSchema);
+const Message = model<MessageSchema, MessageModel>('ConnectFourMessage', messageSchema);
 
 export default Message;
