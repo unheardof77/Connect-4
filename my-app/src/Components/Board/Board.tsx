@@ -2,6 +2,7 @@ import React, { useState, MouseEvent, Dispatch, SetStateAction } from "react";
 import {BsFillCircleFill} from "react-icons/bs";
 import { useGameContext, useModalContext } from "../../utils/statemanagment/globalstate";
 import './Board.css';
+import {Box, Button} from '@mui/material';
 
 interface Props {
     setWinner: Dispatch<SetStateAction<string>>;
@@ -183,9 +184,9 @@ export default function Board({setWinner}:Props) {
                 <h1 style={playerTurn ? {visibility: "hidden"} : {visibility: "visible", color: "lightgray"}}>Player <span className="player-turn-2">Two's</span> Turn</h1>
             </div>
             {playAgain? 
-            <div>
-                <button onClick={handlePlayAgain}>Play again?</button>
-            </div> : null }
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <Button variant="outlined" onClick={handlePlayAgain}>Play again?</Button>
+                </Box>: null }
         </>
     );
 };
