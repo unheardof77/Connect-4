@@ -28,6 +28,11 @@ const gameLobbySchema = new Schema(
         isGameFinished: {
             type: Boolean,
             default: false
+        },
+        expire_at: {
+            type:Date,
+            default:Date.now,
+            expires:86400
         }
     },
     {

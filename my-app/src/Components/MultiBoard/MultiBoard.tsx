@@ -4,7 +4,7 @@ import { BsFillCircleFill } from "react-icons/bs";
 import { Skeleton, Button, Box } from "@mui/material/";
 import { useModalContext } from "../../utils/statemanagment/globalstate";
 import { useMutation, useSubscription } from "@apollo/client";
-import { UPDATELOBBY, SENDMESSAGE } from "../../utils/crud/Mutation";
+import { UPDATELOBBY, SENDMESSAGE, DELETELOBBY } from "../../utils/crud/Mutation";
 import { GAMELOBBYSUB } from "../../utils/crud/Subscription";
 import Auth from "../../utils/auth/auth"
 import { useNavigate } from "react-router-dom";
@@ -41,6 +41,8 @@ export default function MultiBoard({ winner, setWinner, playerType }: MultiBoard
 
     //mutation for updating the lobby ie mutation thats used whenever a move is made
     const [updateLobby] = useMutation(UPDATELOBBY);
+
+    const [deleteLobby] = useMutation(DELETELOBBY);
 
     //subscription that listens for updated lobby data
     const { data, loading } = useSubscription(GAMELOBBYSUB, { variables: { lobbyName: name } });
@@ -266,6 +268,11 @@ export default function MultiBoard({ winner, setWinner, playerType }: MultiBoard
         await updateLobby({ variables: { gameboard: [[], [], [], [], [], [], []], lobbyName: name, isGameFinished: false } });
     };
 
+    const handleLeaveGame = async () => {
+        await deleteLobby({variables:{GameLobby_id: gameId}});
+        navigate('/');
+    }
+
     function renderColor(boardCell: string) {
         switch (boardCell) {
             case "x": return "#b69f34";
@@ -312,6 +319,9 @@ export default function MultiBoard({ winner, setWinner, playerType }: MultiBoard
                                 </h1>
                                 <Box sx={{ display: "flex", justifyContent: "center" }}>
                                     <Button variant="outlined" onClick={handlePlayAgain}>Play again?</Button>
+                                </Box>
+                                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                                    <Button variant="outlined" onClick={handleLeaveGame}>Leave Game</Button>
                                 </Box>
                             </Box>
                         :
