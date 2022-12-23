@@ -9,6 +9,7 @@ import { GAMELOBBYSUB } from "../../utils/crud/Subscription";
 import Auth from "../../utils/auth/auth"
 import { useNavigate } from "react-router-dom";
 import ChatBox from "../ChatBox/ChatBox";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 
 interface Props {
@@ -24,6 +25,7 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
     const [sentMessage, setSendMessage] = useState("");//state representing the value of the message they can send;
     const [playAgain, setPlayAgain] = useState(false);
     const [chatMessages, setChatMessages] = useState([]);
+    const [showClipMessage, setShowClipMessage] = useState(false);
 
     const navigate = useNavigate();
 
@@ -242,6 +244,18 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
         }
     };
 
+    function handleCopyToClipboard() {
+        navigator.clipboard.writeText(name);
+        setShowClipMessage(true);
+        setTimeout(()=>{
+            setShowClipMessage(false);
+        }, 5000)
+    }
+
+    const handlePlayAgain = async () => {
+        await updateLobby({ variables: { gameboard: [[], [], [], [], [], [], []], lobbyName: name, isGameFinished: false } });
+    };
+
     function renderColor(boardCell: string) {
         switch (boardCell) {
             case "x": return "#b69f34";
@@ -275,9 +289,6 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
         return colsArray;
     }
 
-    const handlePlayAgain = async () => {
-        await updateLobby({ variables: { gameboard: [[], [], [], [], [], [], []], lobbyName: name, isGameFinished: false } });
-    };
 
     return (
         <>
@@ -312,7 +323,16 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
                         {renderBoard()}
                     </tbody>
                 </table>
-                <ChatBox data={data} username={username} piece={piece} handleMessageSubmit={handleMessageSubmit} chatMessages={chatMessages} sentMessage={sentMessage} handleMessageChange={handleMessageChange} />
+                <div>
+                    <h2 style={{textAlign: "center", color: "gray", display: "flex", justifyContent: "center", margin: "0"}}>
+                        Lobby Name:
+                        <span style={{color: "white", display: "flex", alignItems: "center", justifyContent: "center", marginLeft: "4%", cursor: "pointer"}}>
+                            {name} <ContentCopyIcon onClick={handleCopyToClipboard} style={{marginLeft: "8%", color: "#8ac1eb"}}/>
+                        </span>
+                    </h2>
+                    <h4 style={{textAlign: "center", margin: "0 0 2% 0", color: "#444444", visibility: (showClipMessage) ? "visible": "hidden"}}>&#10003; Copied to clipboard</h4>
+                    <ChatBox data={data} username={username} piece={piece} handleMessageSubmit={handleMessageSubmit} chatMessages={chatMessages} sentMessage={sentMessage} handleMessageChange={handleMessageChange} />
+                </div>
             </div>
         </>
     );
