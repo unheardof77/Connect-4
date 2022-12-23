@@ -38,7 +38,10 @@ export interface SlideInfo {
 //Header
 
 //JoinGameModal
-
+export interface GameLobbyError {
+    status:boolean;
+    message:string;
+}
 //LoginModal
 
 //MorganBio

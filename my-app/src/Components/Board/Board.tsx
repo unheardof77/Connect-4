@@ -40,6 +40,7 @@ export default function Board() {
     };
 
     const checkColWin = () => {
+        
         gameBoard.forEach((col) => {
             const stringCol = col.join('');
             regexTest(stringCol)

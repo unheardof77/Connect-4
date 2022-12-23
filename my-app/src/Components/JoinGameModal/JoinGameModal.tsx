@@ -8,7 +8,8 @@ import { forwardRef, useState, FormEvent, ChangeEvent, ReactElement, Ref } from 
 import { useMutation } from '@apollo/client';
 import { useModalContext } from '../../utils/statemanagment/globalstate';
 import { UPDATELOBBY } from '../../utils/crud/Mutation';
-import { useNavigate } from 'react-router-dom';
+import { isRouteErrorResponse, useNavigate } from 'react-router-dom';
+import { GameLobbyError } from '../../utils/types/types';
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -22,13 +23,13 @@ const Transition = forwardRef(function Transition(
 export default function JoinGameModal() {
     const { modalState, updateModalState } = useModalContext();
     const [gameName, setGameName] = useState("");
-    const [gameLobbyStatus, setGameLobbyStatus] = useState(false);
+    const [gameLobbyStatus, setGameLobbyStatus] = useState<GameLobbyError>({status:false, message:''});
     const [createLobby] = useMutation(UPDATELOBBY);
     const navigate = useNavigate();
 
     const handleClose = () => {
         setGameName("");
-        setGameLobbyStatus(false);
+        setGameLobbyStatus({status:false, message:''});
         updateModalState({ type: 'hideJoinModal' });
     };
 
@@ -42,9 +43,9 @@ export default function JoinGameModal() {
                 localStorage.setItem('GameBoard', JSON.stringify(data.updateGameLobby));
                 handleClose();
                 navigate('/multiplayer/sub');
-            } catch (err) {
-                console.error(err);
-                setGameLobbyStatus(true);
+            } catch (err:any) {
+                const newError = {...err}
+                setGameLobbyStatus({status:true, message: newError.message});
             }
         }
     };
@@ -66,7 +67,7 @@ export default function JoinGameModal() {
                 <Box component='form' onSubmit={handleFormSubmit} padding={4}>
                     <Typography variant="h4" component="h6" sx={{ margin: "0px 0px 25px 0px" }}>Join Multiplayer Game</Typography>
                     <TextField
-                        error={gameLobbyStatus}
+                        error={gameLobbyStatus.status}
                         fullWidth
                         name='gameName' value={gameName} onChange={handleGameNameValue} label="Enter Lobby Name"
                         variant="filled"
@@ -74,7 +75,7 @@ export default function JoinGameModal() {
                         required
                     />
                     
-                    {gameLobbyStatus ? <Typography variant="subtitle1" component="p" sx={{ color: "#f44332", margin: "0px 0px 12px 0px" }}>Oops, something went wrong.</Typography> : null}
+                    {gameLobbyStatus.status ? <Typography variant="subtitle1" component="p" sx={{ color: "#f44332", margin: "0px 0px 12px 0px" }}>{gameLobbyStatus.message}</Typography> : null}
                     <Button sx={{ margin: "10px 20px 0px 0px" }} variant="outlined" type='submit'>Join</Button>
                     <Button sx={{ margin: "10px 0px 0px 0px" }} variant="outlined" onClick={handleClose}>Cancel</Button>
                     
