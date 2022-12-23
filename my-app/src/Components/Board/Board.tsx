@@ -9,6 +9,11 @@ interface Props {
     winner: string;
 }
 
+const obj = {
+    piece:'x',
+    positionX: 3
+}
+
 export default function Board({ setWinner, winner }: Props) {
     const [playerTurn, setTurn] = useState(true);
     const [inProgress, setInProgress] = useState(false);
