@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
-import { useEffect, useState, useReducer } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import CancelIcon from '@mui/icons-material/Cancel';
 
@@ -56,7 +56,7 @@ export default function DonationProcessed() {
 
     return (
         <Box component="div" sx={{ width: "100%", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-            <img src={Logo} style={{ marginLeft: "2%", marginBottom: ".4%" }} />
+            <img src={Logo} alt="Connect four logo" style={{ marginLeft: "2%", marginBottom: ".4%" }} />
             <Typography variant='h2' component='h2' sx={{ color: "lightgray", marginBottom: ".5%" }}>Donation {responseType === "success" ? "Processed" : "Cancelled"}</Typography>
             {responseType === "success" ?
                 <Typography variant='h4' component='h4' sx={{ color: "gray", marginBottom: "1.1%"}}>Thank you so much!</Typography> 

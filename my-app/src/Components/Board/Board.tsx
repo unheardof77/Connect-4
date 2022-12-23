@@ -1,48 +1,47 @@
-import React, { useState, MouseEvent, Dispatch, SetStateAction } from "react";
-import { BsFillCircleFill } from "react-icons/bs";
-import { useGameContext, useModalContext } from "../../utils/statemanagment/globalstate";
 import './Board.css';
 import { Box, Button } from '@mui/material';
+import { useState, MouseEvent, useReducer } from "react";
+import { useNavigate } from "react-router-dom";
+import { BsFillCircleFill } from "react-icons/bs";
+import { useModalContext } from "../../utils/statemanagment/globalstate";
 
-interface Props {
-    setWinner: Dispatch<SetStateAction<string>>;
-    winner: string;
-}
 
-const obj = {
-    piece:'x',
-    positionX: 3
-}
 
-export default function Board({ setWinner, winner }: Props) {
+export default function Board() {
     const [playerTurn, setTurn] = useState(true);
     const [inProgress, setInProgress] = useState(false);
     const [playAgain, setPlayAgain] = useState(false);
-    const { state, dispatch } = useGameContext();
-    const { updateModalState } = useModalContext();
+    const [gameBoard, setGameBoard] = useState<string[][]>([[], [], [], [], [], [], []]);;
+    const { updateModalState, modalState } = useModalContext();
+
+    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+    const navigate = useNavigate();
 
     const updateBoard = (index: number, piece: string) => {
-        const newState = [...state];
-        newState[index].push(piece);
-        dispatch({ type: 'updateBoard', payload: newState });
+        const newGameBoard = [...gameBoard];
+        newGameBoard[index].push(piece);
+        setGameBoard(newGameBoard);
     };
 
     const regexTest = (testString: string) => {
         const regexColX = /xxxx/;
         const regexColO = /OOOO/;
+        const regexDraw = /6666666/;
         if (regexColX.test(testString)) {
-            setWinner("Player 1");
-            updateModalState({ type: 'showWinnerModal' })
+            updateModalState({ type: 'showWinnerModal', whoWon:"Player 1 Won!" })
             setPlayAgain(true);
         } else if (regexColO.test(testString)) {
-            setWinner("Player 2");
-            updateModalState({ type: 'showWinnerModal' })
+            updateModalState({ type: 'showWinnerModal', whoWon:"Player 2 Won!" })
             setPlayAgain(true);
-        };
+        } else if (regexDraw.test(testString)) {
+            updateModalState({ type: 'showWinnerModal', whoWon:"Its a draw, both players won!" })
+            setPlayAgain(true);
+        }
     };
 
     const checkColWin = () => {
-        state.forEach((col) => {
+        
+        gameBoard.forEach((col) => {
             const stringCol = col.join('');
             regexTest(stringCol)
         });
@@ -50,7 +49,7 @@ export default function Board({ setWinner, winner }: Props) {
 
     const checkRowWin = () => {
         for (let i = 0; i < 6; i++) {
-            const stringRow = state.map((col) => col[i] || ' ').join('');
+            const stringRow = gameBoard.map((col) => col[i] || ' ').join('');
             regexTest(stringRow)
         };
     };
@@ -59,8 +58,8 @@ export default function Board({ setWinner, winner }: Props) {
         for (let i = 3; i < 6; i++) {
             let westDiagonal: string = '';
             for (let j = 0; j < 6; j++) {
-                if (state[j][i - j]) {
-                    westDiagonal += state[0 + j][i - j]
+                if (gameBoard[j][i - j]) {
+                    westDiagonal += gameBoard[0 + j][i - j]
                 } else {
                     westDiagonal += ' '
                 };
@@ -71,8 +70,8 @@ export default function Board({ setWinner, winner }: Props) {
         for (let i = 1; i < 4; i++) {
             let northWestDiagonal: string = '';
             for (let j = 0; j < 6; j++) {
-                if (state?.[i + j]?.[5 - j]) {
-                    northWestDiagonal += state[i + j][5 - j];
+                if (gameBoard?.[i + j]?.[5 - j]) {
+                    northWestDiagonal += gameBoard[i + j][5 - j];
                 } else {
                     northWestDiagonal += ' '
                 };
@@ -83,8 +82,8 @@ export default function Board({ setWinner, winner }: Props) {
         for (let i = 3; i < 6; i++) {
             let northEastDiagonal: string = '';
             for (let j = 0; j < 6; j++) {
-                if (state?.[i - j]?.[5 - j]) {
-                    northEastDiagonal += state[i - j][5 - j];
+                if (gameBoard?.[i - j]?.[5 - j]) {
+                    northEastDiagonal += gameBoard[i - j][5 - j];
                 } else {
                     northEastDiagonal += ' ';
                 };
@@ -95,8 +94,8 @@ export default function Board({ setWinner, winner }: Props) {
         for (let i = 5; i > 2; i--) {
             let eastDiagonal: string = '';
             for (let j = 0; j < 6; j++) {
-                if (state[6 - j][i - j]) {
-                    eastDiagonal += state[6 - j][i - j];
+                if (gameBoard[6 - j][i - j]) {
+                    eastDiagonal += gameBoard[6 - j][i - j];
                 } else {
                     eastDiagonal += ' ';
                 };
@@ -105,35 +104,48 @@ export default function Board({ setWinner, winner }: Props) {
         };
     };
 
+    function checkDraw(): void {
+        const arrayOfNum: number[] = [];
+        gameBoard.forEach((arr) => {
+            arrayOfNum.push(arr.length);
+        });
+        regexTest(arrayOfNum.join(''));
+    };
+
     function didWin() {
         checkColWin();
         checkRowWin();
         checkDiagonalWin();
+        checkDraw();
     };
 
     async function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {
-        if (inProgress || playAgain) return;
-
-        setInProgress(true);
         const index = Number(e.currentTarget.getAttribute('data-index'))
 
+        if (inProgress || playAgain || gameBoard[index].length === 6) return;
+
+        setInProgress(true);
+
         //programatic changes to board pieces array of arrays to mock falling "animation"
-        const initialLength = state[index].length;
+        const initialLength = gameBoard[index].length;
+        const newGameBoard = [...gameBoard]
         for (let i: number = 5; i >= initialLength; i--) {
             const ArrayToConcat: string[] = Array(i - initialLength).fill("null");
-            state[index] = playerTurn ? [...state[index], ...ArrayToConcat, "x"] : [...state[index], ...ArrayToConcat, "O"];
-            dispatch({ type: 'updateBoard', payload: state });
+            newGameBoard[index] = playerTurn ? [...newGameBoard[index], ...ArrayToConcat, "x"] : [...newGameBoard[index], ...ArrayToConcat, "O"];
+            setGameBoard(newGameBoard);
+            forceUpdate();
             await new Promise(resolve => setTimeout(resolve, 125));
-            state[index].splice(initialLength, 6);
-            dispatch({ type: 'updateBoard', payload: state });
+            newGameBoard[index].splice(initialLength, 6);
+            setGameBoard(newGameBoard);
+            forceUpdate();
         }
 
-        if (playerTurn && state[index].length < 6) {
+        if (playerTurn && gameBoard[index].length < 6) {
             updateBoard(index, 'x');
             setTurn(false);
             setInProgress(false);
             didWin();
-        } else if (!playerTurn && state[index].length < 6) {
+        } else if (!playerTurn && gameBoard[index].length < 6) {
             updateBoard(index, 'O');
             setTurn(true);
             setInProgress(false)
@@ -153,7 +165,7 @@ export default function Board({ setWinner, winner }: Props) {
         const cellArray = [];
         for (let j: number = 0; j < 6; j++) {
             cellArray.push(
-                <td key={`col:${columnIndex}-cell:${j}`} className={playAgain ? "boardCell" : "boardCell hover"}><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])} /></td>
+                <td key={`col:${columnIndex}-cell:${j}`} className={playAgain ? "boardCell" : "boardCell hover"}><BsFillCircleFill size="85px" color={renderColor(gameBoard[columnIndex][j])} /></td>
             )
         }
         return cellArray;
@@ -171,11 +183,16 @@ export default function Board({ setWinner, winner }: Props) {
         return colsArray;
     }
 
-    const handlePlayAgain = (e: React.MouseEvent) => {
-        dispatch({ type: 'updateBoard', payload: [[], [], [], [], [], [], []] });
+    const handlePlayAgain = () => {
+        setGameBoard([[], [], [], [], [], [], []]);
         setTurn(true);
         setPlayAgain(false);
     };
+
+    const handleLeaveGame = () => {
+        setGameBoard([[], [], [], [], [], [], []]);
+        navigate('/');
+    }
 
     return (
         <div className="gameboard-wrapper">
@@ -184,11 +201,14 @@ export default function Board({ setWinner, winner }: Props) {
                     <h1 style={{ color: "lightgray", textAlign: "center", margin: "0", fontSize: "3em" }}>
                         Game Over!
                     </h1>
-                    <h2 style={{ color: "gray", textAlign: "center", margin: "0 0 4% 0"}}>
-                        {winner} Won
+                    <h2 style={{ color: "gray", textAlign: "center", margin: "0 0 4% 0" }}>
+                        {modalState.whoWon} Won
                     </h2>
-                    <Box sx={{ display: "flex", justifyContent: "center"}}>
+                    <Box sx={{ display: "flex", justifyContent: "center" }}>
                         <Button variant="outlined" onClick={handlePlayAgain}>Play again?</Button>
+                    </Box>
+                    <Box sx={{ display: "flex", justifyContent: "center" }}>
+                        <Button variant="outlined" onClick={handleLeaveGame}>Leave Game</Button>
                     </Box>
                 </Box>
                 :

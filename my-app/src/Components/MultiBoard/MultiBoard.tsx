@@ -1,27 +1,24 @@
-import { useState, MouseEvent, Dispatch, SetStateAction, useReducer, useEffect } from "react";
+import '../Board/Board.css';
+import { useState, MouseEvent, useReducer, useEffect } from "react";
 import { BsFillCircleFill } from "react-icons/bs";
 import { Skeleton, Button, Box } from "@mui/material/";
 import { useModalContext } from "../../utils/statemanagment/globalstate";
-import '../Board/Board.css';
 import { useMutation, useSubscription } from "@apollo/client";
-import { UPDATELOBBY, SENDMESSAGE } from "../../utils/crud/Mutation";
+import { UPDATELOBBY, SENDMESSAGE, DELETELOBBY } from "../../utils/crud/Mutation";
 import { GAMELOBBYSUB } from "../../utils/crud/Subscription";
 import Auth from "../../utils/auth/auth"
 import { useNavigate } from "react-router-dom";
 import ChatBox from "../ChatBox/ChatBox";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { MultiBoardProps } from '../../utils/types/types';
 
 
-interface Props {
-    winner: string;
-    setWinner: Dispatch<SetStateAction<string>>;
-    playerType: string;
-}
 
-export default function MultiBoard({ winner, setWinner, playerType }: Props) {
+
+export default function MultiBoard({ playerType }: MultiBoardProps) {
     const [playerTurn, setTurn] = useState(playerType === 'host');//sets initial state value for the player turn if there host they go first
     const [inProgress, setInProgress] = useState(false); //this is the state for the animation when a piece is dropped from the top
-    const [state, dispatch] = useState<string[][]>([[], [], [], [], [], [], []]);//local state for the game board
+    const [localGameBoard, dispatch] = useState<string[][]>([[], [], [], [], [], [], []]);//local state for the game board
     const [sentMessage, setSendMessage] = useState("");//state representing the value of the message they can send;
     const [playAgain, setPlayAgain] = useState(false);
     const [chatMessages, setChatMessages] = useState([]);
@@ -45,6 +42,8 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
     //mutation for updating the lobby ie mutation thats used whenever a move is made
     const [updateLobby] = useMutation(UPDATELOBBY);
 
+    const [deleteLobby] = useMutation(DELETELOBBY);
+
     //subscription that listens for updated lobby data
     const { data, loading } = useSubscription(GAMELOBBYSUB, { variables: { lobbyName: name } });
 
@@ -53,8 +52,8 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
         if (!loading) {
             let didBoardChange: boolean | undefined;
             let indexOfChange: number | undefined;
-            const newState: string[][] = [...state]
-            newState.forEach((column: string[], index: number) => {
+            const newLocalGameBoard: string[][] = [...localGameBoard]
+            newLocalGameBoard.forEach((column: string[], index: number) => {
                 if (column.length !== data.gameLobbyChanged.gameboard[index].length) {
                     didBoardChange = true;
                     indexOfChange = index;
@@ -64,7 +63,7 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
             setPlayAgain(data.gameLobbyChanged.isGameFinished);
             setChatMessages(data.gameLobbyChanged.messages);
             if (didBoardChange && indexOfChange !== undefined) {
-                renderAnimation(newState, indexOfChange, "opponentMove", () => {
+                renderAnimation(newLocalGameBoard, indexOfChange, "opponentMove", () => {
                     console.log("beyond animation function")
                     dispatch(data.gameLobbyChanged.gameboard);
                     setTurn(!playerTurn);
@@ -77,7 +76,7 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
         if (!Auth.loggedIn()) {
             navigate("/");
         }
-    })
+    }, []);
 
     // retrieve username of opponent
     if (!loading && playerType === "host") {
@@ -112,32 +111,33 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
 
     //creates a new state then pushes either an x or O to the column that was clicked on 
     const updateBoard = async (index: number) => {
-        const newState = [...state];
-        newState[index].push(piece);
-        // const promisedSetState = (newState: string[][]) => new Promise(resolve => dispatch(newState, resolve)); //updates the gameboard local state to the new one
-        dispatch(newState);
+        const newLocalGameBoard = [...localGameBoard];
+        newLocalGameBoard[index].push(piece);
+        dispatch(newLocalGameBoard);
         setTurn(!playerTurn);
-        await updateLobby({ variables: { gameboard: newState, lobbyName: name } }); //uses the updateLobby mutation to update the gameboard in mongodb
+        await updateLobby({ variables: { gameboard: newLocalGameBoard, lobbyName: name } }); //uses the updateLobby mutation to update the gameboard in mongodb
     };
 
     //this function takes in a string to test and uses regex to see if there are four x or O next to each other in the string
     const regexTest = async (testString: string) => {
         const regexColX = /xxxx/;
         const regexColO = /OOOO/;
+        const regexDraw = /6666666/;
         if (regexColX.test(testString)) {// the .test returns a boolean, if its true that means x has gotten four in a row
-            setWinner(data.gameLobbyChanged.members[0].username);
-            updateModalState({ type: 'showWinnerModal' })//updates the global modal state to display the winner modal;
-            await updateLobby({ variables: { gameboard: state, lobbyName: name, isGameFinished: true } });
+            updateModalState({ type: 'showWinnerModal', whoWon: `${data.gameLobbyChanged.members[0].username} Won!` })//updates the global modal state to display the winner modal;
+            await updateLobby({ variables: { gameboard: localGameBoard, lobbyName: name, isGameFinished: true } });
         } else if (regexColO.test(testString)) {// if this test returns true then O has gotten four in a row
-            setWinner(data.gameLobbyChanged.members[1].username);
-            updateModalState({ type: 'showWinnerModal' });
-            await updateLobby({ variables: { gameboard: state, lobbyName: name, isGameFinished: true } });
-        };
+            updateModalState({ type: 'showWinnerModal', whoWon:`${data.gameLobbyChanged.members[1].username} Won!` });
+            await updateLobby({ variables: { gameboard: localGameBoard, lobbyName: name, isGameFinished: true } });
+        }else if(regexDraw.test(testString)){
+            updateModalState({type:'showWinnerModal', whoWon:'Its a draw, both players won!'});
+            await updateLobby({ variables: { gameboard: localGameBoard, lobbyName: name, isGameFinished: true } });
+        }
     };
 
     //this function looks at the gameboard state and for each array in it, it joins them into a string then runs the regexTest function on it
     const checkColWin = () => {
-        state.forEach((col) => {
+        localGameBoard.forEach((col) => {
             const stringCol = col.join('');
             regexTest(stringCol)
         });
@@ -146,7 +146,7 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
     //this function uses a for loop that represents the height of the board to check row wins for each row;
     const checkRowWin = () => {
         for (let i = 0; i < 6; i++) {//6 is the maximum length for each column in our game board
-            const stringRow = state.map((col) => col[i] || ' ').join('');//maps over the gameboard array and then if a piece exist it returns it otherwise it returns a space it then joins it into a string
+            const stringRow = localGameBoard.map((col) => col[i] || ' ').join('');//maps over the gameboard array and then if a piece exist it returns it otherwise it returns a space it then joins it into a string
             regexTest(stringRow)//test each string representing rows
         };
     };
@@ -155,8 +155,8 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
         for (let i = 3; i < 6; i++) {
             let westDiagonal: string = '';
             for (let j = 0; j < 6; j++) {
-                if (state[j][i - j]) {
-                    westDiagonal += state[0 + j][i - j]
+                if (localGameBoard[j][i - j]) {
+                    westDiagonal += localGameBoard[0 + j][i - j]
                 } else {
                     westDiagonal += ' '
                 };
@@ -167,8 +167,8 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
         for (let i = 1; i < 4; i++) {
             let northWestDiagonal: string = '';
             for (let j = 0; j < 6; j++) {
-                if (state?.[i + j]?.[5 - j]) {
-                    northWestDiagonal += state[i + j][5 - j];
+                if (localGameBoard?.[i + j]?.[5 - j]) {
+                    northWestDiagonal += localGameBoard[i + j][5 - j];
                 } else {
                     northWestDiagonal += ' '
                 };
@@ -179,8 +179,8 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
         for (let i = 3; i < 6; i++) {
             let northEastDiagonal: string = '';
             for (let j = 0; j < 6; j++) {
-                if (state?.[i - j]?.[5 - j]) {
-                    northEastDiagonal += state[i - j][5 - j];
+                if (localGameBoard?.[i - j]?.[5 - j]) {
+                    northEastDiagonal += localGameBoard[i - j][5 - j];
                 } else {
                     northEastDiagonal += ' ';
                 };
@@ -191,8 +191,8 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
         for (let i = 5; i > 2; i--) {
             let eastDiagonal: string = '';
             for (let j = 0; j < 6; j++) {
-                if (state[6 - j][i - j]) {
-                    eastDiagonal += state[6 - j][i - j];
+                if (localGameBoard[6 - j][i - j]) {
+                    eastDiagonal += localGameBoard[6 - j][i - j];
                 } else {
                     eastDiagonal += ' ';
                 };
@@ -201,27 +201,36 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
         };
     };
 
+    function checkDraw():void{
+        const arrayOfNum:number[] = [];
+        localGameBoard.forEach((arr)=>{
+            arrayOfNum.push(arr.length);
+        });
+        regexTest(arrayOfNum.join(''));
+    };
+
     //this function acts as a controller making it quick to run every test
     function didWin() {
         checkColWin();
         checkRowWin();
         checkDiagonalWin();
+        checkDraw();
     };
 
-    const renderAnimation = async function (newState: string[][], index: number, moveType: string, cb?: () => void) {
-        const initialLength = newState[index].length;
+    const renderAnimation = async function (newLocalGameBoard: string[][], index: number, moveType: string, cb?: () => void) {
+        const initialLength = newLocalGameBoard[index].length;
         for (let i: number = 5; i >= initialLength; i--) {
             const ArrayToConcat: string[] = Array(i - initialLength).fill("null");
             if (moveType === "hostMove") {
-                newState[index] = piece === 'x' ? [...newState[index], ...ArrayToConcat, "x"] : [...newState[index], ...ArrayToConcat, "O"];
+                newLocalGameBoard[index] = piece === 'x' ? [...newLocalGameBoard[index], ...ArrayToConcat, "x"] : [...newLocalGameBoard[index], ...ArrayToConcat, "O"];
             } else {
-                newState[index] = piece === 'x' ? [...newState[index], ...ArrayToConcat, "O"] : [...newState[index], ...ArrayToConcat, "x"];
+                newLocalGameBoard[index] = piece === 'x' ? [...newLocalGameBoard[index], ...ArrayToConcat, "O"] : [...newLocalGameBoard[index], ...ArrayToConcat, "x"];
             }
-            dispatch(newState);
+            dispatch(newLocalGameBoard);
             forceUpdate();
             await new Promise(resolve => setTimeout(resolve, 125));
-            newState[index].splice(initialLength, 6);
-            dispatch(newState);
+            newLocalGameBoard[index].splice(initialLength, 6);
+            dispatch(newLocalGameBoard);
             forceUpdate();
         }
         if (cb) {
@@ -230,15 +239,16 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
     }
 
     async function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {
-        if (inProgress || !playerTurn || playAgain || !data) return;
+        const index = Number(e.currentTarget.getAttribute('data-index'))
+
+        if (inProgress || !playerTurn || playAgain || !data || localGameBoard[index].length === 6) return;
 
         setInProgress(true);
-        const index = Number(e.currentTarget.getAttribute('data-index'))
-        let newState = [...state];
+        let newLocalGameBoard = [...localGameBoard];
 
-        await renderAnimation(newState, index, "hostMove");
+        await renderAnimation(newLocalGameBoard, index, "hostMove");
 
-        if (playerTurn && newState[index].length < 6) {
+        if (playerTurn && newLocalGameBoard[index].length < 6) {
             updateBoard(index);
             setInProgress(false);
         }
@@ -258,6 +268,11 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
         await updateLobby({ variables: { gameboard: [[], [], [], [], [], [], []], lobbyName: name, isGameFinished: false } });
     };
 
+    const handleLeaveGame = async () => {
+        await deleteLobby({variables:{GameLobby_id: gameId}});
+        navigate('/');
+    }
+
     function renderColor(boardCell: string) {
         switch (boardCell) {
             case "x": return "#b69f34";
@@ -271,7 +286,7 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
         for (let j: number = 0; j < 6; j++) {
             cellArray.push(
                 ((data && data.gameLobbyChanged.lobbyIsFull) || playerType === "sub") ?
-                    <td key={`col:${columnIndex}-cell:${j}`} className={playAgain ? "boardCell" : "boardCell hover"}><BsFillCircleFill size="85px" color={renderColor(state[columnIndex][j])} /></td>
+                    <td key={`col:${columnIndex}-cell:${j}`} className={playAgain ? "boardCell" : "boardCell hover"}><BsFillCircleFill size="85px" color={renderColor(localGameBoard[columnIndex][j])} /></td>
                     :
                     <Skeleton key={`skel-col:${columnIndex}-cell:${j}`} variant="rectangular" width={110} height={110} sx={{ margin: "0px 10px" }} />
             )
@@ -299,11 +314,14 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
                     <>
                         {playAgain ?
                             <Box sx={{width: "17%", display: "flex", flexDirection: "column", justifyContent: "center"}}>
-                                <h1 style={playerTurn ? { display: "none" } : { color: "lightgray", textAlign: "center" }}>
+                                <h1 style={{ color: "lightgray", textAlign: "center" }}>
                                     Game Over
                                 </h1>
                                 <Box sx={{ display: "flex", justifyContent: "center" }}>
                                     <Button variant="outlined" onClick={handlePlayAgain}>Play again?</Button>
+                                </Box>
+                                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                                    <Button variant="outlined" onClick={handleLeaveGame}>Leave Game</Button>
                                 </Box>
                             </Box>
                         :
@@ -326,10 +344,10 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
                     </tbody>
                 </table>
                 <div>
-                    <div style={{display: "flex", justifyContent: "center", margin: "0", alignItems: "center"}}>
+                    <div onClick={handleCopyToClipboard} style={{display: "flex", justifyContent: "center", margin: "0", alignItems: "center", cursor: "pointer"}}>
                         <h2 style={{color: "gray", margin: "0"}}>Lobby:</h2>
                         <h2 style={{color: "white", margin: "0 0 0 3%"}}>{name}</h2>
-                        <ContentCopyIcon onClick={handleCopyToClipboard} style={{color: "#8ac1eb", cursor: "pointer", marginLeft: "1.2%"}}/>
+                        <ContentCopyIcon style={{color: "#8ac1eb", marginLeft: "1.2%"}}/>
                     </div>
                     <h4 style={{textAlign: "center", margin: "0 0 2% 0", color: "#444444", visibility: (showClipMessage) ? "visible": "hidden"}}>&#10003; Copied to clipboard</h4>
                     <ChatBox data={data} username={username} piece={piece} handleMessageSubmit={handleMessageSubmit} chatMessages={chatMessages} sentMessage={sentMessage} handleMessageChange={handleMessageChange} />

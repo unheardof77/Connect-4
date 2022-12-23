@@ -1,33 +1,10 @@
 import './ChatBox.css'
 import { Box, Button, TextField, Typography, Skeleton, Divider } from "@mui/material";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import SendIcon from '@mui/icons-material/Send';
+import {ChatBoxProp, MessageColorObj} from '../../utils/types/types'
 
-interface Message {
-    name: string;
-    message: string;
-    formattedTime: string;
-}
-interface SubScriptionData {
 
-};
-
-interface ChatBoxProp {
-    sentMessage: string;
-    handleMessageChange: (e:React.ChangeEvent<HTMLInputElement>)=>void;
-    chatMessages: Message[];
-    handleMessageSubmit: (e:React.FormEvent)=>void;
-    piece: string;
-    username:string | undefined;
-    data: {
-        gameLobbyChanged:{
-            lobbyIsFull: boolean;
-        }
-    }
-};
-interface MessageColorObj {
-    color:string;
-}
 
 export default function ChatBox({sentMessage, handleMessageChange, chatMessages, handleMessageSubmit, piece, username, data}:ChatBoxProp){
     const bottomRef = useRef<null | HTMLDivElement>(null);

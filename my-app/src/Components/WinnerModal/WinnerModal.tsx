@@ -7,27 +7,25 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import { forwardRef } from 'react';
+import { forwardRef, ReactElement, Ref } from 'react';
 import { useModalContext } from "../../utils/statemanagment/globalstate";
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
-        children: React.ReactElement<any, any>;
+        children: ReactElement<any, any>;
     },
-    ref: React.Ref<unknown>,
+    ref: Ref<unknown>,
 ) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 
-interface winnerState {
-    winner: string
-}
 
-export default function WinnerModal({ winner }: winnerState) {
+
+export default function WinnerModal() {
     const { modalState, updateModalState } = useModalContext();
 
     const handleClose = () => {
-        updateModalState({type: "hideWinnerModal"});
+        updateModalState({type: "hideWinnerModal", whoWon:''});
     };
 
     return (
@@ -41,7 +39,7 @@ export default function WinnerModal({ winner }: winnerState) {
         >
             <Box padding={3}>
                 <DialogContent>
-                    <Typography variant="h4" component="h6" sx={{margin: "0px 0px 25px 0px"}}>{winner} Won!</Typography>
+                    <Typography variant="h4" component="h6" sx={{margin: "0px 0px 25px 0px"}}>{modalState.whoWon}</Typography>
                     <DialogContentText id="alert-dialog-slide-description">
                         Congrats!
                     </DialogContentText>

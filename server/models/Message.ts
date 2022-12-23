@@ -1,17 +1,6 @@
-import mongoose, { Schema, model, Model } from "mongoose";
+import { Schema, model } from "mongoose";
+import { MessageSchema, MessageModel } from "../utils/types";
 
-interface MessageVirtuals {
-    formattedTime: string;
-}
-
-interface MessageSchema {
-    _id: mongoose.Types.ObjectId;
-    name: string;
-    message: string;
-    sentAt: string;
-}
-
-type MessageModel = Model<MessageSchema, {}, MessageVirtuals>
 
 const messageSchema = new Schema(
     {
