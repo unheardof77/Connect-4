@@ -11,7 +11,7 @@ export default function Board() {
     const [playerTurn, setTurn] = useState(true);
     const [inProgress, setInProgress] = useState(false);
     const [playAgain, setPlayAgain] = useState(false);
-    const [gameBoard, setGameBoard] = useState<string[][]>([[], [], [], [], [], [], []]);;
+    const [gameBoard, setGameBoard] = useState<string[][]>([[], [], [], [], [], [], []]);
     const { updateModalState, modalState } = useModalContext();
 
     const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
@@ -26,25 +26,28 @@ export default function Board() {
     const regexTest = (testString: string) => {
         const regexColX = /xxxx/;
         const regexColO = /OOOO/;
-        const regexDraw = /6666666/;
         if (regexColX.test(testString)) {
             updateModalState({ type: 'showWinnerModal', whoWon:"Player 1 Won!" })
             setPlayAgain(true);
         } else if (regexColO.test(testString)) {
             updateModalState({ type: 'showWinnerModal', whoWon:"Player 2 Won!" })
             setPlayAgain(true);
-        } else if (regexDraw.test(testString)) {
-            updateModalState({ type: 'showWinnerModal', whoWon:"Its a draw, both players won!" })
-            setPlayAgain(true);
-        }
+        };
     };
 
     const checkColWin = () => {
-        
+        let isFull = true;
         gameBoard.forEach((col) => {
             const stringCol = col.join('');
             regexTest(stringCol)
+            if(col.length <6){
+                isFull = false
+            }
         });
+        if(isFull){
+            updateModalState({ type: 'showWinnerModal', whoWon:"Its a draw, both players won!" })
+            setPlayAgain(true);
+        }
     };
 
     const checkRowWin = () => {
@@ -104,19 +107,10 @@ export default function Board() {
         };
     };
 
-    function checkDraw(): void {
-        const arrayOfNum: number[] = [];
-        gameBoard.forEach((arr) => {
-            arrayOfNum.push(arr.length);
-        });
-        regexTest(arrayOfNum.join(''));
-    };
-
     function didWin() {
         checkColWin();
         checkRowWin();
         checkDiagonalWin();
-        checkDraw();
     };
 
     async function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {
@@ -190,7 +184,6 @@ export default function Board() {
     };
 
     const handleLeaveGame = () => {
-        setGameBoard([[], [], [], [], [], [], []]);
         navigate('/');
     }
 
