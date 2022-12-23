@@ -4,7 +4,7 @@ import { BsFillCircleFill } from "react-icons/bs";
 import { Skeleton, Button, Box } from "@mui/material/";
 import { useModalContext } from "../../utils/statemanagment/globalstate";
 import { useMutation, useSubscription } from "@apollo/client";
-import { UPDATELOBBY, SENDMESSAGE, DELETELOBBY } from "../../utils/crud/Mutation";
+import { UPDATELOBBY, SENDMESSAGE } from "../../utils/crud/Mutation";
 import { GAMELOBBYSUB } from "../../utils/crud/Subscription";
 import Auth from "../../utils/auth/auth"
 import { useNavigate } from "react-router-dom";
@@ -42,8 +42,6 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
     //mutation for updating the lobby ie mutation thats used whenever a move is made
     const [updateLobby] = useMutation(UPDATELOBBY);
 
-    const [deleteLobby] = useMutation(DELETELOBBY);
-
     //subscription that listens for updated lobby data
     const { data, loading } = useSubscription(GAMELOBBYSUB, { variables: { lobbyName: name } });
 
@@ -57,14 +55,12 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
                 if (column.length !== data.gameLobbyChanged.gameboard[index].length) {
                     didBoardChange = true;
                     indexOfChange = index;
-                    console.log("detected change")
                 }
             })
             setPlayAgain(data.gameLobbyChanged.isGameFinished);
             setChatMessages(data.gameLobbyChanged.messages);
             if (didBoardChange && indexOfChange !== undefined) {
                 renderAnimation(newLocalGameBoard, indexOfChange, "opponentMove", () => {
-                    console.log("beyond animation function")
                     dispatch(data.gameLobbyChanged.gameboard);
                     setTurn(!playerTurn);
                 });
@@ -122,25 +118,29 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
     const regexTest = async (testString: string) => {
         const regexColX = /xxxx/;
         const regexColO = /OOOO/;
-        const regexDraw = /6666666/;
         if (regexColX.test(testString)) {// the .test returns a boolean, if its true that means x has gotten four in a row
             updateModalState({ type: 'showWinnerModal', whoWon: `${data.gameLobbyChanged.members[0].username} Won!` })//updates the global modal state to display the winner modal;
             await updateLobby({ variables: { gameboard: localGameBoard, lobbyName: name, isGameFinished: true } });
         } else if (regexColO.test(testString)) {// if this test returns true then O has gotten four in a row
             updateModalState({ type: 'showWinnerModal', whoWon:`${data.gameLobbyChanged.members[1].username} Won!` });
             await updateLobby({ variables: { gameboard: localGameBoard, lobbyName: name, isGameFinished: true } });
-        }else if(regexDraw.test(testString)){
-            updateModalState({type:'showWinnerModal', whoWon:'Its a draw, both players won!'});
-            await updateLobby({ variables: { gameboard: localGameBoard, lobbyName: name, isGameFinished: true } });
-        }
+        };
     };
 
     //this function looks at the gameboard state and for each array in it, it joins them into a string then runs the regexTest function on it
-    const checkColWin = () => {
+    const checkColWin = async () => {
+        let isFull = true;
         localGameBoard.forEach((col) => {
             const stringCol = col.join('');
-            regexTest(stringCol)
+            regexTest(stringCol);
+            if(col.length < 6){
+                isFull = false
+            };
         });
+        if(isFull){
+            updateModalState({type:'showWinnerModal', whoWon:'Its a draw, both players won!'});
+            await updateLobby({ variables: { gameboard: localGameBoard, lobbyName: name, isGameFinished: true } });
+        }
     };
 
     //this function uses a for loop that represents the height of the board to check row wins for each row;
@@ -201,20 +201,11 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
         };
     };
 
-    function checkDraw():void{
-        const arrayOfNum:number[] = [];
-        localGameBoard.forEach((arr)=>{
-            arrayOfNum.push(arr.length);
-        });
-        regexTest(arrayOfNum.join(''));
-    };
-
     //this function acts as a controller making it quick to run every test
     function didWin() {
         checkColWin();
         checkRowWin();
         checkDiagonalWin();
-        checkDraw();
     };
 
     const renderAnimation = async function (newLocalGameBoard: string[][], index: number, moveType: string, cb?: () => void) {
@@ -266,7 +257,6 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
     };
 
     const handleLeaveGame = async () => {
-        await deleteLobby({variables:{GameLobby_id: gameId}});
         navigate('/');
     }
 
