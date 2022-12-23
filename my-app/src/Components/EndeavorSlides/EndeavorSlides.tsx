@@ -48,7 +48,7 @@ export default function EndeavorSlides() {
 
     return (
         <Box sx={{ width: "100%", flexGrow: 1 }}>
-            <Box sx={{ display: "flex", marginBottom: "40px", alignItems: "center"}}>
+            <Box sx={{ display: "flex", marginBottom: "60px", alignItems: "center"}}>
                 <Box sx={{ width: "50%" }}>
                     <Typography variant='h2' component='h2' sx={{ fontSize: "2em", color: "lightgray", marginBottom: "20px"}}>{steps[activeStep].label}</Typography>
                     <Typography variant='h2' component='h2' sx={{ fontSize: "1.5em", color: "gray", marginBottom: "20px", width: "100%" }}> {steps[activeStep].description} </Typography>

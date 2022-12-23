@@ -230,10 +230,11 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
     }
 
     async function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {
-        if (inProgress || !playerTurn || playAgain || !data) return;
+        const index = Number(e.currentTarget.getAttribute('data-index'))
+
+        if (inProgress || !playerTurn || playAgain || !data || localGameBoard[index].length === 6) return;
 
         setInProgress(true);
-        const index = Number(e.currentTarget.getAttribute('data-index'))
         let newLocalGameBoard = [...localGameBoard];
 
         await renderAnimation(newLocalGameBoard, index, "hostMove");
@@ -245,11 +246,13 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
     };
 
     function handleCopyToClipboard() {
+        if (showClipMessage) return;
+
         navigator.clipboard.writeText(name);
         setShowClipMessage(true);
         setTimeout(()=>{
             setShowClipMessage(false);
-        }, 2000)
+        }, 3000)
     }
 
     const handlePlayAgain = async () => {
@@ -331,12 +334,11 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
                     </tbody>
                 </table>
                 <div>
-                    <h2 style={{textAlign: "center", color: "gray", display: "flex", justifyContent: "center", margin: "0"}}>
-                        Lobby Name:
-                        <span onClick={handleCopyToClipboard} style={{color: "white", display: "flex", alignItems: "center", justifyContent: "center", marginLeft: "4%", cursor: "pointer"}}>
-                            {name} <ContentCopyIcon  style={{marginLeft: "8%", color: "#8ac1eb"}}/>
-                        </span>
-                    </h2>
+                    <div onClick={handleCopyToClipboard} style={{display: "flex", justifyContent: "center", margin: "0", alignItems: "center", cursor: "pointer"}}>
+                        <h2 style={{color: "gray", margin: "0"}}>Lobby:</h2>
+                        <h2 style={{color: "white", margin: "0 0 0 3%"}}>{name}</h2>
+                        <ContentCopyIcon style={{color: "#8ac1eb", marginLeft: "1.2%"}}/>
+                    </div>
                     <h4 style={{textAlign: "center", margin: "0 0 2% 0", color: "#444444", visibility: (showClipMessage) ? "visible": "hidden"}}>&#10003; Copied to clipboard</h4>
                     <ChatBox data={data} username={username} piece={piece} handleMessageSubmit={handleMessageSubmit} chatMessages={chatMessages} sentMessage={sentMessage} handleMessageChange={handleMessageChange} />
                 </div>

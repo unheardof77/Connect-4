@@ -114,10 +114,11 @@ export default function Board() {
     };
 
     async function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {
-        if (inProgress || playAgain) return;
+        const index = Number(e.currentTarget.getAttribute('data-index'))
+
+        if (inProgress || playAgain || gameBoard[index].length === 6) return;
 
         setInProgress(true);
-        const index = Number(e.currentTarget.getAttribute('data-index'))
 
         //programatic changes to board pieces array of arrays to mock falling "animation"
         const initialLength = gameBoard[index].length;

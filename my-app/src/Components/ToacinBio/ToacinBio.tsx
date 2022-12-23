@@ -5,6 +5,17 @@ import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import Toacin from '../../assets/Toacin.jpg'
 
 export default function ToacinBio() {
+    const bioIconStyle = { 
+        fontSize: "3em", 
+        color: 'gray', 
+        marginLeft: "10px", 
+        cursor: "pointer" 
+    }
+
+    const chipStyle = {
+        marginLeft: "10px"
+    }
+
     return (
         <Box component='article' sx={{ width: "50%" }} >
             <Box sx={{ display: "flex" }}>
@@ -18,15 +29,15 @@ export default function ToacinBio() {
                     </Box>
                     <Typography variant='h2' component='h2' sx={{ fontSize: "2em", color: "lightgray", marginBottom: "15px", textAlign: "end" }}>Favorite Technologies</Typography>
                     <Box sx={{ marginBottom: "40px", textAlign: "end" }}>
-                        <Chip label="Extra Soft" sx={{ marginLeft: "10px" }} />
-                        <Chip label="Soft" sx={{ marginLeft: "10px" }} />
-                        <Chip label="Medium" sx={{ marginLeft: "10px" }} />
-                        <Chip label="Hard" sx={{ marginLeft: "10px" }} />
+                        <Chip label="React" sx={chipStyle} />
+                        <Chip label="GraphQL" sx={chipStyle} />
+                        <Chip label="Chakra UI" sx={chipStyle} />
+                        <Chip label="Sequelize" sx={chipStyle} />
                     </Box>
                     <Box sx={{ marginBottom: "35px", textAlign: "end" }}>
-                        <BusinessCenterIcon sx={{ fontSize: "3em", color: 'gray', marginLeft: "10px" }} />
-                        <LinkedInIcon sx={{ fontSize: "3em", color: 'gray', marginLeft: "10px" }} />
-                        <GitHubIcon sx={{ fontSize: "3em", color: 'gray', marginLeft: "10px" }} />
+                        <BusinessCenterIcon onClick={()=>{window.open("https://toacin.github.io/Portfolio-React/", "_blank")}} sx={bioIconStyle} />
+                        <LinkedInIcon onClick={()=>{window.open("https://www.linkedin.com/in/toacin-patwary-985728256/", "_blank")}} sx={bioIconStyle} />
+                        <GitHubIcon onClick={()=>{window.open("https://github.com/Toacin", "_blank")}} sx={bioIconStyle} />
                     </Box>
                 </Box>
             </Box>
