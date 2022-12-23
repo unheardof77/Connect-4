@@ -1,20 +1,13 @@
-import React, { useState, MouseEvent, Dispatch, SetStateAction } from "react";
-import { BsFillCircleFill } from "react-icons/bs";
-import { useGameContext, useModalContext } from "../../utils/statemanagment/globalstate";
 import './Board.css';
 import { Box, Button } from '@mui/material';
+import React, { useState, MouseEvent } from "react";
+import { BsFillCircleFill } from "react-icons/bs";
+import { useGameContext, useModalContext } from "../../utils/statemanagment/globalstate";
+import { BoardProps } from '../../utils/types/types';
 
-interface Props {
-    setWinner: Dispatch<SetStateAction<string>>;
-    winner: string;
-}
 
-const obj = {
-    piece:'x',
-    positionX: 3
-}
 
-export default function Board({ setWinner, winner }: Props) {
+export default function Board({ setWinner, winner }: BoardProps) {
     const [playerTurn, setTurn] = useState(true);
     const [inProgress, setInProgress] = useState(false);
     const [playAgain, setPlayAgain] = useState(false);

@@ -4,7 +4,7 @@ import Slide from '@mui/material/Slide';
 import Typography from '@mui/material/Typography';
 import { TransitionProps } from '@mui/material/transitions';
 import { TextField, Box } from '@mui/material';
-import { forwardRef, useState, FormEvent, ChangeEvent, MouseEvent } from 'react';
+import { forwardRef, useState, FormEvent, ChangeEvent, ReactElement, Ref } from 'react';
 import { useMutation } from '@apollo/client';
 import { useModalContext } from '../../utils/statemanagment/globalstate';
 import { UPDATELOBBY } from '../../utils/crud/Mutation';
@@ -12,9 +12,9 @@ import { useNavigate } from 'react-router-dom';
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
-        children: React.ReactElement<any, any>;
+        children: ReactElement<any, any>;
     },
-    ref: React.Ref<unknown>,
+    ref: Ref<unknown>,
 ) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -33,7 +33,6 @@ export default function JoinGameModal() {
     };
 
     const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        console.log('insubmit')
         e.preventDefault();
         if (!gameName) {
             console.log('empty')

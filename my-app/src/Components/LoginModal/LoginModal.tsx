@@ -12,7 +12,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { TransitionProps } from '@mui/material/transitions';
 import { TextField, Box } from '@mui/material';
-import { forwardRef, useState, FormEvent, ChangeEvent, MouseEvent } from 'react';
+import { forwardRef, useState, FormEvent, ChangeEvent, MouseEvent, ReactElement, Ref } from 'react';
 import { useMutation } from '@apollo/client';
 import { login } from '../../utils/crud/Mutation';
 import { useModalContext } from '../../utils/statemanagment/globalstate';
@@ -20,9 +20,9 @@ import Auth from '../../utils/auth/auth';
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
-        children: React.ReactElement<any, any>;
+        children: ReactElement<any, any>;
     },
-    ref: React.Ref<unknown>,
+    ref: Ref<unknown>,
 ) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -49,7 +49,6 @@ export default function LoginModal() {
     };
 
     const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        console.log('insubmit')
         e.preventDefault();
         if (!username || !password) {
             console.log('empty')

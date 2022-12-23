@@ -28,8 +28,5 @@
     "@types/jsonwebtoken": "^8.5.9",
     "@types/ws": "^8.5.3",
     "ws": "^8.11.0"
-  },
-  "devDependencies": {
-
   }
 }

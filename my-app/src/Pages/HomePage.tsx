@@ -1,4 +1,3 @@
-import './PageStyles/HomePage.css';
 import Logo from '../assets/Logo.png';
 import LoginModal from "../Components/LoginModal/LoginModal";
 import SignupModal from "../Components/SignupModal/SignupModal";

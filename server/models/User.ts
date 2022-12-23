@@ -1,12 +1,7 @@
-import { Schema, model, Model } from "mongoose";
+import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
-import { userInt } from "../utils/types";
+import { userInt, UserModel } from "../utils/types";
 
-interface userMethods {
-    isCorrectPassword(password:string): boolean;
-};
-
-type UserModel = Model<userInt, {}, userMethods>;
 
 const userSchema = new Schema({
     username:{

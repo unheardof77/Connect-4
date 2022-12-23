@@ -1,21 +1,7 @@
 import decode from 'jwt-decode';
+import { DecodeOBJ, Profile } from '../types/types';
 
 
-interface decodeOBJ {
-    exp: number
-}
-
-interface ProfileData {
-    friends: [];
-    username: string;
-    _id: string;
-}
-
-interface Profile {
-    data: ProfileData;
-    exp: number;
-    iat: number;
-}
 
 class AuthService {
 
@@ -34,7 +20,7 @@ class AuthService {
 
     isTokenExpired(token:string) {
         try {
-            const decoded:decodeOBJ = decode(token);
+            const decoded:DecodeOBJ = decode(token);
             if (decoded.exp < Date.now() / 1000) {
                 return true;
             } else return false;

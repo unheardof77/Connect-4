@@ -7,23 +7,22 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import { forwardRef } from 'react';
+import { forwardRef, ReactElement, Ref } from 'react';
 import { useModalContext } from "../../utils/statemanagment/globalstate";
+import { WinnerState } from '../../utils/types/types';
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
-        children: React.ReactElement<any, any>;
+        children: ReactElement<any, any>;
     },
-    ref: React.Ref<unknown>,
+    ref: Ref<unknown>,
 ) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 
-interface winnerState {
-    winner: string
-}
 
-export default function WinnerModal({ winner }: winnerState) {
+
+export default function WinnerModal({ winner }: WinnerState) {
     const { modalState, updateModalState } = useModalContext();
 
     const handleClose = () => {

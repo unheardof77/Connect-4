@@ -1,8 +1,7 @@
-import { createContext, useContext } from 'react';
-import { useGameReducer } from './reducer';
-import { Dispatch } from 'react';
+import { createContext, useContext, Dispatch } from 'react';
+import { useModalReducer, useGameReducer } from './reducer';
+import { ModalState, ModalAction } from '../types/types'
 
-import { useModalReducer, ModalState, modalAction } from './reducer';;
 
 const initialModalState = {login:false, signup:false, winner: false, createLobby: false, joinModal: false};
 
@@ -21,7 +20,7 @@ const useGameContext = () => useContext(GameContext);
 
 
 
-const modalContext = createContext<{modalState:ModalState, updateModalState:Dispatch<modalAction>}>({modalState: initialModalState, updateModalState: ()=>null});
+const modalContext = createContext<{modalState:ModalState, updateModalState:Dispatch<ModalAction>}>({modalState: initialModalState, updateModalState: ()=>null});
 const { Provider: ModalProvider } = modalContext;
 
 const ModalStateProvider = ({value = [], ...props}) =>{

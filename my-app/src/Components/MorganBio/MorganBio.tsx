@@ -1,4 +1,4 @@
-import { Box, Typography, Divider, Stack, Chip } from '@mui/material';
+import { Box, Typography, Divider, Chip } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';

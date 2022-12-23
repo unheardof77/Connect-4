@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, {Model} from "mongoose";
 
 export interface userInt {
     username:string;
@@ -40,3 +40,37 @@ export interface UpdateGameLobbyArgs {
     lobbyName: string;
     isGameFinished: boolean;
 }
+export interface userMethods {
+    isCorrectPassword(password:string): boolean;
+};
+
+export type UserModel = Model<userInt, {}, userMethods>;
+
+export interface MessageVirtuals {
+    formattedTime: string;
+}
+
+export interface MessageSchema {
+    _id: mongoose.Types.ObjectId;
+    name: string;
+    message: string;
+    sentAt: string;
+}
+
+export type MessageModel = Model<MessageSchema, {}, MessageVirtuals>
+
+export interface LobbyVirtuals {
+    lobbyIsFull: boolean;
+}
+
+export interface LobbySchema {
+    _id: mongoose.Types.ObjectId;
+    name: String;
+    gameboard: string[][];
+    members: mongoose.Types.ObjectId[];
+    lobbyIsFull: boolean;
+    messages: mongoose.Types.ObjectId[];
+    isGameFinished: boolean;
+}
+
+export type LobbyModel = Model<LobbySchema, {}, LobbyVirtuals>

@@ -15,7 +15,7 @@ import Logo from '../../assets/Logo.png';
 import { useState, MouseEvent } from 'react';
 import Auth from '../../utils/auth/auth';
 import { useModalContext } from '../../utils/statemanagment/globalstate';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 
 const pages = ['Home', 'About', 'Coffee'];

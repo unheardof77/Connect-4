@@ -1,8 +1,8 @@
-import { useState, MouseEvent, Dispatch, SetStateAction, useReducer, useEffect } from "react";
+import '../Board/Board.css';
+import { useState, MouseEvent, useReducer, useEffect } from "react";
 import { BsFillCircleFill } from "react-icons/bs";
 import { Skeleton, Button, Box } from "@mui/material/";
 import { useModalContext } from "../../utils/statemanagment/globalstate";
-import '../Board/Board.css';
 import { useMutation, useSubscription } from "@apollo/client";
 import { UPDATELOBBY, SENDMESSAGE } from "../../utils/crud/Mutation";
 import { GAMELOBBYSUB } from "../../utils/crud/Subscription";
@@ -10,15 +10,12 @@ import Auth from "../../utils/auth/auth"
 import { useNavigate } from "react-router-dom";
 import ChatBox from "../ChatBox/ChatBox";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { MultiBoardProps } from '../../utils/types/types';
 
 
-interface Props {
-    winner: string;
-    setWinner: Dispatch<SetStateAction<string>>;
-    playerType: string;
-}
 
-export default function MultiBoard({ winner, setWinner, playerType }: Props) {
+
+export default function MultiBoard({ winner, setWinner, playerType }: MultiBoardProps) {
     const [playerTurn, setTurn] = useState(playerType === 'host');//sets initial state value for the player turn if there host they go first
     const [inProgress, setInProgress] = useState(false); //this is the state for the animation when a piece is dropped from the top
     const [state, dispatch] = useState<string[][]>([[], [], [], [], [], [], []]);//local state for the game board

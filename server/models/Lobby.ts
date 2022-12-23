@@ -1,20 +1,5 @@
-import mongoose, { Schema, model, Model } from "mongoose";
-
-interface LobbyVirtuals {
-    lobbyIsFull: boolean;
-}
-
-interface LobbySchema {
-    _id: mongoose.Types.ObjectId;
-    name: String;
-    gameboard: string[][];
-    members: mongoose.Types.ObjectId[];
-    lobbyIsFull: boolean;
-    messages: mongoose.Types.ObjectId[];
-    isGameFinished: boolean;
-}
-
-type LobbyModel = Model<LobbySchema, {}, LobbyVirtuals>
+import { Schema, model } from "mongoose";
+import { LobbySchema, LobbyModel } from "../utils/types";
 
 const gameLobbySchema = new Schema(
     {

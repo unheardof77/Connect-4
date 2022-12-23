@@ -9,7 +9,7 @@ import { loadStripe } from '@stripe/stripe-js';
 
 import { getCheckout } from '../utils/crud/Query';
 import { useLazyQuery } from '@apollo/client';
-import { useEffect, useState, forwardRef } from 'react';
+import { useEffect, useState, forwardRef, SyntheticEvent, ChangeEvent, FormEvent } from 'react';
 
 import ToacinBio from '../Components/ToacinBio/ToacinBio';
 import MorganBio from '../Components/MorganBio/MorganBio';
@@ -34,7 +34,7 @@ export default function AboutPage() {
         setOpen(true);
     };
 
-    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
             return;
         }
@@ -52,11 +52,11 @@ export default function AboutPage() {
         }
     }, [checkoutData]);
 
-    const handleDonationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleDonationChange = (e: ChangeEvent<HTMLInputElement>) => {
         setDonationAmount(e.target.value)
     }
 
-    const handleDonationSubmit = async (e: React.FormEvent) => {
+    const handleDonationSubmit = async (e: FormEvent) => {
         e.preventDefault();
         handleToast();
         try {

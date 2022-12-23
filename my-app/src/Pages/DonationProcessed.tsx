@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
-import { useEffect, useState, useReducer } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import CancelIcon from '@mui/icons-material/Cancel';
 

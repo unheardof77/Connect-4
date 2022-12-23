@@ -1,8 +1,7 @@
-import * as React from 'react';
+import {useState} from 'react';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import MobileStepper from '@mui/material/MobileStepper';
-import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
@@ -10,15 +9,10 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import Vintage from '../../assets/Vintage.jpg'
 import Modern2 from '../../assets/Modern2.jpg'
 import InverseLogo from '../../assets/InverseLogo.jpg'
-import { width } from '@mui/system';
+import { SlideInfo } from '../../utils/types/types';
 
-interface slideInfo {
-    label: string;
-    description: string;
-    image?: any;
-}
 
-const steps: slideInfo[] = [
+const steps: SlideInfo[] = [
     {
         label: 'History',
         description: `"Connect 4, as you know it today, is the game that was trademarked and released by Milton Bradley in 1974. If you have a Connect 4 game that was bought after 1974, then you have the original Milton Bradley version of the game. Milton Bradley was actually a game company that was started by Milton Bradley in Massachusetts in 1860." -Gamesver Team`,
@@ -38,7 +32,7 @@ const steps: slideInfo[] = [
 
 export default function EndeavorSlides() {
     const theme = useTheme();
-    const [activeStep, setActiveStep] = React.useState(0);
+    const [activeStep, setActiveStep] = useState(0);
     const maxSteps = steps.length;
 
     const handleNext = () => {
