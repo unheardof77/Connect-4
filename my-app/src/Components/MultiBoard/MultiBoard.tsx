@@ -60,7 +60,7 @@ export default function MultiBoard({ winner, setWinner, playerType }: Props) {
                 }
             })
             setPlayAgain(data.gameLobbyChanged.isGameFinished);
-            setChatMessages(data.gameLobbyChanged.messages)
+            setChatMessages(data.gameLobbyChanged.messages);
             if (didBoardChange && indexOfChange !== undefined) {
                 renderAnimation(newState, indexOfChange, "opponentMove", () => {
                     console.log("beyond animation function")
