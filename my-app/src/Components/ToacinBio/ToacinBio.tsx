@@ -1,4 +1,4 @@
-import { Box, Typography, Divider, Stack, Chip } from '@mui/material';
+import { Box, Typography, Divider, Chip } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
@@ -9,7 +9,7 @@ export default function ToacinBio() {
         <Box component='article' sx={{ width: "50%" }} >
             <Box sx={{ display: "flex" }}>
                 <Box sx={{ width: "50%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                    <img src={Toacin} style={{ height: "300px", width: "300px", marginBottom: "20%", marginRight: "7%", borderRadius: "50%" }} />
+                    <img alt='Toacin wearing a hat' src={Toacin} style={{ height: "300px", width: "300px", marginBottom: "20%", marginRight: "7%", borderRadius: "50%" }} />
                 </Box>
                 <Box sx={{ width: "50%" }}>
                     <Typography variant='h2' component='h2' sx={{ fontSize: "3em", color: "lightgray", textAlign: "end", marginBottom: "20px" }}>Toacin Patwary</Typography>

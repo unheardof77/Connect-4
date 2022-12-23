@@ -4,12 +4,12 @@
   "description": "Connect-4 clone",
   "main": "index.js",
   "engines": {
-    "node": "v16.17.1"
+    "node": "v16.17.1",
+    "npm": "v8.19.2"
   },
   "scripts": {
     "start": "node server/build/server.js",
     "build": "concurrently \" cd server && npx tsc \" \"cd my-app && npm run build\" ",
-    "serve": "cd my-app && npx serve -s build",
     "develop": "concurrently \" cd server && npx tsc && cd build && node server.js\" \"cd my-app && npm run start\"",
     "install": "cd server && npm i && cd ../my-app && npm i"
   },
@@ -19,7 +19,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/unheardof77/Connect-4/issues"
   },

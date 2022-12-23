@@ -2,18 +2,15 @@
 
 ## Description
 
-This application is a note taker that saves notes to a mock database so that they can be accessed later.  This can help manage a busy schedule.  By having an application that saves notes, you can take notes in class or just write reminders through-out the day.  This takes off some of the mental stress of having to remember everything you need to study or ask more about.  I was given starter code for this assignment.  The starter code was a fully working front end.  My task was to take this existing front end, and add a back end.  I did this using express.js.  I also organized the files using molecular routing.  This allows for more organized files and a smoother future development.
-
 This application is a clone of the classic game Connect 4.  It supports both local and online multiplayer.  Online multiplayer also features real time chat.  This application was created using the MERN stack with TypeScript and GraphQl.  It was developed and tested by two developers over the course of two weeks.  That being said feel free to open issues and suggest changes.  A feature we are planning for future development is real time voice chat.  
 
 [Deployed website](https://connect4clone.herokuapp.com/)
 ## Table of Contents 
-
+- [Installation](#installation)
 - [Usage](#Usage)
 - [Team](#Team)
 - [License](#License)
 - [How to Contribute](#How-to-Contribute)
-- [Tests](#Tests)
 - [Questions](#Questions)
 
 ## Installation

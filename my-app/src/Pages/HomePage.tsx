@@ -1,4 +1,3 @@
-import './PageStyles/HomePage.css';
 import Logo from '../assets/Logo.png';
 import LoginModal from "../Components/LoginModal/LoginModal";
 import SignupModal from "../Components/SignupModal/SignupModal";
@@ -11,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { BsFillCircleFill } from "react-icons/bs";
 import Auth from '../utils/auth/auth';
 
+const smallBoardStyles = { height: '50px', width: '50px', margin: '.5%', border: '2px solid #444444', display: 'flex', justifyContent: 'center', alignItems: 'center' };
+const smallTextStyles = {color:'gray', fontSize:'1.5em'};
 
 export default function HomePage() {
     const { updateModalState } = useModalContext();
@@ -27,7 +28,7 @@ export default function HomePage() {
                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '50%', alignItems: 'center' }}>
                         <Box sx={{width:'65%', marginBottom:'2%'}}>
                             <Typography component="h2" sx={{color:'lightgray', fontSize:'3em'}} >Local Multiplayer</Typography>
-                            <Typography component="p" sx={{color:'gray', fontSize:'1.5em'}} >Compete with your friends in a competitive local game.</Typography>
+                            <Typography component="p" sx={smallTextStyles} >Compete with your friends in a competitive local game.</Typography>
                             <Button sx={{marginTop:'2%'}} variant="outlined" onClick={() => navigate('/local')}>Local game</Button>
                         </Box>
                         <Box sx={{width:'65%'}}>
@@ -52,18 +53,18 @@ export default function HomePage() {
                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '50%', alignItems: 'center', justifyContent:'center' }}>
                         <Box sx={{ width: '65%', display:'flex', flexDirection:'column'  }}>
                             <Typography sx={{color:'lightgray', fontSize:'3em'}}>How to play</Typography>
-                            <Typography sx={{color:'gray', fontSize:'1.5em'}}>Connect four in a row to win.</Typography>
+                            <Typography sx={smallTextStyles}>Connect four in a row to win.</Typography>
                             <Box component='div' sx={{ display: 'flex' }}>
-                                <Box sx={{ height: '50px', width: '50px', margin: '.5%', border: '2px solid #444444', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><BsFillCircleFill size='40px' color="#b69f34" /></Box>
-                                <Box sx={{ height: '50px', width: '50px', margin: '.5%', border: '2px solid #444444', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><BsFillCircleFill size='40px' color="#b69f34" /></Box>
-                                <Box sx={{ height: '50px', width: '50px', margin: '.5%', border: '2px solid #444444', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><BsFillCircleFill size='40px' color="#b69f34" /></Box>
-                                <Box sx={{ height: '50px', width: '50px', margin: '.5%', border: '2px solid #444444', display: 'flex', justifyContent: 'center', alignItems: 'center' }}><BsFillCircleFill size='40px' color="#b69f34" /></Box>
+                                <Box sx={smallBoardStyles}><BsFillCircleFill size='40px' color="#b69f34" /></Box>
+                                <Box sx={smallBoardStyles}><BsFillCircleFill size='40px' color="#b69f34" /></Box>
+                                <Box sx={smallBoardStyles}><BsFillCircleFill size='40px' color="#b69f34" /></Box>
+                                <Box sx={smallBoardStyles}><BsFillCircleFill size='40px' color="#b69f34" /></Box>
                             </Box>
-                            <Typography sx={{color:'gray', fontSize:'1.5em'}} >This can be done using diagonals, rows, and columns.</Typography>
-                            <Typography sx={{color:'gray', fontSize:'1.5em'}} >When a column is clicked, the one of your pieces is dropped at the bottom.</Typography>
-                            <Typography sx={{color:'gray', fontSize:'1.5em'}} >After a piece is dropped the turn switches.</Typography>
-                            <Typography sx={{color:'gray', fontSize:'1.5em'}} >This pattern repeats until a win is achieved.</Typography>
-                            <Typography sx={{color:'gray', fontSize:'1.5em'}} >In the event that the board is filled up and no player achieves a win, it is a draw.</Typography>
+                            <Typography sx={smallTextStyles} >This can be done using diagonals, rows, and columns.</Typography>
+                            <Typography sx={smallTextStyles} >When a column is clicked, the one of your pieces is dropped at the bottom.</Typography>
+                            <Typography sx={smallTextStyles} >After a piece is dropped the turn switches.</Typography>
+                            <Typography sx={smallTextStyles} >This pattern repeats until a win is achieved.</Typography>
+                            <Typography sx={smallTextStyles} >In the event that the board is filled up and no player achieves a win, it is a draw.</Typography>
                         </Box>
                     </Box>
                 </Box>

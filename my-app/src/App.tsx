@@ -1,6 +1,6 @@
 import BoardPage from "./Pages/BoardPage";
 import { Route, Routes, HashRouter as Router, } from 'react-router-dom'
-import {GameProvider, ModalStateProvider} from './utils/statemanagment/globalstate';
+import {ModalStateProvider} from './utils/statemanagment/globalstate';
 import AboutPage from "./Pages/AboutPage";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -27,13 +27,13 @@ const httpLink = new HttpLink({
   uri: '/graphql'
 });
 
-const wsLink = new GraphQLWsLink(createClient({
-  url: 'wss://connect4clone.herokuapp.com/graphql',
-}));
-
 // const wsLink = new GraphQLWsLink(createClient({
-//   url: 'ws://localhost:3001/graphql',
+//   url: 'wss://connect4clone.herokuapp.com/graphql',
 // }));
+
+const wsLink = new GraphQLWsLink(createClient({
+  url: 'ws://localhost:3001/graphql',
+}));
 
 
 const splitLink = split(
@@ -72,9 +72,8 @@ const darkTheme = createTheme({
 function App() {
 
   return (
-    <div className="App">
+    <div>
       <ApolloProvider client={client}>
-        <GameProvider>
           <ModalStateProvider>
             <ThemeProvider theme={darkTheme}>
             <CssBaseline />
@@ -93,7 +92,6 @@ function App() {
                 </Router>
               </ThemeProvider>
           </ModalStateProvider>
-        </GameProvider>
       </ApolloProvider>
     </div>
   );
