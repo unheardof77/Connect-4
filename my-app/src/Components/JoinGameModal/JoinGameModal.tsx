@@ -8,7 +8,7 @@ import { forwardRef, useState, FormEvent, ChangeEvent, ReactElement, Ref } from 
 import { useMutation } from '@apollo/client';
 import { useModalContext } from '../../utils/statemanagment/globalstate';
 import { UPDATELOBBY } from '../../utils/crud/Mutation';
-import { isRouteErrorResponse, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { GameLobbyError } from '../../utils/types/types';
 
 const Transition = forwardRef(function Transition(
