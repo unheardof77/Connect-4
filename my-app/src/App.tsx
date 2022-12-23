@@ -27,17 +27,14 @@ const httpLink = new HttpLink({
   uri: '/graphql'
 });
 
-// const wsLink = new GraphQLWsLink(createClient({
-//   url: 'wss://connect4clone.herokuapp.com/graphql',
-// }));
-
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'ws://localhost:3001/graphql',
+  url: 'wss://connect4clone.herokuapp.com/graphql',
 }));
 
 // const wsLink = new GraphQLWsLink(createClient({
-//   url: 'wss://connect4clone.herokuapp.com/graphql',
+//   url: 'ws://localhost:3001/graphql',
 // }));
+
 
 const splitLink = split(
   ({ query }) => {
