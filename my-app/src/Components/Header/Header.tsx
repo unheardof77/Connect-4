@@ -18,7 +18,6 @@ import { useModalContext } from '../../utils/statemanagment/globalstate';
 import { useNavigate } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 
-const pages = ['Home', 'About', 'Coffee'];
 const settings = ['Profile', 'Account', 'Dashboard'];
 
 export default function Header() {
@@ -26,14 +25,6 @@ export default function Header() {
     const { updateModalState } = useModalContext();
 
     const navigate = useNavigate();
-
-    function GenerateUsername() {
-        if (Auth.loggedIn()) {
-            return (user) ? user.data.username : "Guest";
-        } else {
-            return "Guest";
-        }
-    }
 
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -107,10 +98,10 @@ export default function Header() {
                                 <Typography textAlign="center">Coffee</Typography>
                             </MenuItem></HashLink>
                         </Menu>
-                        <img src={Logo} style={{ maxHeight: "50px", margin: "10px 0px" }} />
+                        <img src={Logo} alt="Connect four logo" style={{ maxHeight: "50px", margin: "10px 0px" }} />
                     </Box>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        <img src={Logo} style={{ maxHeight: "50px", margin: "10px 0px" }} />
+                        <img src={Logo} alt="Connect four logo" style={{ maxHeight: "50px", margin: "10px 0px" }} />
                         <Button onClick={() => navigate('/')} sx={{ my: 2, color: 'white', display: 'block' }}>Home</Button>
                         <Button onClick={() => navigate('/aboutUs')} sx={{ my: 2, color: 'white', display: 'block' }}>About</Button>
                         <HashLink className='link-reset' to="/aboutUs#coffee-message"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>Coffee</Button></HashLink>

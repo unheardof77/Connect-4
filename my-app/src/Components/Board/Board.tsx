@@ -23,15 +23,20 @@ export default function Board({ setWinner, winner }: BoardProps) {
     const regexTest = (testString: string) => {
         const regexColX = /xxxx/;
         const regexColO = /OOOO/;
+        const regexDraw = /6666666/;
         if (regexColX.test(testString)) {
-            setWinner("Player 1");
+            setWinner("Player 1 Won!");
             updateModalState({ type: 'showWinnerModal' })
             setPlayAgain(true);
         } else if (regexColO.test(testString)) {
-            setWinner("Player 2");
+            setWinner("Player 2 Won!");
             updateModalState({ type: 'showWinnerModal' })
             setPlayAgain(true);
-        };
+        }else if(regexDraw.test(testString)){
+            setWinner("Its a draw, both players won!");
+            updateModalState({ type: 'showWinnerModal' })
+            setPlayAgain(true);
+        }
     };
 
     const checkColWin = () => {
@@ -98,10 +103,19 @@ export default function Board({ setWinner, winner }: BoardProps) {
         };
     };
 
+    function checkDraw():void{
+        const arrayOfNum:number[] = [];
+        state.forEach((arr)=>{
+            arrayOfNum.push(arr.length);
+        });
+        regexTest(arrayOfNum.join(''));
+    };
+
     function didWin() {
         checkColWin();
         checkRowWin();
         checkDiagonalWin();
+        checkDraw();
     };
 
     async function whatPositionPicked(e: MouseEvent<HTMLTableRowElement>) {

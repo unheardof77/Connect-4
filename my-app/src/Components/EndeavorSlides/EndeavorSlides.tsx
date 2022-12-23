@@ -16,18 +16,21 @@ const steps: SlideInfo[] = [
     {
         label: 'History',
         description: `"Connect 4, as you know it today, is the game that was trademarked and released by Milton Bradley in 1974. If you have a Connect 4 game that was bought after 1974, then you have the original Milton Bradley version of the game. Milton Bradley was actually a game company that was started by Milton Bradley in Massachusetts in 1860." -Gamesver Team`,
-        image: Vintage
+        image: Vintage,
+        alt:'Vintage picture of the connect four board game.'
     },
     {
         label: 'Contemporary Connect Four',
         description: `"Connect 4 is a game that has come a long way over the years and that has not been stagnant by any means. Right now, Connect 4 is still making history as more versions of it are created and released." -Gamesver Team`,
-        image: Modern2
+        image: Modern2,
+        alt:'Modern connect 4 board made out of wood.'
     },
     {
         label: 'Our Mission',
         description: `Morgan and I (Toacin) were sitting in a discord call one day, many miles apart, wishing we can get together to play a game of connect four. With no great alternative online, we decided to make a multiplayer connect four clone, and after some work, we made it happen!`,
-        image: InverseLogo
-    },
+        image: InverseLogo,
+        alt:'Our connect four logo.'
+    }
 ];
 
 export default function EndeavorSlides() {
@@ -51,7 +54,7 @@ export default function EndeavorSlides() {
                     <Typography variant='h2' component='h2' sx={{ fontSize: "1.5em", color: "gray", marginBottom: "20px", width: "100%" }}> {steps[activeStep].description} </Typography>
                 </Box>
                 <Box sx={{ width: "50%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                    <img src={steps[activeStep].image} style={{ height: "400px", width: "400px", marginLeft: "4%", borderRadius: "5px" }} />
+                    <img alt={steps[activeStep].alt} src={steps[activeStep].image} style={{ height: "400px", width: "400px", marginLeft: "4%", borderRadius: "5px" }} />
                 </Box>
             </Box>
             <Box sx={{ width: "100%", display: "flex", justifyContent: "center"}}>

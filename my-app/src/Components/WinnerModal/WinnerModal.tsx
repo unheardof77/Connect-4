@@ -40,7 +40,7 @@ export default function WinnerModal({ winner }: WinnerState) {
         >
             <Box padding={3}>
                 <DialogContent>
-                    <Typography variant="h4" component="h6" sx={{margin: "0px 0px 25px 0px"}}>{winner} Won!</Typography>
+                    <Typography variant="h4" component="h6" sx={{margin: "0px 0px 25px 0px"}}>{winner}</Typography>
                     <DialogContentText id="alert-dialog-slide-description">
                         Congrats!
                     </DialogContentText>

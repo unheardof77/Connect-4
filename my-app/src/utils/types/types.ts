@@ -36,6 +36,7 @@ export interface SlideInfo {
     label: string;
     description: string;
     image?: any;
+    alt:string;
 };
 //Header
 
