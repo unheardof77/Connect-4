@@ -1,19 +1,11 @@
 import { useReducer } from 'react'
-import { Action, ModalState, ModalAction } from '../types/types';
+import { ModalState, ModalAction } from '../types/types';
 
 
 
-export default function reducer(state: string[][], action: Action):string[][] {
-    switch(action.type){
-        case 'updateBoard': return [...action.payload];
-        case 'Finished Game': return action.payload;
-        default: return state;
-    };
-};
 
-export function useGameReducer(initialState:string[][]){
-    return useReducer(reducer, initialState)
-};
+
+
 
 export function modalReducer(state:ModalState, action:ModalAction): ModalState{
     switch(action.type){
@@ -21,7 +13,7 @@ export function modalReducer(state:ModalState, action:ModalAction): ModalState{
         case 'hideSignup': return {...state, signup: false};
         case 'showLogin': return {...state, login: true};
         case 'showSignup': return {...state, signup: true};
-        case 'showWinnerModal': return {...state, winner: true};
+        case 'showWinnerModal': return {...state, winner: true, whoWon:action.whoWon};
         case 'hideWinnerModal': return {...state, winner: false}
         case 'showLobbyModal': return {...state, createLobby: true};
         case 'hideLobbyModal': return {...state, createLobby: false}

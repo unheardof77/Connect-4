@@ -1,10 +1,7 @@
 import {Dispatch, SetStateAction, ChangeEvent, FormEvent} from 'react';
 //------COMPONENTS-------
 //Board
-export interface BoardProps {
-    setWinner: Dispatch<SetStateAction<string>>;
-    winner: string;
-};
+
 //ChatBox
 interface Message {
     name: string;
@@ -48,8 +45,6 @@ export interface SlideInfo {
 
 //MultiBoard
 export interface MultiBoardProps {
-    winner: string;
-    setWinner: Dispatch<SetStateAction<string>>;
     playerType: string;
 };
 //SignupModal
@@ -57,9 +52,7 @@ export interface MultiBoardProps {
 //ToacinBio
 
 //WinnerModal
-export interface WinnerState {
-    winner: string
-};
+
 //------PAGES--------
 
 //AboutPage
@@ -93,14 +86,14 @@ export interface Profile {
 //crud
 
 //statemanagment
-export type Action = | {type: 'Finished Game', payload: string[][]} | {type: 'updateBoard', payload: string[][]};
 
 export interface ModalState {
     login: boolean;
     signup: boolean;
     winner: boolean;
+    whoWon:string;
     createLobby: boolean;
     joinModal: boolean;
 }
 
-export type ModalAction = {type: 'showSignup'} | {type: 'hideSignup'} | {type: 'showLogin'} | {type: 'hideLogin'} | {type: 'showWinnerModal'} | {type: 'hideWinnerModal'} | {type: 'showLobbyModal'} | {type: 'hideLobbyModal'} | {type: 'showJoinModal'} | {type: 'hideJoinModal'}
+export type ModalAction = {type: 'showSignup'} | {type: 'hideSignup'} | {type: 'showLogin'} | {type: 'hideLogin'} | {type: 'showWinnerModal', whoWon:string} | {type: 'hideWinnerModal', whoWon:''} | {type: 'showLobbyModal'} | {type: 'hideLobbyModal'} | {type: 'showJoinModal'} | {type: 'hideJoinModal'}

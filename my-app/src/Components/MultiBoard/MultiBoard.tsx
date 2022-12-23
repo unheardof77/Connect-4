@@ -15,7 +15,7 @@ import { MultiBoardProps } from '../../utils/types/types';
 
 
 
-export default function MultiBoard({ winner, setWinner, playerType }: MultiBoardProps) {
+export default function MultiBoard({ playerType }: MultiBoardProps) {
     const [playerTurn, setTurn] = useState(playerType === 'host');//sets initial state value for the player turn if there host they go first
     const [inProgress, setInProgress] = useState(false); //this is the state for the animation when a piece is dropped from the top
     const [localGameBoard, dispatch] = useState<string[][]>([[], [], [], [], [], [], []]);//local state for the game board
@@ -124,16 +124,13 @@ export default function MultiBoard({ winner, setWinner, playerType }: MultiBoard
         const regexColO = /OOOO/;
         const regexDraw = /6666666/;
         if (regexColX.test(testString)) {// the .test returns a boolean, if its true that means x has gotten four in a row
-            setWinner(`${data.gameLobbyChanged.members[0].username} Won!`);
-            updateModalState({ type: 'showWinnerModal' })//updates the global modal state to display the winner modal;
+            updateModalState({ type: 'showWinnerModal', whoWon: `${data.gameLobbyChanged.members[0].username} Won!` })//updates the global modal state to display the winner modal;
             await updateLobby({ variables: { gameboard: localGameBoard, lobbyName: name, isGameFinished: true } });
         } else if (regexColO.test(testString)) {// if this test returns true then O has gotten four in a row
-            setWinner(`${data.gameLobbyChanged.members[1].username} Won!`);
-            updateModalState({ type: 'showWinnerModal' });
+            updateModalState({ type: 'showWinnerModal', whoWon:`${data.gameLobbyChanged.members[1].username} Won!` });
             await updateLobby({ variables: { gameboard: localGameBoard, lobbyName: name, isGameFinished: true } });
         }else if(regexDraw.test(testString)){
-            setWinner('Its a draw, both players won!');
-            updateModalState({type:'showWinnerModal'});
+            updateModalState({type:'showWinnerModal', whoWon:'Its a draw, both players won!'});
             await updateLobby({ variables: { gameboard: localGameBoard, lobbyName: name, isGameFinished: true } });
         }
     };

@@ -9,7 +9,6 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef, ReactElement, Ref } from 'react';
 import { useModalContext } from "../../utils/statemanagment/globalstate";
-import { WinnerState } from '../../utils/types/types';
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -22,11 +21,11 @@ const Transition = forwardRef(function Transition(
 
 
 
-export default function WinnerModal({ winner }: WinnerState) {
+export default function WinnerModal() {
     const { modalState, updateModalState } = useModalContext();
 
     const handleClose = () => {
-        updateModalState({type: "hideWinnerModal"});
+        updateModalState({type: "hideWinnerModal", whoWon:''});
     };
 
     return (
@@ -40,7 +39,7 @@ export default function WinnerModal({ winner }: WinnerState) {
         >
             <Box padding={3}>
                 <DialogContent>
-                    <Typography variant="h4" component="h6" sx={{margin: "0px 0px 25px 0px"}}>{winner}</Typography>
+                    <Typography variant="h4" component="h6" sx={{margin: "0px 0px 25px 0px"}}>{modalState.whoWon}</Typography>
                     <DialogContentText id="alert-dialog-slide-description">
                         Congrats!
                     </DialogContentText>
