@@ -85,7 +85,7 @@ export default function AboutPage() {
                 </Box>
 
                 <Box component='article' sx={{ width: "50%" }} >
-                    <Typography variant='h2' id="coffee-message" component='h2' sx={{ fontSize: "3em", color: "lightgray", marginBottom: "5%", textAlign: "center" }}>We'd Love Your Help</Typography>
+                    <Typography variant='h2' id="coffee-message" component='h2' sx={{ fontSize: "3em", color: "lightgray", marginBottom: "5%", textAlign: "center" }}>We'd Love Your Support &#9749;</Typography>
 
                     <Typography variant='h2' component='p' sx={{ fontSize: "1.5em", color: "gray", marginBottom: "4%", width: "100%" }}> We are open to collaboration! If you would like to help make this application better, visit the <a href='https://github.com/unheardof77/Connect-4#how-to-contribute' target="_blank" className="anchor-reset">GitHub</a> repository for more information on making contributions. Or if you simply would like to submit a suggestion/message, feel free to email <a href="mailto:morgan.tolman04@gmail.com" className="anchor-reset">morgan.tolman04@gmail.com</a> or <a href='mailto:toacinp@outlook.com' className="anchor-reset">toacinp@outlook.com</a>.</Typography>
 
