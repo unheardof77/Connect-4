@@ -16,7 +16,7 @@ export default function ToacinBio() {
                     <Box sx={{ display: "flex", flexDirection: "row-reverse" }}>
                         <Typography variant='h2' component='h2' sx={{ fontSize: "1.5em", color: "gray", marginBottom: "20px", textAlign: "end", width: "100%" }}> Hey there! I am prospective full stack web developer and software engineer from Phoenix, Arizona, with a university background in Electrical Engineering and Mathematics. This project has been a passion project, and I'm glad to be sharing it with you all!</Typography>
                     </Box>
-                    <Typography variant='h2' component='h2' sx={{ fontSize: "2em", color: "lightgray", marginBottom: "15px", textAlign: "end" }}>Roles</Typography>
+                    <Typography variant='h2' component='h2' sx={{ fontSize: "2em", color: "lightgray", marginBottom: "15px", textAlign: "end" }}>Favorite Technologies</Typography>
                     <Box sx={{ marginBottom: "40px", textAlign: "end" }}>
                         <Chip label="Extra Soft" sx={{ marginLeft: "10px" }} />
                         <Chip label="Soft" sx={{ marginLeft: "10px" }} />
