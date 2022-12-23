@@ -53,11 +53,21 @@ export default function Header() {
         setAnchorElUser(null);
     };
 
+    const generateAvatar = () => {
+        if (Auth.loggedIn()) {
+            let userFirstLetter: string = ((/[a-zA-Z]/).test(user.data.username[0])) ? user.data.username[0].toUpperCase() : user.data.username[0];
+            return (
+                <Avatar>{userFirstLetter}</Avatar>
+            )
+        }
+    }
 
     return (
         <AppBar position="static">
             <Container maxWidth={false}>
-                <Toolbar disableGutters>
+                <Toolbar disableGutters sx={{display: "flex", alignItems: "center"}}>
+
+                    {/* left side of navigation bar, includes mobile and non-mobile nav items */}
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
@@ -87,32 +97,35 @@ export default function Header() {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            <MenuItem onClick={handleCloseNavMenu}>
+                            <MenuItem onClick={()=>{navigate('/'); handleCloseNavMenu()}}>
                                 <Typography textAlign="center">Home</Typography>
                             </MenuItem>
-                            {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
-                                </MenuItem>
-                            ))}
+                            <MenuItem onClick={()=>{navigate('/aboutUs'); handleCloseNavMenu()}}>
+                                <Typography textAlign="center">About</Typography>
+                            </MenuItem>
+                            <HashLink className='link-reset' to="/aboutUs#coffee-message"><MenuItem onClick={handleCloseNavMenu}>
+                                <Typography textAlign="center">Coffee</Typography>
+                            </MenuItem></HashLink>
                         </Menu>
                         <img src={Logo} style={{ maxHeight: "50px", margin: "10px 0px" }} />
                     </Box>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <img src={Logo} style={{ maxHeight: "50px", margin: "10px 0px" }} />
-                        <Link className='link-reset' to="/"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>Home</Button></Link>
+                        <Button onClick={() => navigate('/')} sx={{ my: 2, color: 'white', display: 'block' }}>Home</Button>
                         <Button onClick={() => navigate('/aboutUs')} sx={{ my: 2, color: 'white', display: 'block' }}>About</Button>
                         <HashLink className='link-reset' to="/aboutUs#coffee-message"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>Coffee</Button></HashLink>
                     </Box>
 
+                    {/* right side of Nav Bar */}
                     {Auth.loggedIn() ?
                         <>
+                            <Button onClick={() => navigate('/local')} sx={{ my: 2, color: 'white', display: 'block' }}>Local Game</Button>
                             <Button onClick={() => updateModalState({ type: 'showLobbyModal' })} sx={{ my: 2, color: 'white', display: 'block' }}>Create Game</Button>
-                            <Button onClick={() => updateModalState({ type: 'showJoinModal' })} sx={{ my: 2, color: 'white', display: 'block', mr: 2 }}>Join Game</Button>
+                            <Button onClick={() => updateModalState({ type: 'showJoinModal' })} sx={{ my: 2, mr: 2, color: 'white', display: 'block' }}>Join Game</Button>
                             <Box sx={{ flexGrow: 0 }}>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                        {generateAvatar()}
                                     </IconButton>
                                 </Tooltip>
                                 <Menu

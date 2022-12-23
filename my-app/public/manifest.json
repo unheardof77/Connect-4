@@ -3,8 +3,8 @@
   "name": "Toacin and Morgan's Connect 4 Clone",
   "icons": [
     {
-      "src": "InverseLogo.jpg",
-      "type": "image/jpg",
+      "src": "MiniLogo.png",
+      "type": "image/png",
       "sizes": "500x500"
     }
   ],

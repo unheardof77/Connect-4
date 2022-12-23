@@ -6,13 +6,13 @@ import LobbyModal from "../Components/CreateLobbyModal/CreateLobbyModal";
 import JoinGameModal from "../Components/JoinGameModal/JoinGameModal";
 import { useModalContext } from '../utils/statemanagment/globalstate';
 import { Box, Typography, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Auth from '../utils/auth/auth'
 
 
 export default function HomePage(){
     const {updateModalState} = useModalContext();
-
+    const navigate = useNavigate();
     return(
         <>
             <Header/>
@@ -24,7 +24,7 @@ export default function HomePage(){
                         <Box>
                             <Typography component="h2" >Single player</Typography>
                             <Typography component="p">Compete with your friends in a competitive local game.</Typography>
-                            <Link className='link-reset' to="/singleplayer"><Button variant="outlined">Single player</Button></Link>
+                            <Button variant="outlined" onClick={()=> navigate('/local')}>Single player</Button>
                         </Box>
                         <Box>
                         <Typography component="h2" >MultipLayer</Typography>
@@ -33,7 +33,13 @@ export default function HomePage(){
                         {Auth.loggedIn()?<>
                             <Button onClick={()=>updateModalState({type: 'showLobbyModal'})} variant="outlined">Create Game</Button>
                             <Button onClick={()=>updateModalState({type: 'showJoinModal'})} variant="outlined">Join Game</Button>
-                        </> : <Typography component='p'>Log in to play online.</Typography>}
+                        </> :
+                        <>
+                            <Typography component='p'>Log in to play online.</Typography>
+                            <Button variant='outlined' onClick={()=> updateModalState({type: 'showLogin'})}>Log In</Button>
+                            <Button variant='outlined' onClick={()=> updateModalState({type: 'showSignup'})}>Sign up</Button>
+                        </>
+                            }
                         </Box>
                     </Box>
                     <Box sx={{display:'flex', flexDirection:'column'}}>

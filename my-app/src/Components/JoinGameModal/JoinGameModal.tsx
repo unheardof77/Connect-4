@@ -55,7 +55,6 @@ export default function JoinGameModal() {
     };
 
     return (
-        <div>
             <Dialog
                 open={modalState.joinModal}
                 TransitionComponent={Transition}
@@ -66,11 +65,11 @@ export default function JoinGameModal() {
 
             >
                 <Box component='form' onSubmit={handleFormSubmit} padding={4}>
-                    <Typography variant="h4" component="h6" sx={{ margin: "0px 0px 25px 0px" }}>Join Game</Typography>
+                    <Typography variant="h4" component="h6" sx={{ margin: "0px 0px 25px 0px" }}>Join Multiplayer Game</Typography>
                     <TextField
                         error={gameLobbyStatus}
                         fullWidth
-                        id="standard-basic" name='gameName' value={gameName} onChange={handleGameNameValue} label="Enter Lobby Name"
+                        name='gameName' value={gameName} onChange={handleGameNameValue} label="Enter Lobby Name"
                         variant="filled"
                         sx={{ margin: "0px 0px 15px 0px" }}
                         required
@@ -82,6 +81,5 @@ export default function JoinGameModal() {
                     
                 </Box>
             </Dialog>
-        </div>
     );
 }

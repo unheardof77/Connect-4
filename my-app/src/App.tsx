@@ -35,6 +35,10 @@ const wsLink = new GraphQLWsLink(createClient({
   url: 'ws://localhost:3001/graphql',
 }));
 
+// const wsLink = new GraphQLWsLink(createClient({
+//   url: 'wss://connect4clone.herokuapp.com/graphql',
+// }));
+
 const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
@@ -80,7 +84,7 @@ function App() {
                 <Router>
                   <Routes>
                     <Route path="/" element={<HomePage/>}/>
-                    <Route path="/singleplayer" element={<BoardPage/>}/>
+                    <Route path="/local" element={<BoardPage/>}/>
                     <Route path="/aboutUs" element={<AboutPage/>}/>
                     <Route path="/multiplayer/:playerType" element={<MultiBoardPage/>}/>
                     <Route path="/donation-processed/:responseType" element={<DonationProcessed/>}/>
