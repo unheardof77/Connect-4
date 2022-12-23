@@ -5,6 +5,7 @@ import AboutPage from "./Pages/AboutPage";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MultiBoardPage from "./Pages/MultiplayerBoardPage";
+import HomePage from "./Pages/HomePage";
 import LoginModal from "./Components/CreateLobbyModal/CreateLobbyModal";
 import SignupModal from "./Components/SignupModal/SignupModal";
 import JoinGameModal from "./Components/JoinGameModal/JoinGameModal";
@@ -25,6 +26,10 @@ import DonationProcessed from "./Pages/DonationProcessed";
 const httpLink = new HttpLink({
   uri: '/graphql'
 });
+
+// const wsLink = new GraphQLWsLink(createClient({
+//   url: 'wss://connect4clone.herokuapp.com/graphql',
+// }));
 
 const wsLink = new GraphQLWsLink(createClient({
   url: 'ws://localhost:3001/graphql',
@@ -75,20 +80,21 @@ function App() {
         <GameProvider>
           <ModalStateProvider>
             <ThemeProvider theme={darkTheme}>
-              <CssBaseline />
-              <Router>
-                <Routes>
-                  <Route path="/" element={<BoardPage/>}/>
-                  <Route path="/aboutUs" element={<AboutPage/>}/>
-                  <Route path="/multiplayer/:playerType" element={<MultiBoardPage/>}/>
-                  <Route path="/donation-processed/:responseType" element={<DonationProcessed/>}/>
-                </Routes>
-                <LobbyModal/>
-                <LoginModal/>
-                <SignupModal/>
-                <JoinGameModal/>
-              </Router>
-            </ThemeProvider>
+            <CssBaseline />
+                <Router>
+                  <Routes>
+                    <Route path="/" element={<HomePage/>}/>
+                    <Route path="/local" element={<BoardPage/>}/>
+                    <Route path="/aboutUs" element={<AboutPage/>}/>
+                    <Route path="/multiplayer/:playerType" element={<MultiBoardPage/>}/>
+                    <Route path="/donation-processed/:responseType" element={<DonationProcessed/>}/>
+                  </Routes>
+                  <LobbyModal/>
+                  <LoginModal/>
+                  <SignupModal/>
+                  <JoinGameModal/>
+                </Router>
+              </ThemeProvider>
           </ModalStateProvider>
         </GameProvider>
       </ApolloProvider>

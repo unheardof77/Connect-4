@@ -119,7 +119,7 @@ export default function Header() {
                     {/* right side of Nav Bar */}
                     {Auth.loggedIn() ?
                         <>
-                            <Button onClick={() => navigate('/')} sx={{ my: 2, color: 'white', display: 'block' }}>Local Game</Button>
+                            <Button onClick={() => navigate('/local')} sx={{ my: 2, color: 'white', display: 'block' }}>Local Game</Button>
                             <Button onClick={() => updateModalState({ type: 'showLobbyModal' })} sx={{ my: 2, color: 'white', display: 'block' }}>Create Game</Button>
                             <Button onClick={() => updateModalState({ type: 'showJoinModal' })} sx={{ my: 2, mr: 2, color: 'white', display: 'block' }}>Join Game</Button>
                             <Box sx={{ flexGrow: 0 }}>
