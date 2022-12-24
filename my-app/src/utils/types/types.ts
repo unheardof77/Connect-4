@@ -51,6 +51,10 @@ export interface MultiBoardProps {
     playerType: string;
 };
 //SignupModal
+export interface SignUpError {
+    status:boolean;
+    message:string;
+}
 
 //ToacinBio
 
