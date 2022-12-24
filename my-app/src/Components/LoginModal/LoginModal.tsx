@@ -12,7 +12,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { TransitionProps } from '@mui/material/transitions';
 import { TextField, Box } from '@mui/material';
-import { forwardRef, useState, FormEvent, ChangeEvent, MouseEvent, ReactElement, Ref } from 'react';
+import { forwardRef, useState, FormEvent, ChangeEvent, MouseEvent, ReactElement, Ref, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { login } from '../../utils/crud/Mutation';
 import { useModalContext } from '../../utils/statemanagment/globalstate';
@@ -34,6 +34,7 @@ export default function LoginModal() {
     const [invalidCredentials, setInvalidCredentials] = useState(false);
     const [loginQuery] = useMutation(login);
     const [showPassword, setShowPassword] = useState(false);
+    const [maxLengthMessage, setMaxLengthMessage] = useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -50,17 +51,14 @@ export default function LoginModal() {
 
     const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!username || !password) {
-            console.log('empty')
-        } else {
-            try {
-                const { data } = await loginQuery({ variables: { username, password } });
-                Auth.login(data.login.token);
-                handleClose();
-            } catch (err) {
-                console.error(err);
-                setInvalidCredentials(true)
-            }
+        if (username.length>15) return;
+        try {
+            const { data } = await loginQuery({ variables: { username, password } });
+            Auth.login(data.login.token);
+            handleClose();
+        } catch (err) {
+            console.error(err);
+            setInvalidCredentials(true);
         }
     };
 
@@ -71,6 +69,14 @@ export default function LoginModal() {
             case 'Password': setPassword(value); break;
         };
     };
+
+    useEffect(()=>{
+        if (username.length>15) {
+            setMaxLengthMessage(true);
+        } else {
+            setMaxLengthMessage(false);
+        }
+    }, [username])
 
     const renderSignup = () => {
         handleClose();
@@ -90,7 +96,7 @@ export default function LoginModal() {
                 <Box component='form' onSubmit={handleFormSubmit} padding={4}>
                     <Typography variant="h4" component="h6" sx={{ margin: "0px 0px 25px 0px" }}>Log In</Typography>
                     <TextField
-                        error={(invalidCredentials) ? true : false}
+                        error={(invalidCredentials || maxLengthMessage) ? true : false}
                         fullWidth
                         name='UserName' value={username} onChange={handleUserNameValue} label="Username"
                         variant="filled"
@@ -121,7 +127,7 @@ export default function LoginModal() {
                             }
                         />
                     </FormControl>
-                    {invalidCredentials ? <Typography variant="subtitle1" component="p" sx={{ color: "#f44332", margin: "0px 0px 12px 0px" }}>Invalid Credentials</Typography> : null}
+                    {(invalidCredentials || maxLengthMessage )? <Typography variant="subtitle1" component="p" sx={{ color: "#f44332", margin: "0px 0px 12px 0px" }}>{ (maxLengthMessage) ? 'Username Too Long (Max Length: 15 Characters)' : 'Invalid Credentials'}</Typography> : null}
                     <Button sx={{ margin: "10px 20px 0px 0px" }} variant="outlined" type='submit'>Login</Button>
                     <Button sx={{ margin: "10px 0px 0px 0px" }} variant="outlined" onClick={handleClose}>Cancel</Button>
                     <p style={{ margin: "40px 0px 0px 0px" }}>Don't have an account? Click <span onClick={renderSignup} className='hover-cursor'>here</span> to signup instead!</p>

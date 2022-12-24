@@ -4,7 +4,7 @@ import Slide from '@mui/material/Slide';
 import Typography from '@mui/material/Typography';
 import { TransitionProps } from '@mui/material/transitions';
 import { TextField, Box } from '@mui/material';
-import { forwardRef, useState, FormEvent, ChangeEvent, ReactElement, Ref } from 'react';
+import { forwardRef, useState, useEffect, FormEvent, ChangeEvent, ReactElement, Ref } from 'react';
 import { useMutation } from '@apollo/client';
 import { useModalContext } from '../../utils/statemanagment/globalstate';
 import { UPDATELOBBY } from '../../utils/crud/Mutation';
@@ -35,24 +35,29 @@ export default function JoinGameModal() {
 
     const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!gameName) {
-            console.log('empty')
-        } else {
-            try {
-                const { data } = await createLobby({ variables: { lobbyName: gameName} });
-                localStorage.setItem('GameBoard', JSON.stringify(data.updateGameLobby));
-                handleClose();
-                navigate('/multiplayer/sub');
-            } catch (err:any) {
-                const newError = {...err}
-                setGameLobbyStatus({status:true, message: newError.message});
-            }
+        if (gameName.length>15) return;
+        try {
+            const { data } = await createLobby({ variables: { lobbyName: gameName} });
+            localStorage.setItem('GameBoard', JSON.stringify(data.updateGameLobby));
+            handleClose();
+            navigate('/multiplayer/sub');
+        } catch (err:any) {
+            const newError = {...err}
+            setGameLobbyStatus({status:true, message: newError.message});
         }
     };
 
     const handleGameNameValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setGameName(e.currentTarget.value);
     };
+
+    useEffect(()=>{
+        if (gameName.length > 15) {
+            setGameLobbyStatus({status: true, message: 'Lobby name too long (max length: 15 characters)'})
+        } else {
+            setGameLobbyStatus({status: false, message: ''})
+        }
+    }, [gameName])
 
     return (
             <Dialog
@@ -62,7 +67,6 @@ export default function JoinGameModal() {
                 onClose={handleClose}
                 aria-describedby="alert-dialog-slide-description"
                 fullWidth
-
             >
                 <Box component='form' onSubmit={handleFormSubmit} padding={4}>
                     <Typography variant="h4" component="h6" sx={{ margin: "0px 0px 25px 0px" }}>Join Multiplayer Game</Typography>
