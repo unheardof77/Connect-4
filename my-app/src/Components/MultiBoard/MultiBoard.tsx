@@ -307,7 +307,7 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
                                 <h1 style={{ color: "lightgray", textAlign: "center" }}>
                                     Game Over
                                 </h1>
-                                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                                <Box sx={{ display: "flex", justifyContent: "center", marginBottom:'2%' }}>
                                     <Button variant="outlined" onClick={handlePlayAgain}>Play again?</Button>
                                 </Box>
                                 <Box sx={{ display: "flex", justifyContent: "center" }}>
