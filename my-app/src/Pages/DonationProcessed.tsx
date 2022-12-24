@@ -56,8 +56,8 @@ export default function DonationProcessed() {
 
     return (
         <Box component="div" sx={{ width: "100%", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-            <img src={Logo} alt="Connect four logo" style={{ marginLeft: "2%", marginBottom: ".4%" }} />
-            <Typography variant='h2' component='h2' sx={{ color: "lightgray", marginBottom: ".5%" }}>Donation {responseType === "success" ? "Processed" : "Cancelled"}</Typography>
+            <Box component="img" src={Logo} alt="Connect four logo" sx={{ marginLeft: "2%", marginBottom: ".4%", width: {xs: "70%", sm: "60%", lg: "50%"}  }} />
+            <Typography variant='h2' component='h2' sx={{ color: "lightgray", marginBottom: ".5%", textAlign: "center", fontSize: {xs: "3em", md: "4em"} }}>Donation {responseType === "success" ? "Processed" : "Cancelled"}</Typography>
             {responseType === "success" ?
                 <Typography variant='h4' component='h4' sx={{ color: "gray", marginBottom: "1.1%"}}>Thank you so much!</Typography> 
             :

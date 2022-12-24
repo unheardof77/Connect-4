@@ -75,7 +75,7 @@ export default function AboutPage() {
         <>
             <Header />
             <Box component='div' sx={{ width: "100%", height: "300px", display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '80px' }}>
-                <Typography variant='h1' component='h1'>Meet The Devs</Typography>
+                <Typography variant='h1' component='h1' sx={{fontSize: {xs: "4em", md: "6em"}}}>Meet The Devs</Typography>
             </Box>
 
             <Box component='section' sx={{ width: "100%", display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -83,13 +83,13 @@ export default function AboutPage() {
 
                 <ToacinBio />
 
-                <Box component='article' sx={{ width: "50%" }} >
-                    <Typography variant='h2' component='h2' sx={{ fontSize: "3em", color: "lightgray", marginBottom: "5%" }}>The Endeavor</Typography>
+                <Box component='article' sx={{ width: {xs: "80%", sm: "80%", lg: "50%"} }} >
+                    <Typography variant='h2' component='h2' sx={{ fontSize: "3em", color: "lightgray", marginBottom: "5%", textAlign: {xs: "center", lg: "start"} }}>The Endeavor</Typography>
                     <EndeavorSlides />
                     <Divider light sx={{ width: "100%", marginBottom: "80px", marginTop: "60px", borderBottomWidth: 2, borderColor: "#303030" }} />
                 </Box>
 
-                <Box component='article' sx={{ width: "50%" }} >
+                <Box component='article' sx={{ width: {xs: "80%", sm: "80%", lg: "50%"} }} >
                     <Typography variant='h2' id="coffee-message" component='h2' sx={{ fontSize: "3em", color: "lightgray", marginBottom: "5%", textAlign: "center" }}>We'd Love Your Support &#9749;</Typography>
 
                     <Typography variant='h2' component='p' sx={{ fontSize: "1.5em", color: "gray", marginBottom: "4%", width: "100%" }}> We are open to collaboration! If you would like to help make this application better, visit the <a href='https://github.com/unheardof77/Connect-4#how-to-contribute' target="_blank" rel="noreferrer" className="anchor-reset">GitHub</a> repository for more information on making contributions. Or if you simply would like to submit a suggestion/message, feel free to email <a href="mailto:morgan.tolman04@gmail.com" className="anchor-reset">morgan.tolman04@gmail.com</a> or <a href='mailto:toacinp@outlook.com' className="anchor-reset">toacinp@outlook.com</a>.</Typography>
