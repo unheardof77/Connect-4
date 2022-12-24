@@ -78,7 +78,7 @@ export default function AboutPage() {
                 <ToacinBio />
 
                 <Box component='article' sx={{ width: {xs: "80%", sm: "80%", lg: "50%"} }} >
-                    <Typography variant='h2' component='h2' sx={{ fontSize: "3em", color: "lightgray", marginBottom: "5%" }}>The Endeavor</Typography>
+                    <Typography variant='h2' component='h2' sx={{ fontSize: "3em", color: "lightgray", marginBottom: "5%", textAlign: {xs: "center", lg: "start"} }}>The Endeavor</Typography>
                     <EndeavorSlides />
                     <Divider light sx={{ width: "100%", marginBottom: "80px", marginTop: "60px", borderBottomWidth: 2, borderColor: "#303030" }} />
                 </Box>
