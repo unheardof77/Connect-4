@@ -52,7 +52,9 @@ export default function AboutPage() {
     }, [checkoutData]);
 
     const handleDonationChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setDonationAmount(e.target.value)
+        if(/^[0-9]*$/.test(e.target.value)){
+            setDonationAmount(e.target.value)
+        }
     }
 
     const handleDonationSubmit = async (e: FormEvent) => {
