@@ -195,7 +195,7 @@ export default function Board() {
                         Game Over!
                     </h1>
                     <h2 style={{ color: "gray", textAlign: "center", margin: "0 0 4% 0" }}>
-                        {modalState.whoWon} Won
+                        {modalState.whoWon}
                     </h2>
                     <Box sx={{ display: "flex", justifyContent: "center" }}>
                         <Button variant="outlined" onClick={handlePlayAgain}>Play again?</Button>

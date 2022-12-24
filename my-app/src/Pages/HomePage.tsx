@@ -20,7 +20,7 @@ export default function HomePage() {
         <>
             <Header />
 
-            <Box component='section'>
+            <Box component='section' >
                 <Box sx={{display: 'flex', justifyContent:'center', marginBottom:'1%'}}>
                     <Box component='img' src={Logo} sx={{margin:'2%'}}></Box>
                 </Box>
@@ -34,7 +34,7 @@ export default function HomePage() {
                         <Box sx={{width:'65%'}}>
 
                             <Typography component="h2" sx={{color:'lightgray', fontSize:'3em'}} >Online Multiplayer</Typography>
-                            <Typography component='p' sx={{color:'gray', fontSize:'1.5em', marginBottom:'2%'}}>Compete online with your friends by logging into your accounts then creating a game and sending them the game name.</Typography>
+                            <Typography component='p' sx={{color:'gray', fontSize:'1.5em', marginBottom:'2%'}}>Compete online with your friends by logging into your accounts then creating a game and sending them the lobby name.</Typography>
 
                             {Auth.loggedIn() ?
                                 <>
@@ -61,7 +61,7 @@ export default function HomePage() {
                                 <Box sx={smallBoardStyles}><BsFillCircleFill size='40px' color="#b69f34" /></Box>
                             </Box>
                             <Typography sx={smallTextStyles} >This can be done using diagonals, rows, and columns.</Typography>
-                            <Typography sx={smallTextStyles} >When a column is clicked, the one of your pieces is dropped at the bottom.</Typography>
+                            <Typography sx={smallTextStyles} >When a column is clicked, one of your pieces is dropped at the bottom.</Typography>
                             <Typography sx={smallTextStyles} >After a piece is dropped the turn switches.</Typography>
                             <Typography sx={smallTextStyles} >This pattern repeats until a win is achieved.</Typography>
                             <Typography sx={smallTextStyles} >In the event that the board is filled up and no player achieves a win, it is a draw.</Typography>

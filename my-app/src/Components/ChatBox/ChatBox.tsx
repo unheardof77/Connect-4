@@ -26,11 +26,11 @@ export default function ChatBox({sentMessage, handleMessageChange, chatMessages,
             {((data && data.gameLobbyChanged.lobbyIsFull) || piece === "O") ?
                 <Box component='div' className='scrollbar' id='style-1' sx={{height: '425px', overflow:'scroll', overflowWrap:'normal', overflowX: 'hidden', scrollbarColor:'#444444', padding: '8px 8px 5px 8px' }} >
                     {chatMessages.map((mesObj) => (
-                        <>
+                        <div key={mesObj.message.concat(mesObj.formattedTime)}>
                             <Typography key={mesObj.formattedTime.concat(mesObj.message)} sx={{maxWidth: "100%", overflowWrap: "break-word"}}><span style={renderMessageColor(mesObj.name)}>{mesObj.name}</span>: {mesObj.message}</Typography> 
                             <Typography key={mesObj.formattedTime} sx={{color: "gray", fontSize: ".75em", marginTop: ".5%"}}>{mesObj.formattedTime}</Typography> 
                             <Divider light sx={{ width: "100%", marginBottom: "9px", marginTop: "9px", borderBottomWidth: 2, borderColor: "#303030" }} />
-                        </>
+                        </div>
                     ))}
                     <div ref={bottomRef} />
                 </Box>
