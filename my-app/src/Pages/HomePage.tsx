@@ -25,13 +25,13 @@ export default function HomePage() {
                     <Box component='img' src={Logo} sx={{margin:'2%',  display:'flex', width: {xs: "70%", sm: "60%", lg: "50%"}}}></Box>
                 </Box>
                 <Box sx={{ display: 'flex', width: '100%', flexDirection:{xs:'column', md:'row'}, alignItems:{xs:'center'} }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '50%', alignItems: 'center' }}>
-                        <Box sx={{width:{xs:'100%', md:'65%'}, marginBottom:'2%'}}>
-                            <Typography component="h2" sx={{color:'lightgray', fontSize:'3em'}} >Local Multiplayer</Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '50%', alignItems: 'center', textAlign:'center' }}>
+                        <Box sx={{width:{xs:'100%', md:'65%'}, marginBottom:{xs:'10%', md:'2%'}}}>
+                            <Typography component="h2" sx={{color:'lightgray', fontSize:'3em', textAlign:'center'}} >Local Multiplayer</Typography>
                             <Typography component="p" sx={smallTextStyles} >Compete with your friends in a competitive local game.</Typography>
                             <Button sx={{marginTop:'2%'}} variant="outlined" onClick={() => navigate('/local')}>Local game</Button>
                         </Box>
-                        <Box sx={{width:{xs:'100%', md:'65%'}, marginBottom:'3%'}}>
+                        <Box sx={{width:{xs:'100%', md:'65%'}, marginBottom:{xs:'10%', md:'2%'}}}>
 
                             <Typography component="h2" sx={{color:'lightgray', fontSize:'3em'}} >Online Multiplayer</Typography>
                             <Typography component='p' sx={{color:'gray', fontSize:'1.5em', marginBottom:'2%'}}>Compete online with your friends by logging into your accounts then creating a game and sending them the lobby name.</Typography>

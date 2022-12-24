@@ -52,16 +52,20 @@ export default function AboutPage() {
     }, [checkoutData]);
 
     const handleDonationChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if(/^[0-9]*$/.test(e.target.value)){
+        if(/^\d*\.?\d?\d?$/.test(e.target.value)){
             setDonationAmount(e.target.value)
         }
     }
 
     const handleDonationSubmit = async (e: FormEvent) => {
         e.preventDefault();
+
+        if(!/^\d*\.?\d?\d?$/.test(donationAmount)){
+            return
+        };
         handleToast();
         try {
-            await createCheckout({ variables: { donationAmount: parseInt(donationAmount) } })
+            await createCheckout({ variables: { donationAmount: parseFloat(donationAmount) } })
         } catch (err) {
             console.error(err);
         }
@@ -94,14 +98,13 @@ export default function AboutPage() {
 
                     <Box component='form' onSubmit={handleDonationSubmit} padding={4} sx={{ marginBottom: "10%" }}>
                         <Box sx={{ display: "flex", justifyContent: "center" }}>
+
                             <TextField
-                                // error={(invalidCredentials) ? true : false}
                                 value={donationAmount} onChange={handleDonationChange} label="Donation Amount"
                                 variant="filled"
                                 sx={{ margin: "0px 0px 0px 0px" }}
                                 required
                             />
-                            {/* {invalidCredentials ? <Typography variant="subtitle1" component="p" sx={{ color: "#f44332", margin: "0px 0px 12px 0px" }}>Invalid Credentials</Typography> : null} */}
                             <Button sx={{ margin: "0px 0px 0px 20px" }} variant="outlined" type='submit'>Donate</Button>
                         </Box>
                     </Box>
