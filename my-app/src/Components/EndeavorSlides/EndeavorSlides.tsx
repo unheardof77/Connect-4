@@ -48,13 +48,13 @@ export default function EndeavorSlides() {
 
     return (
         <Box sx={{ width: "100%", flexGrow: 1 }}>
-            <Box sx={{ display: "flex", marginBottom: "60px", alignItems: "center"}}>
-                <Box sx={{ width: "50%" }}>
+            <Box sx={{ display: "flex", marginBottom: "60px", alignItems: "center", flexDirection: {xs: "column", lg: "row", justifyContent: "space-between"}}}>
+                <Box sx={{ width: {xs: "100%", lg: "50%"} }}>
                     <Typography variant='h2' component='h2' sx={{ fontSize: "2em", color: "lightgray", marginBottom: "20px"}}>{steps[activeStep].label}</Typography>
                     <Typography variant='h2' component='h2' sx={{ fontSize: "1.5em", color: "gray", marginBottom: "20px", width: "100%" }}> {steps[activeStep].description} </Typography>
                 </Box>
-                <Box sx={{ width: "50%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                    <img alt={steps[activeStep].alt} src={steps[activeStep].image} style={{ height: "400px", width: "400px", marginLeft: "4%", borderRadius: "5px" }} />
+                <Box sx={{ width: {xs: "100%", lg: "40%"}, display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <Box component="img" alt={steps[activeStep].alt} src={steps[activeStep].image} sx={{ height: {xs: "400px", lg: "100%"}, width: {xs: "400px", lg: "100%"}, marginLeft: "4%", borderRadius: "5px" }} />
                 </Box>
             </Box>
             <Box sx={{ width: "100%", display: "flex", justifyContent: "center"}}>
@@ -87,7 +87,7 @@ export default function EndeavorSlides() {
                         </Button>
                     }
                     sx={{
-                        width: "40%"
+                        width: {xs: "80%", sm: "80%", lg: "40%"}
                     }}
                 />
             </Box>

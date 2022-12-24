@@ -54,7 +54,7 @@ export default function LobbyModal() {
             }
             setGameLobbyStatus({ status: true, message: newError.message });
         }
-    };
+};
 
     const handleGameNameValue = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setGameName(e.currentTarget.value);
