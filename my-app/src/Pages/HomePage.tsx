@@ -20,21 +20,21 @@ export default function HomePage() {
         <>
             <Header />
 
-            <Box component='section'>
-                <Box sx={{display: 'flex', justifyContent:'center', marginBottom:'1%'}}>
-                    <Box component='img' src={Logo} sx={{margin:'2%'}}></Box>
+            <Box component='section' >
+                <Box sx={{display: 'flex', justifyContent:'center', marginBottom:'1%',  flexShrink:'3',}}>
+                    <Box component='img' src={Logo} sx={{margin:'2%',  display:'flex', width: {xs: "70%", sm: "60%", lg: "50%"}}}></Box>
                 </Box>
-                <Box sx={{ display: 'flex', width: '100%' }}>
+                <Box sx={{ display: 'flex', width: '100%', flexDirection:{xs:'column', md:'row'}, alignItems:{xs:'center'} }}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '50%', alignItems: 'center' }}>
-                        <Box sx={{width:'65%', marginBottom:'2%'}}>
+                        <Box sx={{width:{xs:'100%', md:'65%'}, marginBottom:'2%'}}>
                             <Typography component="h2" sx={{color:'lightgray', fontSize:'3em'}} >Local Multiplayer</Typography>
                             <Typography component="p" sx={smallTextStyles} >Compete with your friends in a competitive local game.</Typography>
                             <Button sx={{marginTop:'2%'}} variant="outlined" onClick={() => navigate('/local')}>Local game</Button>
                         </Box>
-                        <Box sx={{width:'65%'}}>
+                        <Box sx={{width:{xs:'100%', md:'65%'}, marginBottom:'3%'}}>
 
                             <Typography component="h2" sx={{color:'lightgray', fontSize:'3em'}} >Online Multiplayer</Typography>
-                            <Typography component='p' sx={{color:'gray', fontSize:'1.5em', marginBottom:'2%'}}>Compete online with your friends by logging into your accounts then creating a game and sending them the game name.</Typography>
+                            <Typography component='p' sx={{color:'gray', fontSize:'1.5em', marginBottom:'2%'}}>Compete online with your friends by logging into your accounts then creating a game and sending them the lobby name.</Typography>
 
                             {Auth.loggedIn() ?
                                 <>
@@ -51,7 +51,7 @@ export default function HomePage() {
                         </Box>
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '50%', alignItems: 'center', justifyContent:'center' }}>
-                        <Box sx={{ width: '65%', display:'flex', flexDirection:'column'  }}>
+                        <Box sx={{ width: {xs:'100%', md:'65%'}, display:'flex', flexDirection:'column'  }}>
                             <Typography sx={{color:'lightgray', fontSize:'3em'}}>How to play</Typography>
                             <Typography sx={smallTextStyles}>Connect four in a row to win.</Typography>
                             <Box component='div' sx={{ display: 'flex' }}>
@@ -61,7 +61,7 @@ export default function HomePage() {
                                 <Box sx={smallBoardStyles}><BsFillCircleFill size='40px' color="#b69f34" /></Box>
                             </Box>
                             <Typography sx={smallTextStyles} >This can be done using diagonals, rows, and columns.</Typography>
-                            <Typography sx={smallTextStyles} >When a column is clicked, the one of your pieces is dropped at the bottom.</Typography>
+                            <Typography sx={smallTextStyles} >When a column is clicked, one of your pieces is dropped at the bottom.</Typography>
                             <Typography sx={smallTextStyles} >After a piece is dropped the turn switches.</Typography>
                             <Typography sx={smallTextStyles} >This pattern repeats until a win is achieved.</Typography>
                             <Typography sx={smallTextStyles} >In the event that the board is filled up and no player achieves a win, it is a draw.</Typography>

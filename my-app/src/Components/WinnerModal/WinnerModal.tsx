@@ -40,9 +40,6 @@ export default function WinnerModal() {
             <Box padding={3}>
                 <DialogContent>
                     <Typography variant="h4" component="h6" sx={{margin: "0px 0px 25px 0px"}}>{modalState.whoWon}</Typography>
-                    <DialogContentText id="alert-dialog-slide-description">
-                        Congrats!
-                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} variant="outlined">Close</Button>

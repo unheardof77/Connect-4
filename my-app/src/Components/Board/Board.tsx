@@ -195,9 +195,9 @@ export default function Board() {
                         Game Over!
                     </h1>
                     <h2 style={{ color: "gray", textAlign: "center", margin: "0 0 4% 0" }}>
-                        {modalState.whoWon} Won
+                        {modalState.whoWon}
                     </h2>
-                    <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <Box sx={{ display: "flex", justifyContent: "center", marginBottom:'2%' }}>
                         <Button variant="outlined" onClick={handlePlayAgain}>Play again?</Button>
                     </Box>
                     <Box sx={{ display: "flex", justifyContent: "center" }}>

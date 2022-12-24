@@ -307,7 +307,7 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
                                 <h1 style={{ color: "lightgray", textAlign: "center" }}>
                                     Game Over
                                 </h1>
-                                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                                <Box sx={{ display: "flex", justifyContent: "center", marginBottom:'2%' }}>
                                     <Button variant="outlined" onClick={handlePlayAgain}>Play again?</Button>
                                 </Box>
                                 <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -334,10 +334,10 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
                     </tbody>
                 </table>
                 <div>
-                    <div onClick={handleCopyToClipboard} style={{display: "flex", justifyContent: "center", margin: "0", alignItems: "center", cursor: "pointer"}}>
+                    <div  style={{display: "flex", justifyContent: "center", margin: "0", alignItems: "center"}}>
                         <h2 style={{color: "gray", margin: "0"}}>Lobby:</h2>
-                        <h2 style={{color: "white", margin: "0 0 0 3%"}}>{name}</h2>
-                        <ContentCopyIcon style={{color: "#8ac1eb", marginLeft: "1.2%"}}/>
+                        <h2 onClick={handleCopyToClipboard} style={{color: "white", margin: "0 0 0 3%", cursor: "pointer"}}>{name}</h2>
+                        <ContentCopyIcon onClick={handleCopyToClipboard} style={{color: "#8ac1eb", marginLeft: "1.2%", cursor: "pointer"}}/>
                     </div>
                     <h4 style={{textAlign: "center", margin: "0 0 2% 0", color: "#444444", visibility: (showClipMessage) ? "visible": "hidden"}}>&#10003; Copied to clipboard</h4>
                     <ChatBox data={data} username={username} piece={piece} handleMessageSubmit={handleMessageSubmit} chatMessages={chatMessages} sentMessage={sentMessage} handleMessageChange={handleMessageChange} />
