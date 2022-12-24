@@ -1,4 +1,4 @@
-import {Dispatch, SetStateAction, ChangeEvent, FormEvent} from 'react';
+import {Dispatch, SetStateAction, ChangeEvent, FormEvent, MouseEvent } from 'react';
 //------COMPONENTS-------
 //Board
 
@@ -50,6 +50,16 @@ export interface GameLobbyError {
 export interface MultiBoardProps {
     playerType: string;
 };
+
+//RenderGameBoard
+export interface RenderGameBoardProps {
+    playAgain: boolean;
+    gameBoard:string[][];
+    whatPositionPicked:(e:MouseEvent<HTMLTableRowElement>)=>void;
+    data?:any;
+    playerType?:string;
+}
+
 //SignupModal
 export interface SignUpError {
     status:boolean;

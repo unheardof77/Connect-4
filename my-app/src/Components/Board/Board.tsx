@@ -4,7 +4,7 @@ import { useState, MouseEvent, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { BsFillCircleFill } from "react-icons/bs";
 import { useModalContext } from "../../utils/statemanagment/globalstate";
-
+import RenderGameBoard from '../RenderGameBoard/RenderGameBoard';
 
 
 export default function Board() {
@@ -147,36 +147,6 @@ export default function Board() {
         };
     };
 
-    function renderColor(boardCell: string): string {
-        switch (boardCell) {
-            case "x": return "#b69f34";
-            case "O": return "#c93030";
-            default: return "#121212";
-        }
-    }
-
-    function renderCells(columnIndex: number) {
-        const cellArray = [];
-        for (let j: number = 0; j < 6; j++) {
-            cellArray.push(
-                <td key={`col:${columnIndex}-cell:${j}`} className={playAgain ? "boardCell" : "boardCell hover"}><BsFillCircleFill size="85px" color={renderColor(gameBoard[columnIndex][j])} /></td>
-            )
-        }
-        return cellArray;
-    }
-
-    function renderBoard() {
-        const colsArray = []
-        for (let i: number = 0; i < 7; i++) {
-            colsArray.push(
-                <tr key={`col:${i}`} style={{ margin: "20px" }} data-index={i} onClick={whatPositionPicked} className="boardCell-wrapper">
-                    {renderCells(i)}
-                </tr>
-            )
-        }
-        return colsArray;
-    }
-
     const handlePlayAgain = () => {
         setGameBoard([[], [], [], [], [], [], []]);
         setTurn(true);
@@ -210,11 +180,7 @@ export default function Board() {
                     <h1 style={playerTurn ? { display: "none" } : { color: "lightgray" }}>Player <span className="player-turn-2">Two's</span> Turn</h1>
                 </>
             }
-            <table style={{ margin: "0px 50px 0px 50px" }}>
-                <tbody style={{ transform: "rotate(-90deg)" }}>
-                    {renderBoard()}
-                </tbody>
-            </table>
+            <RenderGameBoard playAgain={playAgain} gameBoard={gameBoard} whatPositionPicked={whatPositionPicked} />
         </div>
     );
 };
