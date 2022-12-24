@@ -1,7 +1,6 @@
 import '../Board/Board.css';
 import { useState, MouseEvent, useReducer, useEffect } from "react";
-import { BsFillCircleFill } from "react-icons/bs";
-import { Skeleton, Button, Box } from "@mui/material/";
+import { Button, Box } from "@mui/material/";
 import { useModalContext } from "../../utils/statemanagment/globalstate";
 import { useMutation, useSubscription } from "@apollo/client";
 import { UPDATELOBBY, SENDMESSAGE } from "../../utils/crud/Mutation";
@@ -11,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import ChatBox from "../ChatBox/ChatBox";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { MultiBoardProps } from '../../utils/types/types';
+import RenderGameBoard from '../RenderGameBoard/RenderGameBoard';
 
 
 
@@ -59,11 +59,14 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
             })
             setPlayAgain(data.gameLobbyChanged.isGameFinished);
             setChatMessages(data.gameLobbyChanged.messages);
-            if (didBoardChange && indexOfChange !== undefined) {
+            if (didBoardChange && indexOfChange !== undefined && !playAgain) {
                 renderAnimation(newLocalGameBoard, indexOfChange, "opponentMove", () => {
                     dispatch(data.gameLobbyChanged.gameboard);
                     setTurn(!playerTurn);
                 });
+            }else if(didBoardChange && indexOfChange !== undefined) {
+                dispatch(data.gameLobbyChanged.gameboard);
+                setTurn(!playerTurn);
             }
         }
     }, [data]);
@@ -263,39 +266,6 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
         navigate('/');
     }
 
-    function renderColor(boardCell: string) {
-        switch (boardCell) {
-            case "x": return "#b69f34";
-            case "O": return "#c93030";
-            default: return "#121212";
-        }
-    }
-
-    function renderCells(columnIndex: number) {
-        const cellArray = [];
-        for (let j: number = 0; j < 6; j++) {
-            cellArray.push(
-                ((data && data.gameLobbyChanged.lobbyIsFull) || playerType === "sub") ?
-                    <td key={`col:${columnIndex}-cell:${j}`} className={playAgain ? "boardCell" : "boardCell hover"}><BsFillCircleFill size="85px" color={renderColor(localGameBoard[columnIndex][j])} /></td>
-                    :
-                    <Skeleton key={`skel-col:${columnIndex}-cell:${j}`} variant="rectangular" width={110} height={110} sx={{ margin: "0px 10px" }} />
-            )
-        }
-        return cellArray;
-    }
-
-    function renderBoard() {
-        const colsArray = []
-        for (let i: number = 0; i < 7; i++) {
-            colsArray.push(
-                <tr key={`col:${i}`} style={{ margin: "20px" }} data-index={i} onClick={whatPositionPicked} className="boardCell-wrapper">
-                    {renderCells(i)}
-                </tr>
-            )
-        }
-        return colsArray;
-    }
-
 
     return (
         <>
@@ -328,11 +298,7 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
                     :
                     <h1 style={{ visibility: "visible", color: "lightgray", width: "17%", textAlign: "center" }}>Waiting for Opponent</h1>
                 }
-                <table style={{ margin: "0px 50px 0px 50px" }}>
-                    <tbody style={{ transform: "rotate(-90deg)" }}>
-                        {renderBoard()}
-                    </tbody>
-                </table>
+                <RenderGameBoard playAgain={playAgain} gameBoard={localGameBoard} whatPositionPicked={whatPositionPicked} data={data} playerType={playerType} />
                 <div>
                     <div  style={{display: "flex", justifyContent: "center", margin: "0", alignItems: "center"}}>
                         <h2 style={{color: "gray", margin: "0"}}>Lobby:</h2>
