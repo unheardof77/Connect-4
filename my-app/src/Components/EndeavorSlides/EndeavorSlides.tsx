@@ -54,7 +54,7 @@ export default function EndeavorSlides() {
                     <Typography variant='h2' component='h2' sx={{ fontSize: "1.5em", color: "gray", marginBottom: "20px", width: "100%" }}> {steps[activeStep].description} </Typography>
                 </Box>
                 <Box sx={{ width: {xs: "100%", lg: "40%"}, display: "flex", justifyContent: "center", alignItems: "center" }}>
-                    <Box component="img" alt={steps[activeStep].alt} src={steps[activeStep].image} sx={{ height: {xs: "400px", lg: "100%"}, width: {xs: "400px", lg: "100%"}, marginLeft: "4%", borderRadius: "5px" }} />
+                    <Box component="img" alt={steps[activeStep].alt} src={steps[activeStep].image} sx={{ height: {xs: "70%", lg: "100%"}, width: {xs: "70%", lg: "100%"}, marginLeft: "4%", borderRadius: "5px" }} />
                 </Box>
             </Box>
             <Box sx={{ width: "100%", display: "flex", justifyContent: "center"}}>

@@ -137,13 +137,13 @@ export default function Header() {
                                     open={Boolean(anchorElUser)}
                                     onClose={handleCloseUserMenu}
                                 >
-                                    <MenuItem sx={{display: {sm: "block", md: "none"}}} onClick={() => { navigate('/local'); handleCloseUserMenu() }}>
+                                    <MenuItem sx={{display: {sm: "flex", md: "none"}}} onClick={() => { navigate('/local'); handleCloseUserMenu() }}>
                                         <Typography textAlign="center">Local Game</Typography>
                                     </MenuItem>
-                                    <MenuItem sx={{display: {sm: "block", md: "none"}}} onClick={() => { updateModalState({ type: 'showLobbyModal' }); handleCloseUserMenu() }}>
+                                    <MenuItem sx={{display: {sm: "flex", md: "none"}}} onClick={() => { updateModalState({ type: 'showLobbyModal' }); handleCloseUserMenu() }}>
                                         <Typography textAlign="center">Create Game</Typography>
                                     </MenuItem>
-                                    <MenuItem sx={{display: {sm: "block", md: "none"}}} onClick={() => { updateModalState({ type: 'showJoinModal' }); handleCloseUserMenu() }}>
+                                    <MenuItem sx={{display: {sm: "flex", md: "none"}}} onClick={() => { updateModalState({ type: 'showJoinModal' }); handleCloseUserMenu() }}>
                                         <Typography textAlign="center">Join Game</Typography>
                                     </MenuItem>
                                     <MenuItem onClick={() => { Auth.logout(); handleCloseUserMenu() }}>

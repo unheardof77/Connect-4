@@ -4,7 +4,25 @@ import { Skeleton, Box } from '@mui/material'
 
 export default function RenderGameBoard({ playAgain, gameBoard, whatPositionPicked, data, playerType }: RenderGameBoardProps) {
     const boardCellStyle = {
+        border: "2px solid #444444",
+        fontSize: "4em",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    }
 
+    const boardCellStyleAddition = {
+        width: { xs: "40px", sm: "75px", md: "90px", lg: "110px" }, 
+        height: { xs: "40px", sm: "75px", md: "90px", lg: "110px" }, 
+        margin: {xs: "0px 5px", sm: "0px 10px"} 
+    }
+
+    const pieceIcon = { 
+        display: "flex", 
+        justifyContent: "center", 
+        alignItems: "center", 
+        width: { xs: "30px", sm: "58px", md: "69px", lg: "85px" }, 
+        height: { xs: "30px", sm: "58px", md: "69px", lg: "85px" } 
     }
 
     function renderColor(boardCell: string): string {
@@ -21,13 +39,16 @@ export default function RenderGameBoard({ playAgain, gameBoard, whatPositionPick
             for (let j: number = 0; j < 6; j++) {
                 cellArray.push(
                     ((data && data.gameLobbyChanged.lobbyIsFull) || playerType === "sub") ?
-                        <Box key={`col:${columnIndex}-cell:${j}`} sx={{ width: { xs: "50px", sm: "65px", md: "90px", lg: "110px" }, height: { xs: "50px", sm: "65px", md: "90px", lg: "110px" } }} className={playAgain ? "boardCell" : "boardCell hover"}>
-                            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: { xs: "39px", sm: "50px", md: "69px", lg: "85px" }, height: { xs: "39px", sm: "50px", md: "69px", lg: "85px" } }}>
+                        <Box key={`col:${columnIndex}-cell:${j}`} 
+                        sx={{ ...boardCellStyle, ...boardCellStyleAddition }} 
+                        className={playAgain ? "" : "hover"}
+                        >
+                            <Box sx={pieceIcon}>
                                 <BsFillCircleFill size="100%" color={renderColor(gameBoard[columnIndex][j])} />
                             </Box>
                         </Box>
                         :
-                        <Skeleton key={`skel-col:${columnIndex}-cell:${j}`} variant="rectangular" width={110} height={110} sx={{ margin: "0px 10px" }} />
+                        <Skeleton key={`skel-col:${columnIndex}-cell:${j}`} variant="rectangular" sx={{ ...boardCellStyleAddition }} />
                 )
             }
             return cellArray;
@@ -36,8 +57,11 @@ export default function RenderGameBoard({ playAgain, gameBoard, whatPositionPick
             const cellArray = [];
             for (let j: number = 0; j < 6; j++) {
                 cellArray.push(
-                    <Box key={`col:${columnIndex}-cell:${j}`} sx={{ width: { xs: "50px", sm: "65px", md: "90px", lg: "110px" }, height: { xs: "50px", sm: "65px", md: "90px", lg: "110px" } }} className={playAgain ? "boardCell" : "boardCell hover"}>
-                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: { xs: "39px", sm: "50px", md: "69px", lg: "85px" }, height: { xs: "39px", sm: "50px", md: "69px", lg: "85px" } }}>
+                    <Box key={`col:${columnIndex}-cell:${j}`} 
+                    sx={{ ...boardCellStyle, ...boardCellStyleAddition }} 
+                    className={playAgain ? "" : "hover"}
+                    >
+                        <Box sx={pieceIcon}>
                             <BsFillCircleFill size="100%" color={renderColor(gameBoard[columnIndex][j])} />
                         </Box>
                     </Box>
@@ -52,7 +76,7 @@ export default function RenderGameBoard({ playAgain, gameBoard, whatPositionPick
         const colsArray = []
         for (let i: number = 0; i < 7; i++) {
             colsArray.push(
-                <Box key={`col:${i}`} sx={{ margin: "20px", display: "flex" }} data-index={i} onClick={whatPositionPicked}>
+                <Box key={`col:${i}`} sx={{ margin: {xs: "10px", sm: "20px"}, display: "flex" }} data-index={i} onClick={whatPositionPicked}>
                     {renderCells(i)}
                 </Box>
             )
