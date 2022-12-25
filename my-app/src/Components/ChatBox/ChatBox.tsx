@@ -22,7 +22,7 @@ export default function ChatBox({sentMessage, handleMessageChange, chatMessages,
     }, [chatMessages])
 
     return (
-        <Box component='section' sx={{width:{ sx:'200px', md:'400px'}, minHeight: '500px', border: '#444444 2px solid', padding: '5px 5px 0px 5px', marginBottom:{xs:'50px'}}}>
+        <Box component='section' sx={{width:{ xs:'350px', sm:'400px'},  minHeight: '500px', border: '#444444 2px solid', padding: '5px 5px 0px 5px', marginBottom:{xs:'50px'}}}>
             {((data && data.gameLobbyChanged.lobbyIsFull) || piece === "O") ?
                 <Box component='div' className='scrollbar' id='style-1' sx={{height: '425px', overflow:'scroll', overflowWrap:'normal', overflowX: 'hidden', scrollbarColor:'#444444', padding: '3% 3% 1% 3%' }} >
                     {chatMessages.map((mesObj) => (

@@ -298,7 +298,7 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
                         }
                     </>
                     :
-                    <Typography component="h1" sx={{ visibility: "visible", color: "lightgray", width: {xs: "80%", lg: "17%"}, textAlign: "center", marginTop: {xs: "10%", lg: "0%"} }}>Waiting for Opponent</Typography>
+                    <Typography  sx={{ fontSize:'2em', visibility: "visible", color: "lightgray", width: {xs: "80%", lg: "17%"}, textAlign: "center", marginTop: {xs: "10%", lg: "0%"} }}>Waiting for Opponent</Typography>
                 }
                 <RenderGameBoard playAgain={playAgain} gameBoard={localGameBoard} whatPositionPicked={whatPositionPicked} data={data} playerType={playerType} />
                 <div>
