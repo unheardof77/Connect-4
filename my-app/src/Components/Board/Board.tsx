@@ -1,5 +1,5 @@
 import './Board.css';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { useState, MouseEvent, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { BsFillCircleFill } from "react-icons/bs";
@@ -158,16 +158,16 @@ export default function Board() {
     }
 
     return (
-        <div className="gameboard-wrapper">
+        <Box sx={{flexDirection: {xs: "column", lg: "row"}}} className="gameboard-wrapper">
             {playAgain ?
-                <Box sx={{ width: "17%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                    <h1 style={{ color: "lightgray", textAlign: "center", margin: "0", fontSize: "3em" }}>
+                <Box sx={{ width: {xs: "50%", lg: "17%"}, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: {xs: "5%", lg: "0%"} }}>
+                    <Typography style={{ color: "lightgray", textAlign: "center", margin: "0", fontSize: "3em" }}>
                         Game Over!
-                    </h1>
+                    </Typography>
                     <h2 style={{ color: "gray", textAlign: "center", margin: "0 0 4% 0" }}>
                         {modalState.whoWon}
                     </h2>
-                    <Box sx={{ display: "flex", justifyContent: "center", marginBottom:'2%' }}>
+                    <Box sx={{ display: "flex", justifyContent: "center", marginBottom:'5%' }}>
                         <Button variant="outlined" onClick={handlePlayAgain}>Play again?</Button>
                     </Box>
                     <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -175,12 +175,12 @@ export default function Board() {
                     </Box>
                 </Box>
                 :
-                <>
+                <Box sx={{ marginTop: {xs: "5%", lg: "0%"}}}>
                     <h1 style={playerTurn ? { color: "lightgray" } : { display: "none" }}>Player <span className="player-turn-1">One's</span> Turn</h1>
                     <h1 style={playerTurn ? { display: "none" } : { color: "lightgray" }}>Player <span className="player-turn-2">Two's</span> Turn</h1>
-                </>
+                </Box>
             }
             <RenderGameBoard playAgain={playAgain} gameBoard={gameBoard} whatPositionPicked={whatPositionPicked} />
-        </div>
+        </Box>
     );
 };
