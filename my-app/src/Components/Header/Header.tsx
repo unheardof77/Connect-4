@@ -18,6 +18,8 @@ import { useModalContext } from '../../utils/statemanagment/globalstate';
 import { useNavigate } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 
+const headerButtonStyles = { my: 2, color: 'white', display: 'block' };
+
 export default function Header() {
     const user: any = Auth.getProfile();
     const { updateModalState } = useModalContext();
@@ -104,9 +106,9 @@ export default function Header() {
                     </Box>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <img  onClick={logoCLickHandler}src={Logo} alt="Connect four logo" style={{ maxHeight: "50px", margin: "10px 0px" }} />
-                        <Button onClick={() => navigate('/')} sx={{ my: 2, color: 'white', display: 'block' }}>Home</Button>
-                        <Button onClick={() => navigate('/aboutUs')} sx={{ my: 2, color: 'white', display: 'block' }}>About</Button>
-                        <HashLink className='link-reset' to="/aboutUs#coffee-message"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>Coffee</Button></HashLink>
+                        <Button onClick={() => navigate('/')} sx={headerButtonStyles}>Home</Button>
+                        <Button onClick={() => navigate('/aboutUs')} sx={headerButtonStyles}>About</Button>
+                        <HashLink className='link-reset' to="/aboutUs#coffee-message"><Button onClick={handleCloseNavMenu} sx={headerButtonStyles}>Coffee</Button></HashLink>
                     </Box>
 
                     {/* right side of Nav Bar */}
@@ -154,8 +156,8 @@ export default function Header() {
                         </>
                         :
                         <>
-                            <Button onClick={() => updateModalState({ type: 'showLogin' })} sx={{ my: 2, color: 'white', display: 'block' }}>Log In</Button>
-                            <Button onClick={() => updateModalState({ type: 'showSignup' })} sx={{ my: 2, color: 'white', display: 'block' }}>Sign Up</Button>
+                            <Button onClick={() => updateModalState({ type: 'showLogin' })} sx={headerButtonStyles}>Log In</Button>
+                            <Button onClick={() => updateModalState({ type: 'showSignup' })} sx={headerButtonStyles}>Sign Up</Button>
                         </>
                     }
                 </Toolbar>
