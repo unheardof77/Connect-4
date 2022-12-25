@@ -58,7 +58,9 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
                 }
             })
             setPlayAgain(data.gameLobbyChanged.isGameFinished);
-            setChatMessages(data.gameLobbyChanged.messages);
+            if(chatMessages.length < data.gameLobbyChanged.messages.length){
+                setChatMessages(data.gameLobbyChanged.messages);
+            }
             if (didBoardChange && indexOfChange !== undefined && !playAgain) {
                 renderAnimation(newLocalGameBoard, indexOfChange, "opponentMove", () => {
                     dispatch(data.gameLobbyChanged.gameboard);
@@ -269,15 +271,15 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
 
     return (
         <>
-            <div className="gameboard-wrapper">
+            <Box sx={{flexDirection:{xs:'column', lg:'row'}}} className="gameboard-wrapper">
                 {((data && data.gameLobbyChanged.lobbyIsFull) || playerType === "sub") ?
                     <>
                         {playAgain ?
-                            <Box sx={{width: "17%", display: "flex", flexDirection: "column", justifyContent: "center"}}>
+                            <Box sx={{ width: {xs: "50%", lg: "17%"}, display: "flex", flexDirection: "column", justifyContent: "center", marginTop: {xs: "5%", lg: "0%"}}}>
                                 <h1 style={{ color: "lightgray", textAlign: "center" }}>
                                     Game Over
                                 </h1>
-                                <Box sx={{ display: "flex", justifyContent: "center", marginBottom:'2%' }}>
+                                <Box sx={{ display: "flex", justifyContent: "center", marginBottom:'5%' }}>
                                     <Button variant="outlined" onClick={handlePlayAgain}>Play again?</Button>
                                 </Box>
                                 <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -308,7 +310,7 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
                     <h4 style={{textAlign: "center", margin: "0 0 2% 0", color: "#444444", visibility: (showClipMessage) ? "visible": "hidden"}}>&#10003; Copied to clipboard</h4>
                     <ChatBox data={data} username={username} piece={piece} handleMessageSubmit={handleMessageSubmit} chatMessages={chatMessages} sentMessage={sentMessage} handleMessageChange={handleMessageChange} />
                 </div>
-            </div>
+            </Box>
         </>
     );
 };
