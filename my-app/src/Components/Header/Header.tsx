@@ -114,9 +114,9 @@ export default function Header() {
                     {/* right side of Nav Bar */}
                     {Auth.loggedIn() ?
                         <>
-                            <Button onClick={() => navigate('/local')} sx={headerButtonStyles}>Local Game</Button>
-                            <Button onClick={() => updateModalState({ type: 'showLobbyModal' })} sx={headerButtonStyles}>Create Game</Button>
-                            <Button onClick={() => updateModalState({ type: 'showJoinModal' })} sx={{  mr: 2, ...headerButtonStyles }}>Join Game</Button>
+                            <Button onClick={() => navigate('/local')} sx={{ my: 2, color: 'white', display: { xs: 'none', md: 'block' }}}>Local Game</Button>
+                            <Button onClick={() => updateModalState({ type: 'showLobbyModal' })} sx={{ my: 2, color: 'white', display: { xs: 'none', md: 'block' }}}>Create Game</Button>
+                            <Button onClick={() => updateModalState({ type: 'showJoinModal' })} sx={{ my: 2, mr: 2, color: 'white', display: { xs: 'none', md: 'block' }}}>Join Game</Button>
                             <Box sx={{ flexGrow: 0 }}>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -139,7 +139,16 @@ export default function Header() {
                                     open={Boolean(anchorElUser)}
                                     onClose={handleCloseUserMenu}
                                 >
-                                    <MenuItem onClick={(e) => { e.preventDefault(); Auth.logout(); }}>
+                                    <MenuItem sx={{display: {sm: "block", md: "none"}}} onClick={() => { navigate('/local'); handleCloseUserMenu() }}>
+                                        <Typography textAlign="center">Local Game</Typography>
+                                    </MenuItem>
+                                    <MenuItem sx={{display: {sm: "block", md: "none"}}} onClick={() => { updateModalState({ type: 'showLobbyModal' }); handleCloseUserMenu() }}>
+                                        <Typography textAlign="center">Create Game</Typography>
+                                    </MenuItem>
+                                    <MenuItem sx={{display: {sm: "block", md: "none"}}} onClick={() => { updateModalState({ type: 'showJoinModal' }); handleCloseUserMenu() }}>
+                                        <Typography textAlign="center">Join Game</Typography>
+                                    </MenuItem>
+                                    <MenuItem onClick={() => { Auth.logout(); handleCloseUserMenu() }}>
                                         <Typography textAlign="center">Sign Out</Typography>
                                     </MenuItem>
                                 </Menu>

@@ -4,13 +4,7 @@
     align-items: center;
 }
 
-.boardCell-wrapper {
-    display: flex;
-}
-
 .boardCell {
-    min-width: 110px;
-    height: 110px;
     border: 2px solid #444444;
     font-size: 4em;
     margin: 0px 10px;

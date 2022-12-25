@@ -31,8 +31,8 @@ export default function ToacinBio() {
                     <Box sx={{ marginBottom: "40px", textAlign: {xs: "center", lg: "end"} }}>
                         <Chip label="React" sx={chipStyle} />
                         <Chip label="GraphQL" sx={chipStyle} />
-                        <Chip label="Chakra UI" sx={chipStyle} />
-                        <Chip label="Sequelize" sx={chipStyle} />
+                        <Chip label="MUI" sx={chipStyle} />
+                        <Chip label="MySQL" sx={chipStyle} />
                     </Box>
                     <Box sx={{ marginBottom: "35px", textAlign: {xs: "center", lg: "end"} }}>
                         <BusinessCenterIcon onClick={()=>{window.open("https://toacin.github.io/Portfolio-React/", "_blank")}} sx={bioIconStyle} />
