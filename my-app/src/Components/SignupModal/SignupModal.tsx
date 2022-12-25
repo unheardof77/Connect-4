@@ -127,12 +127,12 @@ export default function SignupModal() {
                     <Typography variant="h4" component="h6" sx={{ margin: "0px 0px 25px 0px" }}>Sign Up</Typography>
                     <TextField error={(errorMessage.status)} name='Username' value={username} onChange={handleUserNameValue} label="Username" variant="filled" sx={{ margin: "0px 0px 15px 0px" }} required />
                     <FormControl variant="filled" fullWidth required>
-                        <InputLabel htmlFor="filled-adornment-password" error={(nonMatchPassword) ? true : false}>Password</InputLabel>
+                        <InputLabel htmlFor="firstPassword" error={(nonMatchPassword) ? true : false}>Password</InputLabel>
                         <FilledInput
                             error={(nonMatchPassword) ? true : false}
                             // helperText="Incorrect entry."
                             fullWidth
-                            name='Password' onChange={handleUserNameValue} value={password} id="filled-adornment-password"
+                            name='Password' onChange={handleUserNameValue} value={password} id="firstPassword"
                             type={showPassword ? 'text' : 'password'}
                             sx={{ margin: "0px 0px 15px 0px" }}
                             required
@@ -151,12 +151,12 @@ export default function SignupModal() {
                         />
                     </FormControl>
                     <FormControl variant="filled" fullWidth required>
-                        <InputLabel htmlFor="filled-adornment-password" error={(nonMatchPassword) ? true : false}>Confirm Password</InputLabel>
+                        <InputLabel htmlFor="confirmPassword" error={(nonMatchPassword) ? true : false}>Confirm Password</InputLabel>
                         <FilledInput
                             error={(nonMatchPassword) ? true : false}
                             // helperText="Incorrect entry."
                             fullWidth
-                            name='confirmPassword' onChange={handleUserNameValue} value={confirmPassword} id="filled-adornment-password"
+                            name='confirmPassword' onChange={handleUserNameValue} value={confirmPassword} id="confirmPassword"
                             type={showConfirmPassword ? 'text' : 'password'}
                             sx={{ margin: "0px 0px 15px 0px" }}
                             required

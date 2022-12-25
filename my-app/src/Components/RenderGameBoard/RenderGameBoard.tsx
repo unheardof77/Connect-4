@@ -1,6 +1,6 @@
 import { RenderGameBoardProps } from "../../utils/types/types";
 import { BsFillCircleFill } from "react-icons/bs";
-import { Skeleton } from '@mui/material'
+import { Skeleton, Box } from '@mui/material'
 
 export default function RenderGameBoard({playAgain, gameBoard, whatPositionPicked, data, playerType}:RenderGameBoardProps){
 

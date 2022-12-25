@@ -18,6 +18,8 @@ import { useModalContext } from '../../utils/statemanagment/globalstate';
 import { useNavigate } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 
+const headerButtonStyles = { my: 2, color: 'white', display: 'block' };
+
 export default function Header() {
     const user: any = Auth.getProfile();
     const { updateModalState } = useModalContext();
@@ -104,17 +106,17 @@ export default function Header() {
                     </Box>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <img  onClick={logoCLickHandler}src={Logo} alt="Connect four logo" style={{ maxHeight: "50px", margin: "10px 0px" }} />
-                        <Button onClick={() => navigate('/')} sx={{ my: 2, color: 'white', display: 'block' }}>Home</Button>
-                        <Button onClick={() => navigate('/aboutUs')} sx={{ my: 2, color: 'white', display: 'block' }}>About</Button>
-                        <HashLink className='link-reset' to="/aboutUs#coffee-message"><Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>Coffee</Button></HashLink>
+                        <Button onClick={() => navigate('/')} sx={headerButtonStyles}>Home</Button>
+                        <Button onClick={() => navigate('/aboutUs')} sx={headerButtonStyles}>About</Button>
+                        <HashLink className='link-reset' to="/aboutUs#coffee-message"><Button onClick={handleCloseNavMenu} sx={headerButtonStyles}>Coffee</Button></HashLink>
                     </Box>
 
                     {/* right side of Nav Bar */}
                     {Auth.loggedIn() ?
                         <>
-                            <Button onClick={() => navigate('/local')} sx={{ my: 2, color: 'white', display: 'block' }}>Local Game</Button>
-                            <Button onClick={() => updateModalState({ type: 'showLobbyModal' })} sx={{ my: 2, color: 'white', display: 'block' }}>Create Game</Button>
-                            <Button onClick={() => updateModalState({ type: 'showJoinModal' })} sx={{ my: 2, mr: 2, color: 'white', display: 'block' }}>Join Game</Button>
+                            <Button onClick={() => navigate('/local')} sx={headerButtonStyles}>Local Game</Button>
+                            <Button onClick={() => updateModalState({ type: 'showLobbyModal' })} sx={headerButtonStyles}>Create Game</Button>
+                            <Button onClick={() => updateModalState({ type: 'showJoinModal' })} sx={{  mr: 2, ...headerButtonStyles }}>Join Game</Button>
                             <Box sx={{ flexGrow: 0 }}>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -145,8 +147,8 @@ export default function Header() {
                         </>
                         :
                         <>
-                            <Button onClick={() => updateModalState({ type: 'showLogin' })} sx={{ my: 2, color: 'white', display: 'block' }}>Log In</Button>
-                            <Button onClick={() => updateModalState({ type: 'showSignup' })} sx={{ my: 2, color: 'white', display: 'block' }}>Sign Up</Button>
+                            <Button onClick={() => updateModalState({ type: 'showLogin' })} sx={headerButtonStyles}>Log In</Button>
+                            <Button onClick={() => updateModalState({ type: 'showSignup' })} sx={headerButtonStyles}>Sign Up</Button>
                         </>
                     }
                 </Toolbar>
