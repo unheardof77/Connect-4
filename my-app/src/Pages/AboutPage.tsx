@@ -75,7 +75,7 @@ export default function AboutPage() {
         <>
             <Header />
             <Box component='div' sx={{ width: "100%", height: "300px", display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '80px' }}>
-                <Typography variant='h1' component='h1' sx={{ fontSize: { xs: "4em", md: "6em" } }}>Meet The Devs</Typography>
+                <Typography variant='h1' component='h1' sx={{ fontSize: { xs: "3.3em", md: "6em" } }}>Meet The Devs</Typography>
             </Box>
 
             <Box component='section' sx={{ width: "100%", display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -98,7 +98,6 @@ export default function AboutPage() {
 
                     <Box component='form' onSubmit={handleDonationSubmit} padding={4} sx={{ marginBottom: "10%" }}>
                         <Box sx={{ display: "flex", justifyContent: "center" }}>
-
                             <FormControl variant="filled">
                                 <InputLabel htmlFor="filled-adornment-amount">Donation Amount</InputLabel>
                                 <FilledInput

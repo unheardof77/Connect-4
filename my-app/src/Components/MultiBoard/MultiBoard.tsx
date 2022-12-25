@@ -1,6 +1,6 @@
 import '../Board/Board.css';
 import { useState, MouseEvent, useReducer, useEffect } from "react";
-import { Button, Box } from "@mui/material/";
+import { Button, Box, Typography } from "@mui/material/";
 import { useModalContext } from "../../utils/statemanagment/globalstate";
 import { useMutation, useSubscription } from "@apollo/client";
 import { UPDATELOBBY, SENDMESSAGE } from "../../utils/crud/Mutation";
@@ -288,17 +288,17 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
                             </Box>
                         :
                             <>
-                                <h1 style={playerTurn ? { color: "lightgray", width: "17%", textAlign: "center" } : { display: "none" }}>
+                                <Typography component="h1" sx={playerTurn ? { color: "lightgray", width: {xs: "50%", lg: "17%"}, textAlign: "center", marginTop: {xs: "10%", lg: "0%"} } : { display: "none" }}>
                                     <span className={playerType === "host" ? "player-turn-1" : "player-turn-2"}>Your</span> Turn
-                                </h1>
-                                <h1 style={playerTurn ? { display: "none" } : { color: "lightgray", width: "17%", textAlign: "center" }}>
+                                </Typography>
+                                <Typography component="h1" sx={playerTurn ? { display: "none" } : { color: "lightgray", width: {xs: "50%", lg: "17%"}, textAlign: "center", marginTop: {xs: "10%", lg: "0%"} }}>
                                     <span className={playerType === "host" ? "player-turn-2" : "player-turn-1"}>{opponentUsername}'s</span> Turn
-                                </h1>
+                                </Typography>
                             </>
                         }
                     </>
                     :
-                    <h1 style={{ visibility: "visible", color: "lightgray", width: "17%", textAlign: "center" }}>Waiting for Opponent</h1>
+                    <Typography component="h1" sx={{ visibility: "visible", color: "lightgray", width: {xs: "80%", lg: "17%"}, textAlign: "center", marginTop: {xs: "10%", lg: "0%"} }}>Waiting for Opponent</Typography>
                 }
                 <RenderGameBoard playAgain={playAgain} gameBoard={localGameBoard} whatPositionPicked={whatPositionPicked} data={data} playerType={playerType} />
                 <div>

@@ -7,7 +7,6 @@
 .boardCell {
     border: 2px solid #444444;
     font-size: 4em;
-    margin: 0px 10px;
     display: flex;
     justify-content: center;
     align-items: center;

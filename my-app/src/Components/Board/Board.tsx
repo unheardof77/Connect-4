@@ -2,7 +2,6 @@ import './Board.css';
 import { Box, Button, Typography } from '@mui/material';
 import { useState, MouseEvent, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
-import { BsFillCircleFill } from "react-icons/bs";
 import { useModalContext } from "../../utils/statemanagment/globalstate";
 import RenderGameBoard from '../RenderGameBoard/RenderGameBoard';
 
