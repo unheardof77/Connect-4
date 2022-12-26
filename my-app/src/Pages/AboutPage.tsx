@@ -17,7 +17,7 @@ import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
-const stripePromise = loadStripe('pk_test_51MF246FhLt5A8AbKPxxbzKomjN1l6ggWollsfH66RgVcL9sQrObPHh1kOuZL1b7W7Q7IsO8SjIvh6TUNuiDZr96M006pbFiehi');
+const stripePromise = loadStripe('pk_live_51MIM3JJxeIvqenQzzhwAEpBDCAr1mjRxRIXRgWPFcJQ3yJh3nZ6yRzOd8WEa2y5RViptF0ne4SeyjyzokBNRVZxy00sCW5h6Qb');
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
