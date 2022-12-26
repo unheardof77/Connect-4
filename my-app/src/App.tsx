@@ -26,6 +26,7 @@ import DonationProcessed from "./Pages/DonationProcessed";
 const httpLink = new HttpLink({
   uri: '/graphql'
 });
+
 //production link
 const wsLink = new GraphQLWsLink(createClient({
   url: 'wss://connect4clone.herokuapp.com/graphql',

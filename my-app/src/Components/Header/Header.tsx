@@ -18,7 +18,7 @@ import { useModalContext } from '../../utils/statemanagment/globalstate';
 import { useNavigate } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 
-const headerButtonStyles = { my: 2, color: 'white', display: 'block' };
+const headerButtonStyles = { my: 2, color: 'white', display: 'block', fontSize: {xs: ".68em",sm: ".875em"} };
 
 export default function Header() {
     const user: any = Auth.getProfile();
