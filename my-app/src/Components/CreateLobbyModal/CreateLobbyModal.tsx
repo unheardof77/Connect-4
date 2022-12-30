@@ -28,7 +28,7 @@ export default function LobbyModal() {
     const navigate = useNavigate();
 
     const handleClose = () => {
-        setGameName("");
+        setGameName(" ");
         setGameLobbyStatus({ status: false, message: '' });
         updateModalState({ type: 'hideLobbyModal' });
     };
@@ -44,8 +44,6 @@ export default function LobbyModal() {
             navigate('/multiplayer/host');
         } catch (err: any) {
             const newError = { ...err }
-            console.log(newError.message);
-            console.log(/E11000/.test(newError.message))
             switch (true) {
                 case /E11000/.test(newError.message):
                     newError.message = "Lobby Name Currently Taken";
