@@ -23,11 +23,11 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
     const [playAgain, setPlayAgain] = useState(false);
     const [chatMessages, setChatMessages] = useState([]);
     const [showClipMessage, setShowClipMessage] = useState(false);
+    const [canSendMessage, setCanSendMessage] = useState(true);
 
     const navigate = useNavigate();
 
     const { updateModalState } = useModalContext();// this is the dispatch action for the modals
-    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);// gives us access to force rerender the game board, used when animated the pieces falling
 
     //these two lines of code get the id and name of the game lobby and parse it
     const gameId = JSON.parse(localStorage.getItem('GameBoard') || '')._id;
@@ -62,7 +62,7 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
                 setChatMessages(data.gameLobbyChanged.messages);
             }
             if (didBoardChange && indexOfChange !== undefined && !playAgain) {
-                renderAnimation(newLocalGameBoard, indexOfChange, "opponentMove", () => {
+                renderAnimation(indexOfChange, "opponentMove", () => {
                     dispatch(data.gameLobbyChanged.gameboard);
                     setTurn(!playerTurn);
                 });
@@ -100,8 +100,12 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
     const handleMessageSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await sendMessage({ variables: { message: sentMessage, GameLobby_id: gameId } });
-            setSendMessage("");
+            if(canSendMessage){
+                await sendMessage({ variables: { message: sentMessage, GameLobby_id: gameId } });
+                setSendMessage("");
+                setCanSendMessage(false);
+            }
+            setTimeout(()=>{setCanSendMessage(true)}, 3000);
         } catch (err) {
             console.error(err);
         }
@@ -213,9 +217,10 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
         checkDiagonalWin();
     };
 
-    const renderAnimation = async function (newLocalGameBoard: string[][], index: number, moveType: string, cb?: () => void) {
-        const initialLength = newLocalGameBoard[index].length;
+    const renderAnimation = async function (index: number, moveType: string, cb?: () => void) {
+        const initialLength = localGameBoard[index].length;
         for (let i: number = 5; i >= initialLength; i--) {
+            const newLocalGameBoard = [...localGameBoard];
             const ArrayToConcat: string[] = Array(i - initialLength).fill("null");
             if (moveType === "hostMove") {
                 newLocalGameBoard[index] = piece === 'x' ? [...newLocalGameBoard[index], ...ArrayToConcat, "x"] : [...newLocalGameBoard[index], ...ArrayToConcat, "O"];
@@ -223,11 +228,9 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
                 newLocalGameBoard[index] = piece === 'x' ? [...newLocalGameBoard[index], ...ArrayToConcat, "O"] : [...newLocalGameBoard[index], ...ArrayToConcat, "x"];
             }
             dispatch(newLocalGameBoard);
-            forceUpdate();
             await new Promise(resolve => setTimeout(resolve, 125));
             newLocalGameBoard[index].splice(initialLength, 6);
             dispatch(newLocalGameBoard);
-            forceUpdate();
         }
         if (cb) {
             cb();
@@ -242,7 +245,7 @@ export default function MultiBoard({ playerType }: MultiBoardProps) {
         setInProgress(true);
         let newLocalGameBoard = [...localGameBoard];
 
-        await renderAnimation(newLocalGameBoard, index, "hostMove");
+        await renderAnimation(index, "hostMove");
 
         if (playerTurn && newLocalGameBoard[index].length < 6) {
             updateBoard(index);

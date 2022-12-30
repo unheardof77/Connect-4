@@ -13,7 +13,6 @@ export default function Board() {
     const [gameBoard, setGameBoard] = useState<string[][]>([[], [], [], [], [], [], []]);
     const { updateModalState, modalState } = useModalContext();
 
-    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
     const navigate = useNavigate();
 
     const updateBoard = (index: number, piece: string) => {
@@ -121,16 +120,14 @@ export default function Board() {
 
         //programatic changes to board pieces array of arrays to mock falling "animation"
         const initialLength = gameBoard[index].length;
-        const newGameBoard = [...gameBoard]
         for (let i: number = 5; i >= initialLength; i--) {
+            const newGameBoard = [...gameBoard];
             const ArrayToConcat: string[] = Array(i - initialLength).fill("null");
             newGameBoard[index] = playerTurn ? [...newGameBoard[index], ...ArrayToConcat, "x"] : [...newGameBoard[index], ...ArrayToConcat, "O"];
             setGameBoard(newGameBoard);
-            forceUpdate();
             await new Promise(resolve => setTimeout(resolve, 125));
             newGameBoard[index].splice(initialLength, 6);
             setGameBoard(newGameBoard);
-            forceUpdate();
         }
 
         if (playerTurn && gameBoard[index].length < 6) {
